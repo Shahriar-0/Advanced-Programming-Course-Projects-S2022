@@ -25,17 +25,14 @@ typedef struct Time_period {
     int range_id;
 } Time_period;
 
-
-void strind_to_time_format(char*, Time_period*);
+Time_period string_to_time_format(char*);
 void getting_input(vector<Time_period>*, vector<Time_period>*);
 int time_diffence(Time_period, Time_period);
 void find_free_times(vector<Time_period>, vector<Time_period>*);
 void showing_results(vector<Time_period>, vector<Time_period>);
 void add_and_wrap_time(Time_format*, int);
 
-
 int main(void) {    
-    //initializing
     vector<Time_period> occupiedTimes, freeTimes, activites;
     getting_input(&occupiedTimes, &activites);
     find_free_times(occupiedTimes, &freeTimes);
@@ -49,15 +46,19 @@ int time_diffence(Time_format first, Time_format second) {
         (first.hour * MINUTES_PER_HOUR + first.minute);
 }
 
-void strind_to_time_format(char* timeInString, Time_period* pointerToTime) {
+Time_period string_to_time_format(char* timeInString) {
     //just to convert string in valid format to store
-    pointerToTime->begin.hour = atoi(strtok(timeInString, " :"));
-    pointerToTime->begin.minute = atoi(strtok(NULL, " -"));
-    pointerToTime->end.hour = atoi(strtok(NULL, " :"));
-    pointerToTime->end.minute = atoi(strtok(NULL, " -"));
-    pointerToTime->duration = time_diffence(pointerToTime->begin, pointerToTime->end);
-    pointerToTime->currentTime = pointerToTime->begin;
-    pointerToTime->range_id = 0;
+    Time_period time;
+
+    time.begin.hour = atoi(strtok(timeInString, " :"));
+    time.begin.minute = atoi(strtok(NULL, " -"));
+    time.end.hour = atoi(strtok(NULL, " :"));
+    time.end.minute = atoi(strtok(NULL, " -"));
+    time.duration = time_diffence(time.begin, time.end);
+    time.currentTime = time.begin;
+    time.range_id = 0;
+
+    return time;
 }
 
 void getting_input(vector<Time_period>* occupiedTimes, vector<Time_period>* activites) {
@@ -67,7 +68,7 @@ void getting_input(vector<Time_period>* occupiedTimes, vector<Time_period>* acti
 
     //recieving occupied times
     while (cin >> line && line != "#") {
-        strind_to_time_format(&line[0], &time);
+        time = string_to_time_format(&line[0]);
         (*occupiedTimes).push_back(time);
     }
     //just to be easier when calculating free times
@@ -90,19 +91,19 @@ void find_free_times(vector<Time_period> occupiedTimes, vector<Time_period>* fre
     Time_format currentTime;
     currentTime.hour = START_HOUR;
     currentTime.minute = START_MINUTE;
-    for (int i = 0; i < occupiedTimes.size(); i++) {
-        if (time_diffence(currentTime, occupiedTimes[i].begin) > 0) {
+    for (auto element : occupiedTimes) {
+        if (time_diffence(currentTime, element.begin) > 0) {
             //put it in a value
             Time_period period;
             period.currentTime = period.begin = currentTime;
-            period.end = occupiedTimes[i].begin;
-            period.duration = time_diffence(currentTime, occupiedTimes[i].begin);
+            period.end = element.begin;
+            period.duration = time_diffence(currentTime, element.begin);
             period.range_id = 0;
 
             //add it to the list
             (*freeTimes).push_back(period);
         }
-        currentTime = occupiedTimes[i].end;
+        currentTime = element.end;
     }
 }
 
