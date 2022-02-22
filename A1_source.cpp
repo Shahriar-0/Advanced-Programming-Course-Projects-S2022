@@ -1,3 +1,5 @@
+//an app to schedule your activities for you based on time required 
+//and free times that you got
 #include <unordered_map>
 #include <iostream>
 #include <vector>
