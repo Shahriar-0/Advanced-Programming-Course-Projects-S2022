@@ -72,7 +72,7 @@ bool in_loop(const vector<vector<Coordinate>>& map, Direction direction, Point p
     }
 }
 
-void mark_position(vector<vector<Coordinate>>& map, Point position, Direction direction) {
+void mark_position(vector<vector<Coordinate>>& map, const Point position, Direction direction) {
     switch (direction) {
             case RIGHT: map[position.x][position.y].right = SEEN; break;
             case LEFT: map[position.x][position.y].left = SEEN; break;
@@ -82,17 +82,18 @@ void mark_position(vector<vector<Coordinate>>& map, Point position, Direction di
 }
 
 int find_shortest_path(vector<vector<Coordinate>> map, Direction direction, Point position, int length = 0) {
-    Edge_status hittedEdge;
-    bool inLoop;
+    Edge_status hittedEdge = NOT_HIT;
+    bool inLoop = false;
     do {
         //we go ahead till we hit rock or edge or we stuck in a loop
+        inLoop = in_loop(map, direction, position);
         mark_position(map, position, direction);
         position = generate_new_coordinate(position, direction);
         length++;
         hittedEdge = hit_edge(position, map.size(), map[0].size());
         if (hittedEdge)
             break;
-        inLoop = in_loop(map, direction, position);
+        inLoop = inLoop || in_loop(map, direction, position);
     } while (!inLoop && map[position.x][position.y].data == EMPTY);
 
     if (inLoop) 
@@ -100,42 +101,42 @@ int find_shortest_path(vector<vector<Coordinate>> map, Direction direction, Poin
         //just return random big number
         return BIG_NUMBER;
 
-    if (hittedEdge) {
+    else if (hittedEdge) {
         //go to previous position
-        length--;
-        position = generate_previous_coordinate(position, direction);
         //check the other two
         if (hittedEdge == RIGHT_EDGE || hittedEdge == LEFT_EDGE) 
-            return min(find_shortest_path(map, UP, position, length), find_shortest_path(map, DOWN, position, length));
+            return min(find_shortest_path(map, UP, generate_previous_coordinate(position, direction),length - 1),
+              find_shortest_path(map, DOWN, generate_previous_coordinate(position, direction), length - 1));
         
         else 
-            return min(find_shortest_path(map, LEFT, position, length), find_shortest_path(map, RIGHT, position, length));
+            return min(find_shortest_path(map, LEFT, generate_previous_coordinate(position, direction),length - 1),
+              find_shortest_path(map, RIGHT, generate_previous_coordinate(position, direction), length - 1));
     }
 
-    if (map[position.x][position.y].data == ROCK) {
+    else if (map[position.x][position.y].data == ROCK) {
         //go to previous position
-        length--;
-        position = generate_previous_coordinate(position, direction);
         //check the other two
-        if (direction == RIGHT || direction == LEFT)
-            return min(find_shortest_path(map, UP, position, length), find_shortest_path(map, DOWN, position, length));
+        if (direction == RIGHT || direction == LEFT) 
+            return min(find_shortest_path(map, UP, generate_previous_coordinate(position, direction),length - 1),
+              find_shortest_path(map, DOWN, generate_previous_coordinate(position, direction), length - 1));
         
         else 
-            return min(find_shortest_path(map, LEFT, position, length), find_shortest_path(map, RIGHT, position, length));
+            return min(find_shortest_path(map, LEFT, generate_previous_coordinate(position, direction),length - 1),
+              find_shortest_path(map, RIGHT, generate_previous_coordinate(position, direction), length - 1));
     }
 
-
-    if (map[position.x][position.y].data == BAMBOO)
+    else if (map[position.x][position.y].data == BAMBOO)
         //finally found
         return length;
-
+    
 }
 
 int main(void) {
-    const Point PANDA_POSITION = {0, 0};
+    constexpr Point PANDA_POSITION = {0, 0};
     Direction FIRST_INITIAL_DIRECTION = RIGHT, SECOND_INITIAL_DIRECTION = DOWN;
     vector<vector<Coordinate>> map;
     getting_input(map);
-    cout << min(find_shortest_path(map, FIRST_INITIAL_DIRECTION, PANDA_POSITION),
-         find_shortest_path(map, SECOND_INITIAL_DIRECTION, PANDA_POSITION)) << endl;
+    int minimumLength = min(find_shortest_path(map, FIRST_INITIAL_DIRECTION, PANDA_POSITION),
+         find_shortest_path(map, SECOND_INITIAL_DIRECTION, PANDA_POSITION));
+    (minimumLength >= BIG_NUMBER)? cout << "No path found\n" : cout << minimumLength << endl;
 }
