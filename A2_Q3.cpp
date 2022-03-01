@@ -3,12 +3,11 @@
 
 using namespace std;
 
-#define BIG_NUMBER 1e8
 #define ROCK '#'
 #define BAMBOO '*'
 #define EMPTY '.'
+#define NO_PATH -1
 
-enum Edge_status {NOT_HIT, RIGHT_EDGE, LEFT_EDGE, UPPER_EDGE, BELOW_EDGE};
 enum Direction {RIGHT, LEFT, UP, DOWN};
 enum Coordinate_status {NOT_SEEN, SEEN};
 
@@ -25,7 +24,25 @@ struct Point {
     int y;
 };
 
-void getting_input(vector<vector<Coordinate>>& map) {
+int length_of_shortest_path(vector<vector<Coordinate>>&);
+int find_shortest_path(vector<vector<Coordinate>>, Direction, Point , int = 0);
+int changing_direction(vector<vector<Coordinate>>, Direction, Point , int);
+void mark_position(vector<vector<Coordinate>>&, const Point, Direction);
+int check_result(int, int);
+bool in_loop(const vector<vector<Coordinate>>&, Direction, Point);
+bool hit_edge(Point, int, int);
+Point generate_previous_coordinate(Point, Direction);
+Point generate_new_coordinate(Point, Direction);
+vector<vector<Coordinate>> get_input(void);
+
+int main(void) {
+    vector<vector<Coordinate>> map = get_input();
+    int minLength = length_of_shortest_path(map);
+    (minLength == NO_PATH)? cout << "No path found" << endl : cout << minLength << endl;
+}
+
+vector<vector<Coordinate>> get_input() {
+    vector<vector<Coordinate>> map;
     int index = 0;
     string line;
     while (cin >> line) {
@@ -33,10 +50,12 @@ void getting_input(vector<vector<Coordinate>>& map) {
         map[index].resize(line.length());
         for (int i = 0; i < line.length(); i++) {
             map[index][i].data = line[i];
+            //at first we haven't seen any of them
             map[index][i].down = map[index][i].up = map[index][i].right = map[index][i].left = NOT_SEEN;
         }
         index++;
     }
+    return map;
 }
 
 Point generate_new_coordinate(Point position, Direction direction) {
@@ -51,16 +70,9 @@ Point generate_previous_coordinate(Point position, Direction direction) {
     return position;
 }
 
-Edge_status hit_edge(Point position, int numOfRows, int numOFColumns) {
-    if (position.x == numOfRows)
-        return BELOW_EDGE;
-    if (position.x == -1)
-        return UPPER_EDGE;
-    if (position.y == numOFColumns)
-        return RIGHT_EDGE;
-    if (position.y == -1)
-        return LEFT_EDGE;
-    return NOT_HIT;
+bool hit_edge(Point position, int numOfRows, int numOFColumns) {
+    return (position.x == numOfRows) || (position.x == -1) ||
+           (position.y == numOFColumns) || (position.y == -1);
 }
 
 bool in_loop(const vector<vector<Coordinate>>& map, Direction direction, Point position) {
@@ -81,62 +93,59 @@ void mark_position(vector<vector<Coordinate>>& map, const Point position, Direct
     }
 }
 
-int find_shortest_path(vector<vector<Coordinate>> map, Direction direction, Point position, int length = 0) {
-    Edge_status hittedEdge = NOT_HIT;
-    bool inLoop = false;
+int changing_direction(vector<vector<Coordinate>> map, Direction direction, Point position, int length) {
+    //return value is the minimum length of the other two possible choices
+    position = generate_previous_coordinate(position, direction);
+    int minLengthFirst, minLengthSecond;
+    if (direction == RIGHT || direction == LEFT) {
+        minLengthFirst = find_shortest_path(map, UP, position,length - 1);
+        minLengthSecond = find_shortest_path(map, DOWN, position, length - 1);
+    }
+    else {
+        minLengthFirst = find_shortest_path(map, LEFT, position,length - 1);
+        minLengthSecond = find_shortest_path(map, RIGHT, position, length - 1);
+    }
+
+    return check_result(minLengthFirst, minLengthSecond);
+}
+
+int find_shortest_path(vector<vector<Coordinate>> map, Direction direction, Point position, int length) {
+    bool hittedEdge = false, inLoop = false;
+
     do {
         //we go ahead till we hit rock or edge or we stuck in a loop
+        //and we mark places that we see
         inLoop = in_loop(map, direction, position);
         mark_position(map, position, direction);
         position = generate_new_coordinate(position, direction);
-        length++;
         hittedEdge = hit_edge(position, map.size(), map[0].size());
-        if (hittedEdge)
-            break;
-        inLoop = inLoop || in_loop(map, direction, position);
-    } while (!inLoop && map[position.x][position.y].data == EMPTY);
+        length++;
+    } while (!hittedEdge && !inLoop && map[position.x][position.y].data == EMPTY);
 
     if (inLoop) 
-        //we are stuck in a loop so we
-        //just return random big number
-        return BIG_NUMBER;
+        return NO_PATH;
 
-    else if (hittedEdge) {
-        //go to previous position
-        //check the other two
-        if (hittedEdge == RIGHT_EDGE || hittedEdge == LEFT_EDGE) 
-            return min(find_shortest_path(map, UP, generate_previous_coordinate(position, direction),length - 1),
-              find_shortest_path(map, DOWN, generate_previous_coordinate(position, direction), length - 1));
-        
-        else 
-            return min(find_shortest_path(map, LEFT, generate_previous_coordinate(position, direction),length - 1),
-              find_shortest_path(map, RIGHT, generate_previous_coordinate(position, direction), length - 1));
-    }
-
-    else if (map[position.x][position.y].data == ROCK) {
-        //go to previous position
-        //check the other two
-        if (direction == RIGHT || direction == LEFT) 
-            return min(find_shortest_path(map, UP, generate_previous_coordinate(position, direction),length - 1),
-              find_shortest_path(map, DOWN, generate_previous_coordinate(position, direction), length - 1));
-        
-        else 
-            return min(find_shortest_path(map, LEFT, generate_previous_coordinate(position, direction),length - 1),
-              find_shortest_path(map, RIGHT, generate_previous_coordinate(position, direction), length - 1));
-    }
-
-    else if (map[position.x][position.y].data == BAMBOO)
-        //finally found
-        return length;
+    if (hittedEdge || map[position.x][position.y].data == ROCK) 
+        return changing_direction(map, direction, position, length);
     
+    if (map[position.x][position.y].data == BAMBOO)
+        return length;
 }
 
-int main(void) {
+int length_of_shortest_path(vector<vector<Coordinate>>& map) {
     constexpr Point PANDA_POSITION = {0, 0};
     Direction FIRST_INITIAL_DIRECTION = RIGHT, SECOND_INITIAL_DIRECTION = DOWN;
-    vector<vector<Coordinate>> map;
-    getting_input(map);
-    int minimumLength = min(find_shortest_path(map, FIRST_INITIAL_DIRECTION, PANDA_POSITION),
-         find_shortest_path(map, SECOND_INITIAL_DIRECTION, PANDA_POSITION));
-    (minimumLength >= BIG_NUMBER)? cout << "No path found\n" : cout << minimumLength << endl;
+    int minLengthFirst = find_shortest_path(map, FIRST_INITIAL_DIRECTION, PANDA_POSITION);
+    int minLengthSecond = find_shortest_path(map, SECOND_INITIAL_DIRECTION, PANDA_POSITION);
+    return check_result(minLengthFirst, minLengthSecond);
+}
+
+int check_result(int first, int second) {
+    if (first == NO_PATH && second == NO_PATH)
+        return NO_PATH;
+    if (first == NO_PATH)
+        return second;
+    if (second == NO_PATH)
+        return first;
+    return min(first, second);
 }
