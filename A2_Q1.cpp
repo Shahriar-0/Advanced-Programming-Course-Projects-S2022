@@ -13,5 +13,5 @@ int num_of_changes(int index) {
 int main(void) {
     int numOfLevel, index;
     cin >> numOfLevel >> index;
-    (num_of_changes(index) % 2)? cout << "1\n" : cout << "0\n"; 
+    cout << (num_of_changes(index) % 2) << endl; 
 }
