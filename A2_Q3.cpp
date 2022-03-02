@@ -70,9 +70,9 @@ Point generate_previous_coordinate(Point position, Direction direction) {
     return position;
 }
 
-bool hit_edge(Point position, int numOfRows, int numOFColumns) {
+bool hit_edge(Point position, int numOfRows, int numOfColumns) {
     return (position.x == numOfRows) || (position.x == -1) ||
-           (position.y == numOFColumns) || (position.y == -1);
+           (position.y == numOfColumns) || (position.y == -1);
 }
 
 bool in_loop(const vector<vector<Coordinate>>& map, Direction direction, Point position) {
@@ -95,6 +95,8 @@ void mark_position(vector<vector<Coordinate>>& map, const Point position, Direct
 
 int changing_direction(vector<vector<Coordinate>> map, Direction direction, Point position, int length) {
     //return value is the minimum length of the other two possible choices
+    //but since we move to much we have to backtrack to the previous position
+    //and also reduce the length we calculated
     position = generate_previous_coordinate(position, direction);
     int minLengthFirst, minLengthSecond;
     if (direction == RIGHT || direction == LEFT) {
