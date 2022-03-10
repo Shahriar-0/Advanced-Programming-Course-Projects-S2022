@@ -55,24 +55,24 @@ void read_languages(ifstream&, Languages&, Translators&);
 Time read_time_format(ifstream&);
 Translator read_translator_info(ifstream&);
 int search(const Languages&, string);
-void add_new(Languages&, string, Translator, Translators&);
-void add_existing(Languages&, string, Translator, Translators&, int);
+void add_new(Languages&, string, Translators&, int);
+void add_existing(Languages&, string, Translators&, int, int);
 void read_events(ifstream&, Events&);
 vector<string> read_list_of_languages(ifstream&);
 vector<string> string_tokenizer(char*);
 
 void print_everything(Languages languageslist, Translators translatorsList, Events eventsList) {
-    cout << "languages " << endl;
     for (auto x : languageslist) {
         cout << x.name << " with " << x.numOfTranslators << " translators " << endl;
-        cout << "list of translators " << endl;
+        cout << "************list of translators************" << endl;
         for (auto y : x.translators) {
             cout << y->name << " from " << setw(2) << setfill('0') << y->startTime.hour << ":";
             cout << setw(2) << setfill('0') << y->startTime.minute << " to ";
             cout << setw(2) << setfill('0') << y->endTime.hour << ":";
-            cout << setw(2) << setfill('0') << y->endTime.minute << " to ";
+            cout << setw(2) << setfill('0') << y->endTime.minute << " ";
             cout << "knowing " << y->numOfLanguages << " languages" << endl;
         }
+        cout << "--------------------------------" << endl;
     }
     cout << endl <<"************now events****************" << endl;
     for (auto x : eventsList) {
@@ -94,14 +94,14 @@ int main(int argc, const char* argv[]) {
     Translators translatorsList;
     Events eventsList;
     initialising_data(argv[argc - 1], languagesList, translatorsList, eventsList);
-    print_everything(languagesList, translatorsList, eventsList);
+    //print_everything(languagesList, translatorsList, eventsList);
 }
 
 
 void initialising_data(string inputFile, Languages& languagesList,
     Translators& translatorsList, Events& eventsList) {
     get_input(inputFile, languagesList, translatorsList, eventsList);
-
+    //TODO: sorting languages and translators inside them
 }
 
 void check_for_file_validation(ifstream& inputFile) {
@@ -137,26 +137,16 @@ Translator read_translator_info(ifstream& fileStream) {
     return translator;
 }
 
-void add_new(Languages& languagesList, string name, Translator translator, Translators& translatorsList) {
-    if (translatorsList.empty() || translator.name != translatorsList[translatorsList.size() - 1].name)    
-        translatorsList.push_back(translator);
-    else
-        translatorsList[translatorsList.size() - 1].numOfLanguages++; //in case someone knows more than one language
-    
+void add_new(Languages& languagesList, string name, Translators& translatorsList, int translatorIndex) {
     languagesList.resize(languagesList.size() + 1);
     languagesList[languagesList.size() - 1].name = name;
     languagesList[languagesList.size() - 1].numOfTranslators = 1;   //it's the first translator
-    languagesList[languagesList.size() - 1].translators.push_back(&translatorsList[translatorsList.size() - 1]);
+    languagesList[languagesList.size() - 1].translators.push_back(&translatorsList[translatorIndex]);
 }
 
-void add_existing(Languages& languagesList, string name, Translator translator, Translators& translatorsList, int index) {
-    if (translatorsList.empty() || translator.name != translatorsList[translatorsList.size() - 1].name)    
-        translatorsList.push_back(translator);
-    else
-        translatorsList[translatorsList.size() - 1].numOfLanguages++; //in case someone knows more than one language
-
+void add_existing(Languages& languagesList, string name, Translators& translatorsList, int translatorIndex, int index) {
     languagesList[index].numOfTranslators++;
-    languagesList[index].translators.push_back(&translatorsList[translatorsList.size() - 1]);
+    languagesList[index].translators.push_back(&translatorsList[translatorIndex]);
 }
 
 vector<string> string_tokenizer(char* str) {
@@ -174,24 +164,25 @@ vector<string> read_list_of_languages(ifstream& fileStream) {
     string languagesName;
     getline(fileStream, languagesName);
     languagesName = languagesName.substr(1); //cause we have an extra space
-    return string_tokenizer(&languagesName[0]);
+    return string_tokenizer(&languagesName[0]); 
 }
 
 void read_languages(ifstream& fileStream, Languages& languagesList, Translators& translatorsList) {
-    
     int lineCount; 
     fileStream >> lineCount;
     translatorsList.resize(lineCount);
-    while (lineCount--) {
+    for (int i = 0; i < lineCount; i++) {
         Translator translator = read_translator_info(fileStream);
+        translatorsList[i] = translator;
         vector<string> splittedLanguages = read_list_of_languages(fileStream);
+        translatorsList[i].numOfLanguages = splittedLanguages.size();
         for (auto singleLanguageName : splittedLanguages) {
-            int index = search(languagesList, singleLanguageName);
+            int languageIndex = search(languagesList, singleLanguageName);
 
-            if (index == LANGUAGE_NOT_FOUND) 
-                add_new(languagesList, singleLanguageName, translator, translatorsList);
+            if (languageIndex == LANGUAGE_NOT_FOUND) 
+                add_new(languagesList, singleLanguageName, translatorsList, i);
             else
-                add_existing(languagesList, singleLanguageName, translator, translatorsList, index);
+                add_existing(languagesList, singleLanguageName, translatorsList, i,languageIndex);
         }
     }
 }
@@ -211,7 +202,6 @@ void read_events(ifstream& fileStream, Events& eventsList) {
             eventLanguage.languageName = singleLanguageName;
             event.eventLanguages.push_back(eventLanguage);
         }
-        
         eventsList.push_back(event);
     }
 }
