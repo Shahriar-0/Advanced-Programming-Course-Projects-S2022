@@ -46,7 +46,7 @@ struct Language {
 typedef vector<Language> Languages;
 typedef vector<Translator> Translators;
 typedef vector<Event> Events;
-
+typedef Translator* TranslatorPointer;
 
 void get_input(string, Languages&, Translators&, Events&);
 void initialising_data(string, Languages&, Translators&, Events&);
@@ -60,6 +60,11 @@ void add_existing(Languages&, string, Translators&, int, int);
 void read_events(ifstream&, Events&);
 vector<string> read_list_of_languages(ifstream&);
 vector<string> string_tokenizer(char*);
+void sorting_languages(Languages&);
+bool name_compare(string, string);
+bool translator_compare(const TranslatorPointer&, const TranslatorPointer&);
+bool language_compare(const Language&, const Language&);
+
 
 void print_everything(Languages languageslist, Translators translatorsList, Events eventsList) {
     for (auto x : languageslist) {
@@ -101,6 +106,7 @@ int main(int argc, const char* argv[]) {
 void initialising_data(string inputFile, Languages& languagesList,
     Translators& translatorsList, Events& eventsList) {
     get_input(inputFile, languagesList, translatorsList, eventsList);
+    sorting_languages(languagesList);
     //TODO: sorting languages and translators inside them
 }
 
@@ -211,4 +217,31 @@ void get_input(string inputFile, Languages& languagesList, Translators& translat
     check_for_file_validation(fileStream);
     read_languages(fileStream, languagesList, translatorsList);
     read_events(fileStream, eventsList);
+}
+
+bool language_compare(const Language& first, const Language& second) {
+    return first.numOfTranslators < second.numOfTranslators;
+}
+
+bool name_compare(string first, string second) {
+	int i = 0;
+	for (; i < max(first.size(), second.size()); i++) {
+		if (first[i] != second[i])
+			return first[i] < second[i];
+	}
+	return true;    //when both are equal
+}
+
+bool translator_compare(const TranslatorPointer& first, const TranslatorPointer& second) {
+    if (first->numOfLanguages < second->numOfLanguages) 
+        return true;
+    else if (second->numOfLanguages == first->numOfLanguages) 
+        return name_compare(first->name, second->name);
+    return false;
+}
+
+void sorting_languages(Languages& languagesList) {
+    sort(languagesList.begin(), languagesList.end(), language_compare);
+    for (auto element : languagesList) 
+        sort(element.translators.begin(), element.translators.end(), translator_compare);
 }
