@@ -88,8 +88,7 @@ int main(int argc, const char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-void initialising_data(string inputFile, Languages& languagesList,
-    Translators& translatorsList, Events& eventsList) {
+void initialising_data(string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
     get_input(inputFile, languagesList, translatorsList, eventsList);
     sorting_languages(languagesList);
 }
