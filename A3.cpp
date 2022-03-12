@@ -153,7 +153,6 @@ Translator read_translator_info(ifstream& fileStream) {
     fileStream >> translator.name;
     translator.availableTimePeriod.start = read_time_format(fileStream);
     translator.availableTimePeriod.end = read_time_format(fileStream);
-    translator.numOfLanguages = 1; //at least one language is known by that translator
     return translator;
 }
 
@@ -169,7 +168,7 @@ Time read_time_format(ifstream& fileStream) {
 vector<string> read_list_of_languages(ifstream& fileStream) {
     string languagesName;
     getline(fileStream, languagesName);
-    languagesName = languagesName.substr(1); //cause we have an extra space
+    languagesName = languagesName.substr(1); //cause we have an extra space in thr beginning
     return string_tokenizer(&languagesName[0]); 
 }
 
