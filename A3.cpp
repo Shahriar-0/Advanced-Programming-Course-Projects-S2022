@@ -220,7 +220,7 @@ bool name_compare(string first, string second) {
 }
 
 bool language_of_event_compare(const EventsLanguage& first, const EventsLanguage& second) {
-    return first.numOfTranslators <= second.numOfTranslators;
+    return first.numOfTranslators < second.numOfTranslators;
 }
 
 bool language_of_event_compare_for_priority(const EventsLanguage& first, const EventsLanguage& second) {
