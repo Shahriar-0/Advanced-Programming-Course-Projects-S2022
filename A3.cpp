@@ -260,8 +260,8 @@ bool is_before(Time first, Time second) {
 }
 
 bool is_overlapping(TimePeriod first, TimePeriod second) {
-    return !((is_before(first.start, second.start) && is_before(first.end, second.start)) ||
-            (is_before(second.start, first.start) && is_before(second.end, first.start)));
+    return (is_before(second.start, first.start) || is_before(second.start, first.end)) &&
+            (is_before(first.start, second.start) || is_before(first.start, second.end));
 }
 
 bool is_available(TranslatorPointer translatorPtr, TimePeriod goalTimePeriod) {
