@@ -1,4 +1,4 @@
-g++ A3*.cpp
+g++ A3*.cpp -o A3
 
 if [ $? -eq 0 ];
 then
@@ -8,11 +8,12 @@ then
         rm results.txt
     fi
 
+    unzip A3_testcases.zip &>/dev/null
     total=5
     wrong=0
     for i in $( seq 1 $total )
     do
-        ./a.out $i.in > $i.out
+        ./A3 $i.in > $i.out
         cmp -s $i.out $i.ans 
         if [ $? -eq 1 ];
         then   
