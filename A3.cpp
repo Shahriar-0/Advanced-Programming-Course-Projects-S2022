@@ -93,6 +93,26 @@ void initialising_data(string inputFile, Languages& languagesList, Translators& 
     sorting_languages(languagesList);
 }
 
+
+void sorting_languages(Languages& languagesList) {
+    for (int i = 0; i < languagesList.size(); i++) 
+        sort(languagesList[i].translators.begin(), languagesList[i].translators.end(), translator_compare);
+}
+
+bool translator_compare(const TranslatorPointer& first, const TranslatorPointer& second) {
+    return first->numOfLanguages < second->numOfLanguages ||
+        ((second->numOfLanguages == first->numOfLanguages) && name_compare(first->name, second->name));
+}
+
+bool name_compare(string first, string second) {
+	int i = 0;
+	for (; i < max(first.size(), second.size()); i++) {
+		if (first[i] != second[i])
+			return first[i] < second[i];
+	}
+	return true;    //when both are equal
+}
+
 void get_input(string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
     ifstream fileStream (inputFile);
     check_for_file_validation(fileStream);
@@ -210,31 +230,12 @@ void read_events(ifstream& fileStream, Events& eventsList, const Languages& lang
     }
 }
 
-bool name_compare(string first, string second) {
-	int i = 0;
-	for (; i < max(first.size(), second.size()); i++) {
-		if (first[i] != second[i])
-			return first[i] < second[i];
-	}
-	return true;    //when both are equal
-}
-
 bool language_of_event_compare(const EventsLanguage& first, const EventsLanguage& second) {
     return first.numOfTranslators < second.numOfTranslators;
 }
 
 bool language_of_event_compare_for_priority(const EventsLanguage& first, const EventsLanguage& second) {
     return first.priority < second.priority;
-}
-
-bool translator_compare(const TranslatorPointer& first, const TranslatorPointer& second) {
-    return first->numOfLanguages < second->numOfLanguages ||
-        ((second->numOfLanguages == first->numOfLanguages) && name_compare(first->name, second->name));
-}
-
-void sorting_languages(Languages& languagesList) {
-    for (int i = 0; i < languagesList.size() - 1; i++) 
-        sort(languagesList[i].translators.begin(), languagesList[i].translators.end(), translator_compare);
 }
 
 void dedicate_time(Events& eventsList, const Languages& languageList) {
