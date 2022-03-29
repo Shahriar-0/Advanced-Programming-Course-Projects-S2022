@@ -5,10 +5,10 @@ using namespace std;
 
 #define NUM_OF_MOVES 4
 
-long int sum_of_a_row(const vector<int>& v) {
+long int sum_of_a_row(const vector<int>& row) {
     long int sum = 0;
-    for (int i = 0; i < v.size(); i++)
-        sum += v[i];
+    for (int i = 0; i < row.size(); i++)
+        sum += row[i];
     return sum;
 }
 
