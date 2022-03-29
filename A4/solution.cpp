@@ -59,11 +59,11 @@ void harvest_a_column(vector<vector<int>>& farm,  int columnIndex, int rowCount)
         farm[i][columnIndex] = 0;
 }
 
-long int find_most_profitables(int rowCount, int columnCount,vector<vector<int>>& farm) {
+long int find_most_profitables(int rowCount, int columnCount,vector<vector<int>>& farm, int numOfMoves) {
     int maxRow, maxColumn, rowIndex, columnIndex;
     long int harvested = 0;
 
-    for (int move = 0; move < NUM_OF_MOVES; move++) {
+    for (int move = 0; move < numOfMoves; move++) {
         maxRow = find_max_row(farm, rowCount, rowIndex);
         maxColumn = find_max_column(farm, columnCount, columnIndex);
 
@@ -96,7 +96,7 @@ int main() {
     
     vector<vector<int>> farm = get_input(rowCount, columnCount);
 
-    long int harvested = find_most_profitables(rowCount, columnCount, farm);
+    long int harvested = find_most_profitables(rowCount, columnCount, farm, NUM_OF_MOVES);
     
     cout << harvested << endl;
     return 0;
