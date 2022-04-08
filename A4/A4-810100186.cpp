@@ -25,19 +25,26 @@ const Gun KNIFE(0, 35, 500);
 #define MAX_MONEY 10000
 #define WIN_PRIZE 2700
 #define LOSE_PRIZE 2400
+#define INITIAL_HEALTH 100
+#define INITIAL_MONEY 1000
 
 enum PlayerMode {AFK, ATK};
 enum GameMode {START_MENU, DURING_GAME, FINISHED};
-enum Player_status {DEAD, ALIVE};
+enum PlayerStatus {DEAD, ALIVE};
 
 class Player {
 public:
     Player (string _username, string _teamname) {
         username = _username;
         teamname = _teamname;
+        PlayerStatus = ALIVE;
+        health = INITIAL_HEALTH;
+        money = INITIAL_MONEY;
+        mode = ATK;
     }
     int get_money() { return money; }
     int get_health() { return health; }
+    void get_shot(Gun);
     void add_money(int);
     string get_username() { return username; }
     string get_teamname() { return teamname; }
@@ -52,8 +59,16 @@ private:
     int money;
     int health;
     PlayerMode mode;
-    Player_status
+    PlayerStatus status;
 };
+
+void Player::get_shot(Gun gun) {
+    health -= gun.damage;
+    if (health < 0) {
+        health = 0;
+        status = DEAD;
+    }
+}
 
 void Player::add_money(int income) {
     money += income;
