@@ -44,13 +44,13 @@ public:
     }
     int get_money() { return money; }
     int get_health() { return health; }
-    void get_shot(Gun);
-    void add_money(int);
     string get_username() { return username; }
     string get_teamname() { return teamname; }
+    void get_shot(Gun);
+    void add_money(int);
     void go_AFK() { mode = AFK; }
     void go_ATK() { mode = ATK; }
-    void shoot(Player);
+    void shoot(Player*);
     void buy(Gun);
 private:    
     string teamname;
@@ -76,7 +76,7 @@ void Player::add_money(int income) {
         money = MAX_MONEY;
 }
 
-void Player::shoot(Player attacked) {
+void Player::shoot(Player* attacked) {
     //TODO
 }
 
