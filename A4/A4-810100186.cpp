@@ -35,7 +35,7 @@ enum PlayerMode {AFK, ATK};
 enum GameMode {START_MENU, DURING_GAME, FINISHED};
 enum PlayerStatus {DEAD, ALIVE};
 enum ErrosList {PLAYER_NOT_AVAILABLE, CANT_BUY, WEAPON_NOT_AVAILABLE, ALREADY_HAVE,
-    INSUFFICIENT_MONEY, DOESNT_HAVE_GUN, FRIENDLY_FIRE, NOT_STARTED};
+    INSUFFICIENT_MONEY, DOESNT_HAVE_GUN, FRIENDLY_FIRE, NOT_STARTED, ATTACKER_DEAD, ATTACKED_DEAD};
 
 void show_error(ErrosList error) {
     switch(error) { 
@@ -47,25 +47,20 @@ void show_error(ErrosList error) {
         case DOESNT_HAVE_GUN: cout << "attacker doesn' have this gun" << endl; break;
         case FRIENDLY_FIRE: cout << "you can't shoot this player" << endl; break;
         case NOT_STARTED: cout << "The game hasn't started yet" << endl; break;
+        case ATTACKER_DEAD: cout << "attacker is dead" << endl; break;
+        case ATTACKED_DEAD: cout << "attacked is dead" << endl; break;
     }
 }
 
 class Player {
 public:
-    Player (string _username, string _teamname) {
-        username = _username;
-        teamname = _teamname;
-        status = ALIVE;
-        health = INITIAL_HEALTH;
-        money = INITIAL_MONEY;
-        mode = ATK;
-        kills = deaths = 0;
-    }
+    Player (string, string);
     int get_money() { return money; }
     int get_health() { return health; }
     string get_username() { return username; }
     string get_teamname() { return teamname; }
     void get_shot(Gun);
+    PlayerMode get_mode() { return mode; }
     PlayerStatus get_status() { return status; }
     int get_kills() { return kills; }
     int get_deaths() { return deaths; }
@@ -73,7 +68,10 @@ public:
     void add_money(int);
     void go_AFK() { mode = AFK; }
     void go_ATK() { mode = ATK; }
-    void shoot(Player);
+    Gun* search_in_guns(Gun);
+    vector<Gun> get_list_of_guns() { return listOfGuns; }
+    void shoot(Team&, Team&, GameMode);
+    bool can_shoot(Gun, Player*, Player*, GameMode);
     void buy(string, GameMode);
     bool can_buy(Gun, GameMode);
     void empty_guns() { listOfGuns.clear(); }
@@ -89,6 +87,16 @@ private:
     PlayerStatus status;
 };
 
+Player::Player (string _username, string _teamname) {
+        username = _username;
+        teamname = _teamname;
+        status = ALIVE;
+        health = INITIAL_HEALTH;
+        money = INITIAL_MONEY;
+        mode = ATK;
+        kills = deaths = 0;
+}
+
 class Team {
 public:
     void add_user(Player player) { listOfMembers.push_back(player); }
@@ -99,6 +107,14 @@ private:
     vector<Player> listOfMembers;
     string teamname;
 };
+
+Gun* Player::search_in_guns(Gun gun) {
+    for (auto& playerGun : get_list_of_guns()) {
+        if (playerGun.name == gun.name)
+            return &playerGun;
+    }
+    return NULL;
+}
 
 Player* Team::search(string username) {
     for (auto& player : get_list_of_players()) {
@@ -128,11 +144,49 @@ void Player::add_money(int income) {
         money = MAX_MONEY;
 }
 
-void Player::shoot(Player attacked) {
-    //TODO
+bool Player::can_shoot(Gun gun, Player* attacker, Player* attacked, GameMode gameMode) {
+    if (attacker == NULL || attacked == NULL ||
+        attacker->get_mode() == AFK || attacked->get_mode() == AFK) {
+        show_error(PLAYER_NOT_AVAILABLE);
+        return false;
+    }
+    else if (attacker->get_status() == DEAD) {
+        show_error(ATTACKER_DEAD);
+        return false;
+    }
+    else if (attacked->get_status() == DEAD) {
+        show_error(ATTACKED_DEAD);
+        return false;
+    }
+    else if (attacker->search_in_guns(gun) == NULL) {
+        show_error(WEAPON_NOT_AVAILABLE);
+        return false;
+    }
+    else if (attacker->get_teamname() == attacked->get_teamname()) {
+        show_error(FRIENDLY_FIRE);
+        return false;
+    }
+    else if (gameMode == START_MENU) {
+        show_error(NOT_STARTED);
+        return false;
+    }
+    return true;
 }
 
-Gun switch_name_to_gun(string gunName) {
+void Player::shoot(Team& terrorist, Team& counter_terrorist, GameMode gameMode) {
+    string attackerName, attackedName, gunName;
+    cin >> attackerName >> attackedName >> gunName;
+    Gun gun = convert_name_to_gun(gunName);
+    Player* attacker = search_in_players(terrorist, counter_terrorist, attackerName);
+    Player* attacked = search_in_players(terrorist, counter_terrorist, attackedName);
+    if (can_shoot(gun, attacker, attacked, gameMode)) {
+        attacker->add_money(gun.prizeForKilling);
+        attacked->get_shot(gun);
+        cout << "nice shot" << endl;
+    }
+}
+
+Gun convert_name_to_gun(string gunName) {
     Gun gun;
     if (gunName == HEAVY.name)
         gun = HEAVY;
@@ -170,7 +224,7 @@ bool Player::can_buy(Gun gun, GameMode gameMode) {
 }
 
 void Player::buy(string gunName, GameMode gameMode) {
-    Gun gun = switch_name_to_gun(gunName);
+    Gun gun = convert_name_to_gun(gunName);
     if (can_buy(gun, gameMode)) {
         listOfGuns.push_back(gun);
         money -= gun.price;
@@ -187,7 +241,7 @@ Player* search_in_players(Team& terrorist, Team& counter_terrorist, string usern
     return result;
 }
 
-void end_game(Team& terrorist, Team& counter_terrorist) {
+void end_game(Team& terrorist, Team& counter_terrorist, GameMode& gameMode) {
     string winner;
     if (counter_terrorist.count_alive() > 0)
         winner = "counter-terrorist";
@@ -207,6 +261,7 @@ void end_game(Team& terrorist, Team& counter_terrorist) {
         else     
             Player.add_money(LOSE_PRIZE);
     }
+    gameMode = START_MENU;
 }
 
 void initialising_for_each_round(Team& terrorist, Team& counter_terrorist) {
@@ -298,7 +353,7 @@ void get_command_in_start_menu(GameMode& gameMode, Team& terrorist, Team& counte
         buying(terrorist, counter_terrorist, gameMode);
     else if (command == "score-board")
         score_board(terrorist, counter_terrorist);
-  //  else if (command == "shoot") 
+//      else if (command == "shoot") 
 //        shoot_before_game();
 }
 
@@ -332,7 +387,7 @@ int main() {
         while (gameMode == START_MENU) 
             get_command_in_start_menu(gameMode, terrorist, counter_terrorist, terrorist, counterTerrorist);
         //while (gameMode == DURING_GAME)
-        end_game(terrorist, counter_terrorist);
+        end_game(terrorist, counter_terrorist, gameMode);
     }
     return 0;
 }
