@@ -288,24 +288,28 @@ void add_user(Team& terrorist, Team& counter_terrorist) {
 
 void get_money_of_a_user(Team& terrorist, Team& counter_terrorist) {
     string username;
+    cin >> username;
     Player* player = search_in_players(terrorist, counter_terrorist, username);
     cout << player->get_money() << endl;
 }
 
 void get_health_of_a_user(Team& terrorist, Team& counter_terrorist) {
     string username;
+    cin >> username;
     Player* player = search_in_players(terrorist, counter_terrorist, username);
     cout << player->get_health() << endl;
 }
 
 void going_afk(Team& terrorist, Team& counter_terrorist) {
     string username;
+    cin >> username;
     Player* player = search_in_players(terrorist, counter_terrorist, username);
     player->go_AFK();
 }
 
 void going_atk(Team& terrorist, Team& counter_terrorist) {
     string username;
+    cin >> username;
     Player* player = search_in_players(terrorist, counter_terrorist, username);
     player->go_ATK();
 }
