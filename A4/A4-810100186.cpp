@@ -68,8 +68,8 @@ public:
     int get_kills() { return kills; }
     int get_deaths() { return deaths; }
     void set_status(PlayerStatus _status) { status = _status; }
-    void go_AFK() { mode = AFK; }
     vector<Gun> get_list_of_guns() { return listOfGuns; }
+    void go_AFK() { mode = AFK; }
     void go_ATK() { mode = ATK; }
     void add_money(int);
     void get_shot(Gun);
@@ -362,10 +362,10 @@ void get_command_in_start_menu(GameMode& gameMode, Team& terrorist, Team& counte
         going_atk(terrorist, counter_terrorist);
     else if (command == "buy")
         buying(terrorist, counter_terrorist, gameMode);
-    else if (command == "score-board")
-        score_board(terrorist, counter_terrorist);
     else if (command == "shoot") 
         shooting(terrorist, counter_terrorist, gameMode);
+    else if (command == "score-board")
+        score_board(terrorist, counter_terrorist);
 }
 
 void get_command_during_game(GameMode& gameMode, Team& terrorist, Team& counter_terrorist) {
@@ -396,6 +396,10 @@ void get_command_before_start_menu(GameMode& gameMode, Team& terrorist, Team& co
         gameMode = START_MENU;
         cin >> numOfCommand;
     }
+    else if (command == "buy")
+        buying(terrorist, counter_terrorist, gameMode);
+    else if (command == "shoot") 
+        shooting(terrorist, counter_terrorist, gameMode);
 }
 
 int main() {
