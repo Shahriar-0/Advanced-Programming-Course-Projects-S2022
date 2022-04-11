@@ -63,17 +63,17 @@ public:
     int get_health() { return health; }
     string get_username() { return username; }
     string get_teamname() { return teamname; }
-    void get_shot(Gun);
     PlayerMode get_mode() { return mode; }
     PlayerStatus get_status() { return status; }
     int get_kills() { return kills; }
     int get_deaths() { return deaths; }
     void set_status(PlayerStatus _status) { status = _status; }
-    void add_money(int);
     void go_AFK() { mode = AFK; }
-    void go_ATK() { mode = ATK; }
-    Gun* search_in_guns(Gun);
     vector<Gun> get_list_of_guns() { return listOfGuns; }
+    void go_ATK() { mode = ATK; }
+    void add_money(int);
+    void get_shot(Gun);
+    Gun* search_in_guns(Gun);
     void shoot(Team&, Team&, GameMode);
     bool can_shoot(Gun, Player*, GameMode);
     void buy(string, GameMode);
@@ -221,11 +221,9 @@ bool Player::can_buy(Gun gun, GameMode gameMode) {
         show_error(WEAPON_NOT_AVAILABLE);
         return false;
     }
-    for (auto& i : listOfGuns) {
-        if (i.name == gun.name) {
-            show_error(ALREADY_HAVE);
-            return false;
-        }
+    if (search_in_guns(gun) != NULL) {
+        show_error(ALREADY_HAVE);
+        return false;
     }
     if (money < gun.price) {
         show_error(INSUFFICIENT_MONEY);
@@ -278,12 +276,12 @@ void initialising_for_each_round(Team& terrorist, Team& counter_terrorist, GameM
 }
 
 void add_user(Team& terrorist, Team& counter_terrorist) {
-        string username, teamname;
-        cin >> username >> teamname;
-        if (teamname == "terrorist")
-            terrorist.add_user(Player(username, teamname));
-        else 
-            counter_terrorist.add_user(Player(username, teamname));
+    string username, teamname;
+    cin >> username >> teamname;
+    if (teamname == "terrorist")
+        terrorist.add_user(Player(username, teamname));
+    else 
+        counter_terrorist.add_user(Player(username, teamname));
 }
 
 void get_money_of_a_user(Team& terrorist, Team& counter_terrorist) {
@@ -321,6 +319,13 @@ void buying (Team& terrorist, Team& counter_terrorist, GameMode gameMode) {
     player->buy(gunName, gameMode);
 }
 
+void shooting(Team& terrorist,Team& counter_terrorist, GameMode gameMode) {
+    string attackerName;
+    cin >> attackerName;
+    Player* attacker = search_in_players(terrorist, counter_terrorist, attackerName);
+    attacker->shoot(terrorist, counter_terrorist, gameMode);
+}
+
 bool player_compare(Player& first, Player& second) {
     return first.get_kills() < second.get_kills() ||
     (first.get_deaths() > second.get_deaths() && first.get_kills() == second.get_kills()) ||
@@ -340,18 +345,13 @@ void score_board(Team& terrorist, Team& counter_terrorist) {
         cout << player.get_username() << " " << player.get_kills() << " " << player.get_deaths() <<  endl;    
 }
 
-void shooting(Team& terrorist,Team& counter_terrorist, GameMode gameMode) {
-    string attackerName;
-    cin >> attackerName;
-    Player* attacker = search_in_players(terrorist, counter_terrorist, attackerName);
-    attacker->shoot(terrorist, counter_terrorist, gameMode);
-}
-
 void get_command_in_start_menu(GameMode& gameMode, Team& terrorist, Team& counter_terrorist) {
     string command;
     cin >> command;
-    if (command == "start") 
+    if (command == "start") {
         gameMode = DURING_GAME;
+        cout << "fight!" << endl;
+    }
     else if (command == "get-money")
         get_money_of_a_user(terrorist, counter_terrorist);
     else if (command == "get-health")
@@ -399,7 +399,7 @@ void get_command_before_start_menu(GameMode& gameMode, Team& terrorist, Team& co
 }
 
 int main() {
-    GameMode gameMode = START_MENU;
+    GameMode gameMode = BEFORE_START_MENU;
     Team terrorist, counter_terrorist;
     int numOfRounds;
     cin >> numOfRounds;
