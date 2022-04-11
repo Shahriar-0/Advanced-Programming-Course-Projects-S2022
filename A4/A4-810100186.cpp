@@ -16,7 +16,7 @@ class Team;
 #define INITIAL_MONEY 1000
 
 enum PlayerMode {AFK, ATK};
-enum GameMode {START_MENU, DURING_GAME, FINISHED};
+enum GameMode {BEFORE_START_MENU, START_MENU, DURING_GAME, FINISHED};
 enum PlayerStatus {DEAD, ALIVE};
 enum ErrosList {PLAYER_NOT_AVAILABLE, CANT_BUY, WEAPON_NOT_AVAILABLE, ALREADY_HAVE,
     INSUFFICIENT_MONEY, DOESNT_HAVE_GUN, FRIENDLY_FIRE, NOT_STARTED, ATTACKER_DEAD, ATTACKED_DEAD};
@@ -274,7 +274,7 @@ void initialising_for_each_round(Team& terrorist, Team& counter_terrorist, GameM
         player.empty_guns();
         player.buy("knife", START_MENU);
     }
-    gameMode = START_MENU;
+    gameMode = BEFORE_START_MENU;
 }
 
 void add_user(Team& terrorist, Team& counter_terrorist) {
@@ -352,8 +352,6 @@ void get_command_in_start_menu(GameMode& gameMode, Team& terrorist, Team& counte
     cin >> command;
     if (command == "start") 
         gameMode = DURING_GAME;
-    else if (command == "add-user") 
-        add_user(terrorist, counter_terrorist);
     else if (command == "get-money")
         get_money_of_a_user(terrorist, counter_terrorist);
     else if (command == "get-health")
@@ -389,16 +387,27 @@ void get_command_during_game(GameMode& gameMode, Team& terrorist, Team& counter_
         shooting(terrorist, counter_terrorist, gameMode);
 }
 
+void get_command_before_start_menu(GameMode& gameMode, Team& terrorist, Team& counter_terrorist, int& numOfCommand) {
+    string command;
+    cin >> command;
+    if (command == "add-user")
+        add_user(terrorist, counter_terrorist);
+    else if (command == "round") {
+        gameMode = START_MENU;
+        cin >> numOfCommand;
+    }
+}
+
 int main() {
     GameMode gameMode = START_MENU;
     Team terrorist, counter_terrorist;
     int numOfRounds;
     cin >> numOfRounds;
     while (numOfRounds--) {
-        string tempValueForRound;
-        int numOfCommands;
-        cin >> tempValueForRound >> numOfCommands;
         initialising_for_each_round(terrorist, counter_terrorist, gameMode);
+        int numOfCommands;
+        while (gameMode == BEFORE_START_MENU)
+            get_command_before_start_menu(gameMode, terrorist, counter_terrorist, numOfCommands);
         int iteration = 0;
         while (gameMode == START_MENU && iteration < numOfCommands) { 
             get_command_in_start_menu(gameMode, terrorist, counter_terrorist);
