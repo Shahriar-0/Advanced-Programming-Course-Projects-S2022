@@ -137,7 +137,7 @@ int Team::count_alive() {
 
 void Player::get_shot(Gun gun) {
     health -= gun.damage;
-    if (health < 0) {
+    if (health <= 0) {
         health = 0;
         status = DEAD;
     }
