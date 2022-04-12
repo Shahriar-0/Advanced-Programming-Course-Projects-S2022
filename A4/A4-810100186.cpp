@@ -131,7 +131,7 @@ Player* Team::search(string username) {
 int Team::count_alive() {
     int result = 0;
     for (auto i : listOfMembers)
-        result += (i.get_status() == ALIVE);
+        result += (i.get_status() == ALIVE && i.get_mode() == ATK);
     return result;
 }
 
