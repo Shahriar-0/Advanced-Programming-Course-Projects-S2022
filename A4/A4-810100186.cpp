@@ -204,6 +204,10 @@ void Player::shoot(Team& terrorist, Team& counter_terrorist, GameMode gameMode) 
     if (can_shoot(gun, attacked, gameMode)) {
         add_money(gun.prizeForKilling);
         attacked->get_shot(gun);
+        if (attacked->get_status() == DEAD) {
+            attacked->deaths++;
+            kills++;
+        }
         cout << "nice shot" << endl;
     }
 }
