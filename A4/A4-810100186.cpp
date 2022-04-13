@@ -24,7 +24,6 @@ enum ErrosList { PLAYER_NOT_AVAILABLE, CANT_BUY, WEAPON_NOT_AVAILABLE, ALREADY_H
 
 class Gun {
 public:
-    Gun() { name = "NOT AVAILABLE"; }
     Gun(int _price, int _damage, int _prizeForKilling, string _name) {
         price = _price;
         damage = _damage;
@@ -42,6 +41,7 @@ private:
     int damage;
     int prizeForKilling;
 };
+const Gun GUN_NOT_AVAILABLE(0, 0, 0, "NOT AVAILABLE");
 
 class Player {
 public:
@@ -60,6 +60,7 @@ public:
     void empty_guns() { listOfGuns.clear(); }
 
     Player(string, string);
+    void initialise(GameManager*);
     void add_money(int);
     void get_shot(Gun);
     bool has_gun(Gun);
@@ -81,30 +82,32 @@ private:
 
 class Team {
 public:
+    Team (string _teamname) { teamname = teamname; }
     void add_user(Player player) { listOfMembers.push_back(player); }
     vector<Player> get_list_of_players() { return listOfMembers; }
     void set_list_of_players(vector<Player> listOfPlayers) { listOfMembers = listOfPlayers; }
+    string get_name() { return teamname; }
+
     int count_alive();
     void sorting();
     Player* search(string);
     void win();
     void lose();
     void initialise(GameManager*);
+    void score_board();
 private:
-    vector<Player> listOfMembers;
     string teamname;
+    vector<Player> listOfMembers;
 };
 
 class GameManager {
 public:
     GameManager();
-    Gun search_weapon(Gun);
     void before_menu();
     void menu();
     void fight();
     void end_game();
     void add_user();
-    void show_error(ErrosList);
     void initialising();
     void get_money_of_a_user();
     void get_health_of_a_user();
@@ -113,13 +116,15 @@ public:
     void buying();
     void shooting();
     void score_board();
+    void clearing();
+    Gun search_weapon(Gun);
+    void show_error(ErrosList);
     void get_command_in_start_menu(int&, int);
     void get_command_during_game(int&, int);
     void get_command_before_start_menu(int&);
     Gun convert_name_to_gun(string);
-    GameMode get_mode() { return gameMode; }
     Player* search_in_players(string);
-    void clearing();
+    GameMode get_mode() { return gameMode; }
 private:
     vector<Gun> listOfAllGuns;
     Team terrorist, counter_terrorist;
@@ -130,13 +135,24 @@ Gun GameManager::search_weapon(Gun gun) {
     for (auto i : listOfAllGuns)   
         if (i == gun)
             return i;
-    return Gun();
+    return GUN_NOT_AVAILABLE;
 }
 
-GameManager::GameManager() {
+GameManager::GameManager() : terrorist("terrorist"), counter_terrorist("counter-terrorist") {
     listOfAllGuns.push_back(Gun(3000, 45, 100, "heavy"));
     listOfAllGuns.push_back(Gun(400, 20, 200, "pistol"));
     listOfAllGuns.push_back(Gun(0, 35, 500, "knife"));
+}
+
+
+void Team::win() {
+    for (auto& player : listOfMembers) 
+        player.add_money(WIN_PRIZE);
+}
+
+void Team::lose() {
+    for (auto& player : listOfMembers) 
+        player.add_money(LOSE_PRIZE);
 }
 
 Player::Player(string _username, string _teamname) {
@@ -149,21 +165,14 @@ Player::Player(string _username, string _teamname) {
     kills = deaths = 0;
 }
 
-void Team::win() {
-    for (auto& player : listOfMembers) 
-        player.add_money(WIN_PRIZE);
-}
-
-void Team::lose() {
-    for (auto& player : listOfMembers) 
-        player.add_money(LOSE_PRIZE);
+void Player::initialise(GameManager* cs_go) {
+    empty_guns();
+    listOfGuns.push_back(cs_go->convert_name_to_gun("knife"));
 }
 
 void Team::initialise(GameManager* cs_go){
-    for (auto& player : listOfMembers) {
-        player.empty_guns();
-        player.buy(cs_go);
-    }
+    for (auto& player : listOfMembers) 
+        player.initialise(cs_go);
 }
 
 bool player_compare(Player& first, Player& second) {
@@ -172,15 +181,16 @@ bool player_compare(Player& first, Player& second) {
         (first.get_deaths() == second.get_deaths() && first.get_kills() == second.get_kills() && first.get_username() < second.get_username());
 }
 
+void Team::score_board() {
+    sorting();
+    cout << get_name() << "plyaers:" << endl;
+    for (auto i : listOfMembers)
+        cout << i.get_username() << " " << i.get_kills() << " " << i.get_deaths() << endl;
+}
+
 void GameManager::score_board() {
-    counter_terrorist.sorting();
-    cout << "counter-terrorist players:" << endl;
-    for (auto i : counter_terrorist.get_list_of_players())
-        cout << i.get_username() << " " << i.get_kills() << " " << i.get_deaths() << endl;
-    terrorist.sorting();
-    cout << "terrorist players:" << endl;
-    for (auto i : terrorist.get_list_of_players())
-        cout << i.get_username() << " " << i.get_kills() << " " << i.get_deaths() << endl;
+    counter_terrorist.score_board();
+    terrorist.score_board();
 }
 
 void Team::sorting() {
@@ -252,7 +262,7 @@ bool Player::can_shoot(Gun gun, Player* attacked, GameManager* cs_go) {
         cs_go->show_error(ATTACKED_DEAD);
         return false;
     }
-    if (has_gun(gun) == false) {
+    if (!has_gun(gun)) {
         cs_go->show_error(WEAPON_NOT_AVAILABLE);
         return false;
     }
@@ -268,14 +278,10 @@ bool Player::can_shoot(Gun gun, Player* attacked, GameManager* cs_go) {
 }
 
 Gun GameManager::convert_name_to_gun(string gunName) {
-    Gun result;
-    for (auto gun : listOfAllGuns) {
-        if (gun.get_name() == gunName) {
-            result = gun;
-            break;
-        }
-    }
-    return result;
+    for (auto gun : listOfAllGuns) 
+        if (gun.get_name() == gunName) 
+            return gun;
+    return GUN_NOT_AVAILABLE;
 }
 
 Player* GameManager::search_in_players(string username) {
@@ -311,11 +317,11 @@ bool Player::can_buy(Gun gun, GameManager* cs_go) {
         cs_go->show_error(CANT_BUY);
         return false;
     }
-    if (gun.get_name() == "NOT AVAILABLE") {
+    if (gun == GUN_NOT_AVAILABLE) {
         cs_go->show_error(WEAPON_NOT_AVAILABLE);
         return false;
     }
-    if (has_gun(gun) != false) {
+    if (!has_gun(gun)) {
         cs_go->show_error(ALREADY_HAVE);
         return false;
     }
@@ -332,9 +338,8 @@ void Player::buy(GameManager* cs_go) {
     Gun gun = cs_go->convert_name_to_gun(gunName);
     if (can_buy(gun, cs_go)) {
         listOfGuns.push_back(gun);
-        money -= gun.get_price();
-        if (!(gun == cs_go->convert_name_to_gun("knife")))
-            cout << "weapon bought successfully" << endl;
+        money -= gun.get_price();   
+        cout << "weapon bought successfully" << endl;
     }
 }
 
@@ -395,8 +400,8 @@ void GameManager::shooting() {
 
 void GameManager::get_command_in_start_menu(int& iteration, int numOfCommands) {
     string command;
-    cin >> command;
     while (gameMode == START_MENU && iteration < numOfCommands) {
+        cin >> command;
         if (command == "start") {
             gameMode = DURING_GAME;
             cout << "fight!" << endl;
@@ -415,16 +420,14 @@ void GameManager::get_command_in_start_menu(int& iteration, int numOfCommands) {
             shooting();
         else if (command == "score-board")
             score_board();
-        iteration++;
-        
-        cin >> command;
+        iteration++;        
     }
 }
 
 void GameManager::get_command_during_game(int& iteration, int numOfCommands) {
     string command;
-    cin >> command;
     while (iteration < numOfCommands) {
+        cin >> command;
         if (command == "get-money")
             get_money_of_a_user();
         else if (command == "get-health")
@@ -439,14 +442,13 @@ void GameManager::get_command_during_game(int& iteration, int numOfCommands) {
             score_board();
         else if (command == "shoot")
             shooting();
-        cin >> command;
     }
 }
 
 void GameManager::get_command_before_start_menu(int& numOfCommand) {
     string command;
-    cin >> command;
     while (gameMode == BEFORE_START_MENU) {
+        cin >> command;
         if (command == "add-user")
             add_user();
         else if (command == "round") {
@@ -459,7 +461,6 @@ void GameManager::get_command_before_start_menu(int& numOfCommand) {
             shooting();
         else if (command == "score-board")
             score_board();
-        cin >> command;
     }
 }
 
