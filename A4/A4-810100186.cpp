@@ -339,7 +339,14 @@ void Player::buy(GameManager* cs_go) {
 }
 
 void GameManager::end_game() {
-    (counter_terrorist.count_alive() > 0)? counter_terrorist.win() : terrorist.win();
+    if (counter_terrorist.count_alive() > 0) {
+        counter_terrorist.win();
+        terrorist.lose();
+    } 
+    else {
+        terrorist.win();
+        counter_terrorist.lose();
+    }
 }
 
 void GameManager::add_user() {
