@@ -1,0 +1,26 @@
+2
+add-user Rick terrorist
+add-user Morty counter-terrorist
+add-user Peter terrorist
+add-user Brian counter-terrorist
+round 15
+buy Peter heavy
+buy Peter pistol
+buy Brian pistol
+start
+shoot Peter Brian pistol
+shoot Rick Mamad knife
+shoot Morty Rick heavy
+buy Brian heavy
+shoot Rick Brian knife
+shoot Peter Brian knife
+shoot Rick Brian knife
+shoot Rick Morty knife
+shoot Peter Morty knife
+shoot Rick Morty knife
+shoot Rick Morty knife
+round 3
+start
+shoot Brian Rick pistol
+get-money Morty
+score-board

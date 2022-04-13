@@ -1,0 +1,7 @@
+1
+add-user Rick terrorist
+add-user Morty counter-terrorist
+round 3
+get-money Rick
+start
+get-health Morty
