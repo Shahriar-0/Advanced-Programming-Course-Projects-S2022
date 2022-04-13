@@ -1,7 +1,88 @@
-1
-add-user Rick terrorist
-add-user Morty counter-terrorist
-round 3
-get-money Rick
+5
+add-user ta terrorist
+add-user tb terrorist
+add-user ca counter-terrorist
+add-user cb counter-terrorist
+round 28
+buy ta pistol
+buy ta heavy
+buy tb pistol
+buy cb pistol
+buy ca knife
+buy tb pistol
+get-money ta
+score-board
+shoot tb cb pistol
 start
-get-health Morty
+buy ca pistol
+get-money ca
+get-money tb
+go-afk ca
+shoot ta tb pistol
+shoot ta ggg knife
+shoot ca ta knife
+shoot ta ca pistol
+shoot ta cb pistol
+shoot ta cb knife
+shoot tb cb knife
+shoot tb cb pistol
+get-money ta
+get-money tb
+score-board
+get-health cb
+get-money ta
+get-money tb
+round 3
+get-health cb
+buy cb pistol
+go-atk cb
+add-user tc terrorist
+add-user cc counter-terrorist
+round 4
+get-money cb
+get-money ca
+get-money ta
+get-money tb
+add-user td terrorist
+add-user cd counter-terrorist
+round 28
+buy ca pistol
+buy ca heavy
+buy cc pistol
+buy cc heavy
+get-money cb
+get-money ca
+get-money ta
+start
+shoot ca ta knife
+go-atk ca
+shoot ca ta knife
+shoot cb ta heavy
+shoot cb ta pistol
+shoot cb ta knife
+go-afk tb
+get-money tb
+get-money cc
+go-afk td
+shoot ca tc heavy
+shoot ca tc pistol
+shoot ca tc knife
+shoot cc tc heavy
+shoot cc tc pistol
+shoot cd tc knife
+get-money tc
+get-health ta
+shoot cc ta knife
+get-health tc
+round 10
+score-board
+get-money cb
+get-money ca
+get-money ta
+get-money tb
+start
+get-money cc
+get-money tc
+get-money cd
+get-health ta
+score-board

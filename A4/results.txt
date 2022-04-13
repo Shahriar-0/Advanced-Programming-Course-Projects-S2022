@@ -1,0 +1,10 @@
+test number 3: 
+69c69
+< attacker doesn't have this gun
+---
+> nice shot
+82c82
+< 30
+---
+> 10
+________________________________

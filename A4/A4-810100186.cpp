@@ -82,8 +82,8 @@ private:
 
 class Team {
 public:
-    Team (string _teamname) { teamname = teamname; }
-    void add_user(Player player) { listOfMembers.push_back(player); }
+    Team (string _teamname) { teamname = _teamname; }
+    void add_user(Player player, GameManager* cs_go) { player.initialise(cs_go); listOfMembers.push_back(player); }
     vector<Player> get_list_of_players() { return listOfMembers; }
     void set_list_of_players(vector<Player> listOfPlayers) { listOfMembers = listOfPlayers; }
     string get_name() { return teamname; }
@@ -146,6 +146,7 @@ GameManager::GameManager() : terrorist("terrorist"), counter_terrorist("counter-
 
 
 void Team::win() {
+    cout << teamname << " won" << endl;
     for (auto& player : listOfMembers) 
         player.add_money(WIN_PRIZE);
 }
@@ -168,6 +169,8 @@ Player::Player(string _username, string _teamname) {
 void Player::initialise(GameManager* cs_go) {
     empty_guns();
     listOfGuns.push_back(cs_go->convert_name_to_gun("knife"));
+    status = ALIVE;
+    health = INITIAL_HEALTH;
 }
 
 void Team::initialise(GameManager* cs_go){
@@ -176,14 +179,14 @@ void Team::initialise(GameManager* cs_go){
 }
 
 bool player_compare(Player& first, Player& second) {
-    return first.get_kills() < second.get_kills() ||
-        (first.get_deaths() > second.get_deaths() && first.get_kills() == second.get_kills()) ||
+    return first.get_kills() > second.get_kills() ||
+        (first.get_deaths() < second.get_deaths() && first.get_kills() == second.get_kills()) ||
         (first.get_deaths() == second.get_deaths() && first.get_kills() == second.get_kills() && first.get_username() < second.get_username());
 }
 
 void Team::score_board() {
     sorting();
-    cout << get_name() << "plyaers:" << endl;
+    cout << get_name() << " players:" << endl;
     for (auto i : listOfMembers)
         cout << i.get_username() << " " << i.get_kills() << " " << i.get_deaths() << endl;
 }
@@ -204,7 +207,7 @@ void GameManager::show_error(ErrosList error) {
     case WEAPON_NOT_AVAILABLE: cout << "weapon not available" << endl; break;
     case ALREADY_HAVE: cout << "you already have this weapon" << endl; break;
     case INSUFFICIENT_MONEY: cout << "insufficient money" << endl; break;
-    case DOESNT_HAVE_GUN: cout << "attacker doesn' have this gun" << endl; break;
+    case DOESNT_HAVE_GUN: cout << "attacker doesn't have this gun" << endl; break;
     case FRIENDLY_FIRE: cout << "you can't shoot this player" << endl; break;
     case NOT_STARTED: cout << "The game hasn't started yet" << endl; break;
     case ATTACKER_DEAD: cout << "attacker is dead" << endl; break;
@@ -263,7 +266,7 @@ bool Player::can_shoot(Gun gun, Player* attacked, GameManager* cs_go) {
         return false;
     }
     if (!has_gun(gun)) {
-        cs_go->show_error(WEAPON_NOT_AVAILABLE);
+        cs_go->show_error(DOESNT_HAVE_GUN);
         return false;
     }
     if (get_teamname() == attacked->get_teamname()) {
@@ -298,9 +301,9 @@ void Player::shoot(GameManager* cs_go) {
     Gun gun = cs_go->convert_name_to_gun(gunName);
     Player* attacked = cs_go->search_in_players(attackedName);
     if (can_shoot(gun, attacked, cs_go)) {
-        add_money(gun.get_prize_for_killing());
         attacked->get_shot(gun);
         if (attacked->get_status() == DEAD) {
+            add_money(gun.get_prize_for_killing());
             attacked->deaths++;
             kills++;
         }
@@ -321,7 +324,7 @@ bool Player::can_buy(Gun gun, GameManager* cs_go) {
         cs_go->show_error(WEAPON_NOT_AVAILABLE);
         return false;
     }
-    if (!has_gun(gun)) {
+    if (has_gun(gun)) {
         cs_go->show_error(ALREADY_HAVE);
         return false;
     }
@@ -357,7 +360,7 @@ void GameManager::end_game() {
 void GameManager::add_user() {
     string username, teamname;
     cin >> username >> teamname;
-    (teamname == "terrorist")? terrorist.add_user(Player(username, teamname)) : counter_terrorist.add_user(Player(username, teamname));    
+    (teamname == "terrorist")? terrorist.add_user(Player(username, teamname), this) : counter_terrorist.add_user(Player(username, teamname), this);    
     cout << "ok" << endl;
 }
 
@@ -377,12 +380,14 @@ void GameManager::going_AFK() {
     string username;
     cin >> username;
     search_in_players(username)->go_AFK();
+    cout << "ok" << endl;
 }
 
 void GameManager::going_ATK() {
     string username;
     cin >> username;
     search_in_players(username)->go_ATK();
+    cout << "ok" << endl;
 }
 
 void GameManager::buying() {
@@ -442,6 +447,7 @@ void GameManager::get_command_during_game(int& iteration, int numOfCommands) {
             score_board();
         else if (command == "shoot")
             shooting();
+        iteration++;
     }
 }
 
