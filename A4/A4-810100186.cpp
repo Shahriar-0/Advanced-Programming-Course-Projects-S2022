@@ -159,7 +159,7 @@ void Team::lose() {
 Player::Player(string _username, string _teamname) {
     username = _username;
     teamname = _teamname;
-    status = ALIVE;
+    status = DEAD;
     health = INITIAL_HEALTH;
     money = INITIAL_MONEY;
     mode = ATK;
@@ -167,8 +167,10 @@ Player::Player(string _username, string _teamname) {
 }
 
 void Player::initialise(GameManager* cs_go) {
-    empty_guns();
-    listOfGuns.push_back(cs_go->convert_name_to_gun("knife"));
+    if (status == DEAD) {
+        empty_guns();
+        listOfGuns.push_back(cs_go->convert_name_to_gun("knife"));
+    }
     status = ALIVE;
     health = INITIAL_HEALTH;
 }
