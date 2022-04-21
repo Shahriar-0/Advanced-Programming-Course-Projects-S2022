@@ -1,3 +1,11 @@
+read mario ali
+read matio zare
+read doodle jump 
+first write the variables not the methods
+add things step by step
+
+
+---------------------------------------------
 obviously a class for handling the whole game with a name like star wars
 a class for my ship (for now i decided to keep all the bullets of a ship inside of it
 it means that there should be a vector of corresponding bullet in each ship, the thing 
