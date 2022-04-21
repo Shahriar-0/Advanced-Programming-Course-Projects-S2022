@@ -144,7 +144,6 @@ GameManager::GameManager() : terrorist("terrorist"), counter_terrorist("counter-
     listOfAllGuns.push_back(Gun(0, 35, 500, "knife"));
 }
 
-
 void Team::win() {
     cout << teamname << " won" << endl;
     for (auto& player : listOfMembers) 
