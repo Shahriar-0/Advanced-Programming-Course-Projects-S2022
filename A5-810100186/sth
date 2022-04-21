@@ -1,0 +1,11 @@
+obviously a class for handling the whole game with a name like star wars
+a class for my ship (for now i decided to keep all the bullets of a ship inside of it
+it means that there should be a vector of corresponding bullet in each ship, the thing 
+to remember is that the bullets that are already shot should still be moving)
+a class for hostage
+a class for stationary enemy
+a class for moving enemy
+a class for my bullets (the thing for now is to keep the pointer of the vector
+which holds the list of all enemies and also the hostage and then i got to check all of them in 
+each frame)
+a class for enemy bullet (sth like the last one but holds only my ship)
