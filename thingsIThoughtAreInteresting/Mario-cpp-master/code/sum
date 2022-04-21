@@ -1,0 +1,1545 @@
+#include "audio.hpp"
+
+AudioPlayer::AudioPlayer(Window *win) : window(win){};
+void AudioPlayer::play(AUDIO audio) {
+  window->play_sound_effect(Audio_address[audio]);
+}
+void AudioPlayer::playMusic() { window->play_music(Audio_address[MUSIC]); }
+void AudioPlayer::pauseMusic() { window->stop_music(); }
+#include "background.hpp"
+
+Background::Background(int _mapWidth, int _mapHeight, Window *win) {
+  mapWidth = _mapWidth;
+  mapHeight = _mapHeight;
+  window = win;
+}
+void Background::render(int cameraX) {
+  for (int i = 0; i < mapWidth / mapHeight; i++)
+    window->draw_img(BG_ADDRESS, Rectangle(-cameraX / 2 + i * mapHeight * 2, 0,
+                                           mapHeight * 2, mapHeight));
+}
+#include "block.hpp"
+using namespace std;
+Block::Block(Position _position, TYPE _type, int id)
+    : position(_position), type(_type), bonusId(id), haveBonus(true) {}
+Block::Block(Position _position, TYPE _type, bool _breakable)
+    : position(_position), type(_type), breakable(_breakable) {}
+
+void Block::breakMe() { broken = true; }
+Position Block::getPosition() { return position; }
+int Block::getBonusId() { return bonusId; }
+bool Block::isBroken() { return broken; }
+
+int Block::open(bool shouldBreak) {
+  if (shouldBreak && breakable) {
+    breakMe();
+    return BREAK;
+  }
+  if (type == BRICK) {
+    vy = -10;
+    return MOVED_UP;
+  }
+  if (type != QUESTION_1)
+    return NO_ACTION;
+  type = QUESTION_EMPTY;
+  picChanger = 0;
+  return OPENED;
+}
+void Block::render(Window *window, int cameraX) {
+  if (broken)
+    return;
+  if (type == BRICK)
+    vy = min(vy + 1, 0);
+  if (type == QUESTION_1)
+    picChanger = (picChanger + 1) % (PIC_SPEED * 3);
+
+  window->draw_img(OBJECTS_PIC_ADDRESS[((int)type) + picChanger / PIC_SPEED],
+                   Rectangle(-cameraX + position.x, position.y + vy, BLOCK_SIZE,
+                             BLOCK_SIZE));
+}
+bool Block::isIn(Position pos) { return Xin(pos.x) && Yin(pos.y); }
+bool Block::Xin(int x) {
+  if (x >= position.x && x <= position.x + BLOCK_SIZE)
+    return true;
+  return false;
+}
+bool Block::Yin(int y) {
+  if (y >= position.y && y <= position.y + BLOCK_SIZE)
+    return true;
+  return false;
+}
+#include "bonus.hpp"
+using namespace std;
+Bonus::Bonus(Position pos, char bonusType, int id) : _id(id), position(pos) {
+  if (bonusType == '?')
+    type = COIN;
+  else if (bonusType == 'm')
+    type = RED_MUSH;
+  else
+    type = H_MUSH;
+  ground = pos.y - BLOCK_SIZE;
+}
+void Bonus::appear() { visible = true; }
+void Bonus::disappear() { visible = false; }
+Position Bonus::calculateNextMove() {
+  int newX, newY;
+  vy += GRAVITY;
+  newY = min(ground - 1, position.y + vy);
+  if (position.y == newY) {
+    vy = 0;
+    newX = position.x + vx;
+  } else
+    newX = position.x;
+
+  return Position{newX, newY};
+}
+void Bonus::run() {
+  position = calculateNextMove();
+  moving = true;
+}
+void Bonus::goUp() {
+  if (counter < BLOCK_SIZE)
+    position.y -= 2;
+  else {
+    position.y += 1;
+    ready = true;
+  }
+  counter++;
+}
+void Bonus::render(Window *window, int cameraX) {
+
+  if (!visible)
+    return;
+  if (counter < BLOCK_SIZE * 2) {
+    goUp();
+  } else if (type == COIN)
+    disappear();
+  else {
+    run();
+  }
+  window->draw_img(
+      OBJECTS_PIC_ADDRESS[type],
+      Rectangle(-cameraX + position.x, position.y, BLOCK_SIZE, BLOCK_SIZE));
+}
+TYPE Bonus::getType() { return type; }
+bool Bonus::isVisible() { return visible; }
+bool Bonus::isMoving() { return moving; }
+void Bonus::isCrash() { vx = -vx; }
+bool Bonus::isReady() { return ready; };
+Position Bonus::getPosition() { return position; }
+void Bonus::setGround(int g) { ground = g; }
+#include "game.hpp"
+#define RIGHT 1
+#define LEFT -1
+using namespace std;
+
+Game::Game(string _mapFileAddress) : mapFileAddress(_mapFileAddress) {
+  try {
+    setup();
+    while (1) {
+      handleCrashes();
+      handleEvents();
+      checkWin();
+      if (isWin || isLost)
+        continue;
+      view->nextFrame();
+    }
+  } catch (string err) {
+    cout << endl << "Error Occured :" << err << endl;
+  } catch (...) {
+    cout << "Error Occured , That's all we know" << endl;
+    throw;
+  }
+}
+void Game::checkWin() {
+  for (auto b : map.blocks) {
+    if (b.getType() == FLAG_BODY) {
+      if (b.getPosition().x - mario.getX() < BLOCK_SIZE * 1.5)
+        win();
+    }
+  }
+}
+void Game::handleCrashes() {
+  if (!isMarioCrash())
+    mario.setGround(getGround(mario.getRect()));
+  setGroundToBonuses();
+  setGroundToGumba();
+  setGroundToKoopa();
+  mushroomHandler();
+  gumbaHandler();
+  koopaHandler();
+  handleFall();
+}
+void Game::setup() {
+  map = MapReader(mapFileAddress).getMap();
+  scoreboard = ScoreBoard();
+  mario = Mario(map.mario);
+  view = new View(&map, &mario, &scoreboard);
+  window = view->getWindow();
+  audioPlayer = new AudioPlayer(window);
+  audioPlayer->playMusic();
+}
+void Game::handleFall() {
+  if (mario.getY() > map.height + BLOCK_SIZE) {
+    audioPlayer->play(A_MARIO_DEATH);
+    die(true);
+  }
+}
+void Game::handleEvents() {
+  Event event = window->poll_for_event();
+  if (event.get_type() == Event::KEY_PRESS) {
+    char pressed_key = event.get_pressed_key();
+    if (pressed_key == 'd')
+      mario.move(RIGHT);
+    else if (pressed_key == 'a')
+      mario.move(LEFT);
+    else if (pressed_key == 'w')
+      if (mario.jump())
+        audioPlayer->play(A_JUMP_SUPER);
+  }
+  if (event.get_type() == Event::KEY_RELEASE) {
+    char releasedKey = event.get_pressed_key();
+    if (releasedKey == 'a' || releasedKey == 'd')
+      mario.stopMoving();
+  }
+  if (event.get_type() == Event::QUIT)
+    exit(0);
+}
+void Game::win() {
+  isWin = true;
+  view->win();
+  audioPlayer->pauseMusic();
+  audioPlayer->play(A_LEVEL_CLEAR);
+}
+bool Game::isMarioCrash() {
+  static int counter = 0;
+  mario.setX(max(view->getCameraX(), mario.getX()));
+  for (int i = 0; i < map.blocks.size(); i++) {
+    Block *b = &(map.blocks[i]);
+    if (b->isBroken())
+      continue;
+    if (isConflict(
+            Rect{mario.getPosition(), mario.getWidth(), mario.getHeight() - 1},
+            Rect{b->getPosition(), BLOCK_SIZE, BLOCK_SIZE})) {
+      if (mario.getLastPosition().y >= b->getPosition().y + BLOCK_SIZE) {
+        hitBlock(b);
+      }
+      mario.setVy(max(0, mario.getVy()));
+      mario.setPosition(mario.getLastPosition());
+      return true;
+    }
+  }
+  return false;
+}
+
+void Game::hitBlock(Block *b) {
+  int state = b->open(mario.isBig());
+  if (state == OPENED) {
+    Bonus *bns = &(map.bonus[b->getBonusId()]);
+    bns->appear();
+    if (bns->getType() == COIN) {
+      scoreboard.addCoin();
+      audioPlayer->play(A_COIN);
+    } else
+      audioPlayer->play(A_POWERUP_APPEARS);
+  } else if (state == BREAK)
+    audioPlayer->play(A_BRICK_SMASH);
+  else if (state == MOVED_UP)
+    audioPlayer->play(A_BUMP);
+}
+
+void Game::gumbaHandler() {
+  for (int i = 0; i < map.gumbas.size(); i++) {
+    Gumba *gumba = &(map.gumbas[i]);
+    if (!gumba->isAlive())
+      continue;
+    if (isConflict(Rect{gumba->getPosition(), GUMBA_SIZE, GUMBA_SIZE},
+                   Rect{Position{mario.getPosition().x - FIVE_PIXELS,
+                                 mario.getPosition().y},
+                        mario.getWidth() + TEN_PIXELS, mario.getHeight()})) {
+      if (mario.getLastPosition().y + mario.getHeight() <=
+          gumba->getPosition().y) {
+        mario.setVy(MARIO_REACT);
+        audioPlayer->play(A_ENEMY_STOMP);
+        gumba->die();
+      } else {
+        die();
+      }
+    }
+  }
+}
+void Game::koopaHandler() {
+  for (int i = 0; i < map.koopas.size(); i++) {
+    Koopa *koopa = &(map.koopas[i]);
+    if (isConflict(Rect{koopa->getPosition(), KOOPA_SIZE, KOOPA_SIZE},
+                   Rect{Position{mario.getPosition().x - FIVE_PIXELS,
+                                 mario.getPosition().y},
+                        mario.getWidth() + TEN_PIXELS, mario.getHeight()})) {
+      if (mario.getLastPosition().y + mario.getHeight() <=
+          koopa->getPosition().y) {
+        mario.setVy(MARIO_REACT);
+        audioPlayer->play(A_ENEMY_STOMP);
+        if (koopa->isMoving() && !koopa->isAlive())
+          die();
+        else if (koopa->isAlive())
+          koopa->die();
+        else
+          koopa->shoot(mario.getLastPosition().x > koopa->getPosition().x);
+      } else {
+        die();
+      }
+    }
+  }
+  koopaVsGumbaHandler();
+}
+void Game::koopaVsGumbaHandler() {
+  for (int i = 0; i < map.koopas.size(); i++) {
+    Koopa *koopa = &(map.koopas[i]);
+    if (koopa->isAlive() || !koopa->isMoving())
+      continue;
+    for (int i = 0; i < map.gumbas.size(); i++) {
+      Gumba *gumba = &(map.gumbas[i]);
+      if (!gumba->isAlive())
+        continue;
+      if (isConflict(Rect{koopa->getPosition(), KOOPA_SIZE, KOOPA_SIZE},
+                     Rect{gumba->getPosition(), GUMBA_SIZE, GUMBA_SIZE})) {
+        audioPlayer->play(A_ENEMY_STOMP);
+        gumba->die();
+      }
+    }
+  }
+}
+void Game::lost() {
+  isLost = true;
+  view->lost();
+  audioPlayer->play(A_GAMEOVER);
+  audioPlayer->pauseMusic();
+}
+void Game::die(bool forceDie) {
+  if (mario.isDieHard() && !forceDie)
+    return;
+  if (!mario.isBig()) {
+    audioPlayer->play(A_MARIO_DEATH);
+    scoreboard.decreaseLive();
+    mario.toggleDead();
+    for (int i = 0; i < 20; i++) {
+      mario.goDown();
+      view->nextFrame();
+    }
+    mario.toggleDead();
+  }
+
+  mario.die(forceDie);
+  if (scoreboard.isDied()) {
+    lost();
+  }
+  if (!mario.isBig() || forceDie)
+    view->reset();
+}
+void Game::setGroundToBonuses() {
+  for (int i = 0; i < map.bonus.size(); i++) {
+    Bonus *b = &map.bonus[i];
+    if (!b->isMoving())
+      continue;
+    b->setGround(getGround(Rect{b->getPosition(), BLOCK_SIZE, BLOCK_SIZE}));
+    if (hasConflict(Rect{b->calculateNextMove(), BLOCK_SIZE, BLOCK_SIZE}))
+      b->isCrash();
+  }
+}
+void Game::setGroundToGumba() {
+  for (int i = 0; i < map.gumbas.size(); i++) {
+    Gumba *b = &map.gumbas[i];
+    if (!b->isMoving())
+      continue;
+    b->setGround(getGround(Rect{b->getPosition(), GUMBA_SIZE, GUMBA_SIZE}));
+    if (hasConflict(Rect{b->calculateNextMove(), GUMBA_SIZE, GUMBA_SIZE})) {
+      b->isCrash();
+    }
+  }
+}
+void Game::setGroundToKoopa() {
+  for (int i = 0; i < map.koopas.size(); i++) {
+    Koopa *b = &map.koopas[i];
+    if (!b->isMoving())
+      continue;
+    b->setGround(getGround(Rect{b->getPosition(), KOOPA_SIZE, KOOPA_SIZE}));
+    if (hasConflict(Rect{b->calculateNextMove(), KOOPA_SIZE, KOOPA_SIZE})) {
+      b->isCrash();
+    }
+  }
+}
+bool Game::hasConflict(Rect rect) {
+  for (auto bl : map.blocks) {
+    if (bl.isBroken())
+      continue;
+    if (isConflict(rect, Rect{bl.getPosition(), BLOCK_SIZE, BLOCK_SIZE}))
+      return true;
+  }
+  return false;
+}
+void Game::mushroomHandler() {
+  for (int i = 0; i < map.bonus.size(); i++) {
+    Bonus *b = &(map.bonus[i]);
+    if (!b->isVisible() || !b->isReady())
+      continue;
+    if (isConflict(Rect{b->getPosition(), BLOCK_SIZE, BLOCK_SIZE},
+                   mario.getRect())) {
+      b->disappear();
+      if (b->getType() == H_MUSH)
+        getHealthMush();
+      if (b->getType() == RED_MUSH)
+        getRedMush();
+    }
+  }
+}
+void Game::getHealthMush() {
+  audioPlayer->play(A_POWERUP);
+  scoreboard.addLive();
+}
+void Game::getRedMush() {
+  audioPlayer->play(A_POWERUP);
+  mario.getBig();
+  mario.setGround(getGround(mario.getRect()));
+}
+int Game::getGround(Rect rect) {
+  for (int y = rect.position.y; y <= map.height; y++)
+    for (auto b : map.blocks) {
+      if (b.isBroken())
+        continue;
+      if (b.isIn(Position{rect.position.x + 1, y + rect.height}) ||
+          b.isIn(Position{rect.position.x + rect.width - 1, y + rect.height})) {
+        return (b.getPosition().y - rect.height);
+      }
+    }
+  return map.height + 2 * BLOCK_SIZE;
+}
+
+bool Game::isConflict(Rect rect1, Rect rect2) {
+  Position pos1 = rect1.position, pos2 = rect2.position;
+  int width1 = rect1.width, width2 = rect2.width;
+  int height1 = rect1.height, height2 = rect2.height;
+
+  if ((pos1.x < pos2.x + width2 && pos1.x > pos2.x ||
+       pos1.x + width1 < pos2.x + width2 && pos1.x + width1 > pos2.x) &&
+      (pos1.y <= pos2.y + height2 && pos1.y >= pos2.y ||
+       pos1.y + height1 <= pos2.y + height2 && pos1.y + height1 >= pos2.y))
+    return true;
+  return false;
+};
+#include "gumba.hpp"
+
+using namespace std;
+Gumba::Gumba(Position _position) : position(_position) {
+  ground = position.y - BLOCK_SIZE;
+};
+void Gumba::render(Window *window, int cameraX) {
+  if (counter == 20)
+    return;
+  if (dead) {
+    counter++;
+    picNum = 2;
+    position.y += 3;
+  } else {
+    if (position.x < cameraX + WIDTH)
+      moving = true;
+    if (moving)
+      run();
+  }
+
+  window->draw_img(
+      OBJECTS_PIC_ADDRESS[GUMBA1 + (int)picNum],
+      Rectangle(-cameraX + position.x, position.y, GUMBA_SIZE, GUMBA_SIZE));
+}
+Position Gumba::calculateNextMove() {
+  int newX, newY;
+  int nvy = vy + GRAVITY;
+  newY = min(ground - 1, position.y + nvy);
+  if (newY == ground - 1) {
+    vyShouldReset = true;
+    nvy = 0;
+    newX = position.x + vx;
+  } else
+    newX = position.x;
+  return Position{newX, newY};
+}
+void Gumba::run() {
+  vy += GRAVITY;
+  if (vyShouldReset)
+    vy = 0;
+  vyShouldReset = false;
+  position = calculateNextMove();
+  picNum += .25;
+  if (picNum >= 2)
+    picNum = 0;
+}
+void Gumba::die() { dead = true; }
+void Gumba::setGround(int g) { ground = g; }
+Position Gumba::getPosition() { return position; }
+void Gumba::isCrash() { vx = -1 * vx; }
+bool Gumba::isMoving() { return moving; }
+int Gumba::getY() { return position.y; }
+bool Gumba::isAlive() { return !dead; }
+#include "koopa.hpp"
+
+using namespace std;
+Koopa::Koopa(Position _position) : position(_position) {
+  ground = position.y - BLOCK_SIZE;
+};
+void Koopa::render(Window *window, int cameraX) {
+  if (counter == 20)
+    return;
+
+  if (!dead && position.x < cameraX + WIDTH)
+    moving = true;
+  if (moving)
+    run();
+
+  window->draw_img(
+      KOOPA_FOLDER +
+          (dead ? "dead"
+                : (vx > 0 ? "walking-right-" : "walking-left-") +
+                      to_string((int)picNum + 1)) +
+          ".png",
+      Rectangle(-cameraX + position.x, position.y, KOOPA_SIZE, KOOPA_SIZE));
+}
+void Koopa::shoot(bool right) {
+  moving = true;
+  vx = 10 * (right ? -1 : 1);
+}
+Position Koopa::calculateNextMove() {
+  int newX, newY;
+  int nvy = vy + GRAVITY;
+  newY = min(ground - 1, position.y + nvy);
+  if (newY == ground - 1) {
+    vyShouldReset = true;
+    nvy = 0;
+    newX = position.x + vx;
+  } else
+    newX = position.x;
+  return Position{newX, newY};
+}
+void Koopa::run() {
+  vy += GRAVITY;
+  if (vyShouldReset)
+    vy = 0;
+  vyShouldReset = false;
+  position = calculateNextMove();
+  picNum += .25;
+  if (picNum >= 2)
+    picNum = 1;
+}
+void Koopa::die() {
+  dead = true;
+  moving = false;
+}
+void Koopa::setGround(int g) { ground = g; }
+Position Koopa::getPosition() { return position; }
+void Koopa::isCrash() { vx = -1 * vx; }
+bool Koopa::isMoving() { return moving; }
+int Koopa::getY() { return position.y; }
+bool Koopa::isAlive() { return !dead; }
+#include "../src/rsdl.hpp"
+#include "game.hpp"
+#include "iostream"
+#include <string>
+#define FILE_ADDRESS 1
+using namespace std;
+
+int main(int argc, char const *argv[]) {
+  cout << " \n--------------\n  App running   \n--------------\n \n\n";
+
+  Game mario(argv[FILE_ADDRESS]);
+}
+#include "map_reader.hpp"
+using namespace std;
+
+void MapReader::readFile() {
+  ifstream mapFile;
+  mapFile.open(fileAddress);
+  string temp;
+  while (getline(mapFile, temp)) {
+    mapWidth = temp.length();
+    mapHeight++;
+    map.push_back(temp);
+  }
+  mapHeight *= BLOCK_SIZE;
+  mapWidth *= BLOCK_SIZE;
+}
+
+renderedMap MapReader::getMap() {
+  readFile();
+  translateMap();
+  renderedMap result = {mapHeight, mapWidth, blocks, bonus,
+                        gumbas,    koopas,   mario};
+  return result;
+}
+void MapReader::translateMap() {
+  int y = 0, x = 0, bonusNumber = 0;
+  string line;
+  for (int j = 0; j < map.size(); j++) {
+    line = map[j];
+    for (int i = 0; i < mapWidth / BLOCK_SIZE; i++) {
+      x = i * BLOCK_SIZE;
+      Position pos{x, y};
+      if (line[i] == '.')
+        continue;
+      else if (line[i] == '#')
+        blocks.push_back(Block(pos, CLAY));
+      else if (line[i] == '@')
+        blocks.push_back(Block(pos, BLOCK));
+      else if (line[i] == 'b')
+        blocks.push_back(Block(pos, BRICK, true));
+      else if (line[i] == '|') {
+        if (isRightPipe(line, i)) {
+          blocks.push_back(Block(pos, j > 0 && map[j - 1][i] == '|'
+                                          ? PIPE_RIGHT
+                                          : PIPE_HEAD_RIGHT));
+        } else
+          blocks.push_back(Block(
+              pos, j > 0 && map[j - 1][i] == '|' ? PIPE_LEFT : PIPE_HEAD_LEFT));
+      } else if (line[i] == 'f')
+        blocks.push_back(
+            Block(pos, j > 0 && map[j - 1][i] == 'f' ? FLAG_BODY : FLAG_HEAD));
+      else if (line[i] == '?' || line[i] == 'm' || line[i] == 'h') {
+        bonus.push_back(Bonus(pos, line[i], bonusNumber));
+        blocks.push_back(Block(pos, QUESTION_1, bonusNumber));
+        bonusNumber++;
+      } else if (line[i] == 'M') {
+        mario = Position{x, y};
+      } else if (line[i] == 'l') {
+        gumbas.push_back(Gumba(pos));
+      } else if (line[i] == 'k') {
+        koopas.push_back(Koopa(pos));
+      }
+    }
+    y += BLOCK_SIZE;
+  }
+}
+bool MapReader::isRightPipe(string line, int i) {
+  for (int j = i - 1; j > 0; j--) {
+    if (line[j] != '|')
+      return !((i - j) % 2);
+  }
+  return i % 2;
+}
+#include "mario.hpp"
+using namespace std;
+Mario::Mario(Position pos) {
+  initialX = x = pos.x;
+  initialY = y = pos.y;
+
+  oldX = x;
+  oldY = y;
+}
+Mario::Mario() {
+  x = 0;
+  y = 0;
+}
+Rect Mario::getRect() { return Rect{getPosition(), getWidth(), getHeight()}; }
+void Mario::stopMoving() {
+  static int counter = 0;
+  counter++;
+  int tempVx = vx;
+
+  if (sliding && counter % 3 == 0)
+    vx += vx > 0 ? -2 : vx < 0 ? +2 : 0;
+  if (vx * tempVx < 0)
+    vx = 0;
+  sliding = true;
+  if (vx == 0)
+    isWalking = false;
+}
+void Mario::move(int dir) {
+  vx = VX * dir * (y != ground ? 0.75 : 1);
+  isWalking = true;
+  sliding = false;
+  direction = dir;
+}
+void Mario::moveMario() {
+  picNum += .25;
+  if (picNum == 4)
+    picNum = 1;
+  oldX = x;
+  x += vx;
+  x = max(0, x);
+}
+void Mario::moveBottom() {
+  vy += GRAVITY;
+  oldY = y;
+  y = y + vy;
+  if (y > ground) {
+    y = ground;
+    vy = 0;
+  }
+}
+void Mario::crashedTo(int _x, int _y) {
+  vy = 0;
+  x = _x;
+  y = _y;
+}
+bool Mario::jump() {
+  if (y != ground)
+    return false;
+  vy = VY;
+  // moveBottom();
+  return true;
+};
+bool Mario::stopJump() {
+  if (vy < 0) {
+    vy = 0;
+    return true;
+  }
+  return false;
+}
+void Mario::getBig() {
+  isSmall = false;
+  width = MARIO_SMALL_WIDTH * 1;
+  height = MARIO_SMALL_HEIGHT * 1.5;
+}
+void Mario::getSmall() {
+  isSmall = true;
+  width = MARIO_SMALL_WIDTH;
+  height = MARIO_SMALL_HEIGHT;
+}
+void Mario::goDown() { y += 5; }
+void Mario::draw(Window *window, int cameraX) {
+  dieHardTimer++;
+  if (dieHardTimer == 50)
+    dieHard = false;
+
+  oldY = y;
+  oldX = x;
+  oldVx = vx;
+  oldVy = vy;
+  if (!dead) {
+    moveMario();
+    if (sliding)
+      stopMoving();
+    moveBottom();
+  }
+  if (dieHard && dieHardTimer % 2 == 0)
+    return;
+  window->draw_img(
+      MARIO_FOLDER + string(isSmall ? "normal" : "big") + "/" +
+          (dead ? "dead"
+                : string(isWalking && y == ground
+                             ? "walking-"
+                             : y == ground ? "standing-" : "jumping-") +
+                      string(direction >= 0 ? "right" : "left") +
+                      string(isWalking && y == ground
+                                 ? string("-" + to_string((int)picNum))
+                                 : "")) +
+          ".png",
+      Rectangle(-cameraX + x, y, width, height));
+}
+
+int Mario::getY() { return y; }
+int Mario::getX() { return x; }
+void Mario::setY(int _y) { y = _y; }
+void Mario::setX(int _x) { x = _x; }
+Position Mario::getPosition() { return Position{x, y}; }
+int Mario::getVx() { return vx; }
+int Mario::getVy() { return vy; }
+void Mario::setVy(int _y) { vy = _y; }
+void Mario::setPosition(Position pos) {
+  y = pos.y;
+  x = pos.x;
+}
+void Mario::setGround(int g) {
+  oldGround = ground;
+  ground = g;
+}
+bool Mario::isBig() { return !isSmall; }
+int Mario::getWidth() { return width; }
+int Mario::getHeight() { return height; }
+Position Mario::getLastPosition() { return Position{oldX, oldY}; }
+int Mario::getLastVy() { return oldVy; }
+void Mario::toggleDead() { dead = !dead; }
+void Mario::die(bool forceDie) {
+  if (isSmall || forceDie) {
+    y = initialY - height;
+    vx = 0, vy = 0;
+    x = initialX;
+    direction = 1;
+  }
+  getSmall();
+  dieHard = true;
+  dieHardTimer = 0;
+}
+bool Mario::isDieHard() { return dieHard; }
+#include "scoreboard.hpp"
+using namespace std;
+ScoreBoard::ScoreBoard() {}
+void ScoreBoard::show() {}
+void ScoreBoard::update(int _live, int _coin) {
+  live = _live;
+  coin = _coin;
+}
+void ScoreBoard::addLive() { live++; }
+void ScoreBoard::addCoin() { coin++; }
+void ScoreBoard::decreaseLive() { live--; }
+bool ScoreBoard::isDied() { return live < 0; }
+void ScoreBoard::render(Window *window) {
+  window->fill_rect(Rectangle(SCOREBOARD_X + 2, SCOREBOARD_Y + 2,
+                              SCOREBOARD_WIDTH, SCOREBOARD_HEIGHT),
+                    RGB(80, 80, 80));
+
+  window->fill_rect(Rectangle(SCOREBOARD_X, SCOREBOARD_Y, SCOREBOARD_WIDTH,
+                              SCOREBOARD_HEIGHT),
+                    RGB(190, 190, 250));
+  window->show_text("Coin", Point(SCOREBOARD_X + 20, SCOREBOARD_Y + 5), BLACK,
+                    "assets/FreeSans.ttf", 15);
+  window->show_text(to_string(coin),
+                    Point(SCOREBOARD_X + 30, SCOREBOARD_Y + 30), BLACK,
+                    "assets/FreeSans.ttf", 15);
+
+  window->show_text("Live", Point(SCOREBOARD_X + 120, SCOREBOARD_Y + 5), BLACK,
+                    "assets/FreeSans.ttf", 15);
+  window->show_text(to_string(live),
+                    Point(SCOREBOARD_X + 130, SCOREBOARD_Y + 30), BLACK,
+                    "assets/FreeSans.ttf", 15);
+}
+#include "view.hpp"
+using namespace std;
+View::View(renderedMap *_map, Mario *_mario, ScoreBoard *_scoreboard) {
+  map = _map;
+  mario = _mario;
+  scoreboard = _scoreboard;
+  createWindow();
+  bg = new Background(map->width, map->height, window);
+}
+Window *View::getWindow() { return window; }
+void View::reset() { cameraX = 0; }
+int View::getCameraX() { return cameraX; }
+void View::createWindow() {
+  window = new Window(WIDTH, map->height, ".: SuperMario :.");
+}
+void View::lost() {
+  window->clear();
+  window->show_text("You lost", Point(270, 200), RED, "assets/FreeSans.ttf",
+                    75);
+  window->update_screen();
+}
+void View::win() {
+  window->clear();
+  window->show_text("You Win", Point(270, 200), GREEN, "assets/FreeSans.ttf",
+                    75);
+  window->update_screen();
+}
+void View::nextFrame() {
+  window->clear();
+  bg->render(cameraX);
+  delay(25);
+  renderObjects();
+  mario->draw(window, cameraX);
+  // window->draw_rect(Rectangle(50, 50, 1, 0), RED);
+  window->update_screen();
+}
+
+void View::moveCameraTo(int newX) {
+  if (cameraX >= map->width - 800)
+    return;
+  if (mario->getX() - cameraX < WIDTH / 2)
+    return;
+  if (mario->getX() > WIDTH / 2)
+    cameraX = newX;
+}
+void View::renderObjects() {
+  moveCameraTo(mario->getX() - WIDTH / 2);
+  for (int i = 0; i < map->bonus.size(); i++)
+    map->bonus[i].render(window, cameraX);
+  for (int i = 0; i < map->blocks.size(); i++)
+    map->blocks[i].render(window, cameraX);
+  for (int i = 0; i < map->gumbas.size(); i++)
+    map->gumbas[i].render(window, cameraX);
+  for (int i = 0; i < map->koopas.size(); i++)
+    map->koopas[i].render(window, cameraX);
+  scoreboard->render(window);
+}
+#include "view.hpp"
+using namespace std;
+View::View(string fileAddress) {
+  cameraX = 0;
+  readMapfile(fileAddress);
+  createWindow();
+  drawMap();
+}
+
+void View::createWindow() { window = new Window(WIDTH, mapHeight, TITLE_NAME); }
+int View::getSurface(int x, int y) {
+  int result = 0;
+  x = 745;
+  // cout << " - - -- - - Height" << mapHeight << " - - - - - - " << endl;
+  // cout << result << "/";
+  for (auto c : clays)
+    if (c.getY() > mario.getY() && c.getX() <= x &&
+        c.getX() + BLOCK_SIZE >= x) {
+      result = max(result, c.getY());
+      // cout << "Clay" << c.getX() << "/" << c.getY() << endl;
+    }
+  // cout << result << "/";
+
+  for (auto p : pipes)
+    if (p.getY() > mario.getY() && p.getX() <= x &&
+        p.getX() + BLOCK_SIZE >= x) {
+      result = max(result, p.getY());
+      // cout << "pipe";
+    }
+  for (auto b : bricks)
+    if (b.getY() > mario.getY() && b.getX() <= x &&
+        b.getX() + BLOCK_SIZE >= x) {
+      result = max(result, b.getY());
+      // cout << "brick";
+    }
+  // cout << result << "/";
+
+  for (auto b : blocks)
+    if (b.getY() > mario.getY() && b.getX() <= x &&
+        b.getX() + BLOCK_SIZE >= x) {
+      result = max(result, b.getY());
+      // cout << "block";
+    }
+  // cout << result << "/";
+
+  for (auto q : questions)
+    if (q.getY() > mario.getY() && q.getX() <= x &&
+        q.getX() + BLOCK_SIZE >= x) {
+      result = max(result, q.getY());
+      // cout << "que";
+    }
+  // cout << result << "/" << endl;
+
+  // cout << result << endl;
+  return result;
+}
+void View::drawObjects() {
+
+  int y = 0, x = 0;
+  string line;
+  for (int j = 0; j < map.size(); j++) {
+    line = map[j];
+    for (int i = 0; i < mapWidth; i++) {
+      x = i * BLOCK_SIZE - cameraX;
+
+      if (line[i] == '.')
+        continue;
+      else if (line[i] == '#') {
+        Clay clay(x, y);
+        clays.push_back(clay);
+        clay.draw(window);
+      } else if (line[i] == '@') {
+        Block block(x, y);
+        blocks.push_back(block);
+        block.draw(window);
+      } else if (line[i] == 'b') {
+        Brick brick(x, y);
+        bricks.push_back(brick);
+        brick.draw(window);
+      } else if (line[i] == '|') {
+        Pipe pipe(x, y, j == 0 ? true : map[j - 1][i] != '|',
+                  i == 0 ? true : line[i - 1] != '|');
+        if (i > 0 && line[i - 1] == '|')
+          line[i] = '/';
+        pipes.push_back(pipe);
+        pipe.draw(window);
+
+      } else if (line[i] == 'f') {
+        Flag flag(x, y, j == 0 ? true : map[j - 1][i] != 'f');
+        flags.push_back(flag);
+        flag.draw(window);
+
+      } else if (line[i] == '?' || line[i] == 'm' || line[i] == 'h') {
+        Question question(x, y, line[i]);
+        questions.push_back(question);
+        question.draw(window);
+      }
+    }
+    y += BLOCK_SIZE;
+  }
+}
+void View::drawMap() {
+  window->clear();
+  drawBackground();
+  drawObjects();
+  mario.setY(getSurface(mario.getX(), mario.getY()));
+  // cout << mario.getX() << "/" << mario.getY() << endl;
+  mario.draw(window);
+  window->update_screen();
+}
+void View::moveMario(int dir) {
+  if (dir > 0 && mario.getX() + 100 > mapHeight) {
+    cameraX += getWidth() - 800 < cameraX ? 0 : 2;
+    mario.move(0);
+  } else {
+    if (mario.getX() <= 2 && dir < 0)
+      return;
+    mario.move(dir * 2);
+  }
+}
+void View::drawBackground() {
+  for (int i = 0; i < mapWidth / mapHeight; i++)
+    window->draw_img("assets/background_image.png",
+                     Rectangle(-cameraX / 2 + i * mapHeight * 2, 0,
+                               mapHeight * 2, mapHeight));
+}
+void View::readMapfile(string mapFileAddress) {
+  ifstream mapFile;
+  mapFile.open(mapFileAddress);
+  string temp;
+  mapHeight = 0;
+  while (getline(mapFile, temp)) {
+    mapWidth = temp.length();
+    mapHeight++;
+    map.push_back(temp);
+  }
+  mapHeight *= BLOCK_SIZE;
+  mapWidth *= BLOCK_SIZE;
+}
+#ifndef AUDIO_HPP
+#define AUDIO_HPP
+#include "defines.hpp"
+class AudioPlayer {
+public:
+  AudioPlayer(Window *window);
+  void play(AUDIO audio);
+  void playMusic();
+  void pauseMusic();
+
+private:
+  Window *window;
+};
+#endif
+#ifndef BACKGROUND_HPP
+#define BACKGROUND_HPP
+#define BG_ADDRESS "assets/background_image.png"
+#include "../src/rsdl.hpp"
+class Background {
+public:
+  Background(int _mapWidth, int _mapHeight, Window *win);
+  void render(int cameraX);
+
+private:
+  int mapWidth, mapHeight;
+  Window *window;
+};
+#endif
+#ifndef BLOCK_HPP
+#define BLOCK_HPP
+#include "../src/rsdl.hpp"
+#include "audio.hpp"
+#include "bonus.hpp"
+#include "defines.hpp"
+#define NO_ACTION 0
+#define BREAK 1
+#define MOVED_UP 2
+#define OPENED 3
+#define PIC_SPEED 11
+using namespace std;
+class Block {
+public:
+  Block(){};
+  Block(Position _position, TYPE _type, int bonus_id);
+  Block(Position _position, TYPE _type, bool _breakable = false);
+  void breakMe();
+  TYPE getType() { return type; }
+  void render(Window *window, int cameraX);
+  bool isIn(Position pos);
+  bool Xin(int x);
+  bool Yin(int y);
+  Position getPosition();
+  int open(bool shouldBreak = false);
+  int getBonusId();
+  bool isBroken();
+
+private:
+  bool breakable = false;
+  TYPE type;
+  bool haveBonus = false;
+  int bonusId = -1;
+  bool broken = false;
+  Position position;
+  bool opened = false;
+  int picChanger = 0;
+  int vy = 0;
+};
+
+#endif
+#ifndef BONUS_HPP
+#define BONUS_HPP
+
+#include "../src/rsdl.hpp"
+#include "defines.hpp"
+using namespace std;
+class Bonus {
+public:
+  Bonus(Position pos, char bonusType, int id);
+  Bonus(){};
+  void appear();
+  void render(Window *window, int cameraX);
+  TYPE getType();
+  void disappear();
+  bool isVisible();
+  bool isMoving();
+  Position getPosition();
+  void setGround(int g);
+  Position calculateNextMove();
+  void isCrash();
+  void goUp();
+  bool isReady();
+
+private:
+  int _id;
+  Position position;
+  int counter = 0;
+  bool ready = false;
+  bool visible = false;
+  TYPE type = BONUS_DEFAULT;
+  int vx = 5, vy = 0;
+  int ground;
+  bool moving = false;
+  void run();
+};
+
+#endif
+#ifndef OBJECTS_HPP
+#define OBJECTS_HPP
+
+#include "../src/rsdl.hpp"
+#include <iostream>
+#include <string>
+#include <vector>
+#define GRAVITY 2
+#define WIDTH 800
+#define BLOCK_SIZE 32
+#define FIVE_PIXELS 5
+#define TEN_PIXELS 10
+using namespace std;
+struct Position {
+  int x;
+  int y;
+};
+
+enum TYPE {
+  BLOCK = 0,
+  BRICK,
+  CLAY,
+  BLOCK_DEBRIS,
+  FLAG_BODY,
+  FLAG_HEAD,
+  PIPE_HEAD_LEFT,
+  PIPE_HEAD_RIGHT,
+  PIPE_LEFT,
+  PIPE_RIGHT,
+
+  QUESTION_1,
+  QUESTION_2,
+  QUESTION_3,
+  QUESTION_EMPTY,
+
+  COIN,
+  FLOWER,
+  RED_MUSH,
+  H_MUSH,
+
+  GUMBA1,
+  GUMBA2,
+  GUMBA_DEAD,
+
+  BONUS_DEFAULT
+};
+const string OBJECTS_PIC_ADDRESS[] = {
+    "assets/sprites/objects/bricks_blocks/block.png",
+    "assets/sprites/objects/bricks_blocks/brick.png",
+    "assets/sprites/objects/bricks_blocks/clay.png",
+    "assets/sprites/objects/bricks_blocks/brick-debris.png",
+
+    "assets/sprites/objects/flag/body.png",
+    "assets/sprites/objects/flag/head.png",
+
+    "assets/sprites/objects/pipe/head-left.png",
+    "assets/sprites/objects/pipe/head-right.png",
+    "assets/sprites/objects/pipe/left.png",
+    "assets/sprites/objects/pipe/right.png",
+
+    "assets/sprites/objects/bricks_blocks/question-1.png",
+    "assets/sprites/objects/bricks_blocks/question-2.png",
+    "assets/sprites/objects/bricks_blocks/question-3.png",
+    "assets/sprites/objects/bricks_blocks/question-empty.png",
+
+    "assets/sprites/objects/coin.png",
+    "assets/sprites/objects/flower.png",
+    "assets/sprites/objects/mushroom/red.png",
+    "assets/sprites/objects/mushroom/health.png",
+
+    "assets/sprites/enemies/little_goomba/walking-1.png",
+    "assets/sprites/enemies/little_goomba/walking-2.png",
+    "assets/sprites/enemies/little_goomba/dead.png"};
+
+enum AUDIO {
+  A_1UP,
+  A_ENEMY_STOMP,
+  A_JUMP_SUPER,
+  A_POWERUP_APPEARS,
+  A_BRICK_SMASH,
+  A_FIREBALL,
+  A_LEVEL_CLEAR,
+  A_POWERUP,
+  A_BUMP,
+  A_GAMEOVER,
+  A_MARIO_DEATH,
+  A_COIN,
+  A_JUMP_SMALL,
+  A_PAUSE,
+  MUSIC
+};
+const string Audio_address[] = {
+    "assets/sounds/sound_effects/1-up.wav",
+    "assets/sounds/sound_effects/enemy-stomp.wav",
+    "assets/sounds/sound_effects/jump-super.wav",
+    "assets/sounds/sound_effects/powerup-appears.wav",
+    "assets/sounds/sound_effects/brick-smash.wav",
+    "assets/sounds/sound_effects/fireball.wav",
+    "assets/sounds/sound_effects/level-clear.wav",
+    "assets/sounds/sound_effects/powerup.wav",
+    "assets/sounds/sound_effects/bump.wav",
+    "assets/sounds/sound_effects/gameover.wav",
+    "assets/sounds/sound_effects/mario-death.wav",
+    "assets/sounds/sound_effects/coin.wav",
+    "assets/sounds/sound_effects/jump-small.wav",
+    "assets/sounds/sound_effects/pause.wav",
+    "assets/sounds/Super Mario Bros. theme music.mp3"};
+
+struct Rect {
+  Position position;
+  int width;
+  int height;
+};
+#endif
+#ifndef GAME_HPP
+#define GAME_HPP
+#include "../src/rsdl.hpp"
+#include "audio.hpp"
+#include "block.hpp"
+#include "defines.hpp"
+#include "gumba.hpp"
+#include "map_reader.hpp"
+#include "mario.hpp"
+#include "view.hpp"
+#include <cstdlib>
+#include <iostream>
+using namespace std;
+
+class Game {
+public:
+  Game(std::string mapFileAddress);
+
+private:
+  renderedMap map;
+  Window *window;
+  Mario mario;
+  string mapFileAddress;
+  vector<Block *> bonusBlocks;
+  ScoreBoard scoreboard;
+  View *view;
+  AudioPlayer *audioPlayer;
+  bool isWin = false, isLost = false;
+  void win();
+  void lost();
+  void setup();
+  void checkWin();
+  void die(bool forceDie = false);
+  int getGround(Rect rect);
+  bool hasConflict(Rect rect);
+  bool isConflict(Rect rect1, Rect rect2);
+  void coinHandler(Block *b);
+  void mushroomHandler();
+  void koopaVsGumbaHandler();
+  void setGroundToBonuses();
+  void gumbaHandler();
+  void koopaHandler();
+  void setGroundToGumba();
+  bool isMarioCrash();
+  void handleFall();
+  void handleCrashes();
+  void handleEvents();
+  void hitBlock(Block *b);
+  void getHealthMush();
+  void getRedMush();
+  void setGroundToKoopa();
+};
+#endif
+#ifndef GUMBA_HPP
+#define GUMBA_HPP
+#include "defines.hpp"
+#define GUMBA_SIZE 32
+class Gumba {
+public:
+  Gumba(Position _position);
+  void render(Window *window, int cameraX);
+  Position calculateNextMove();
+  void setGround(int g);
+  Position getPosition();
+  void isCrash();
+  bool isMoving();
+  int getY();
+  void die();
+  bool isAlive();
+
+private:
+  Position position;
+  bool moving = false;
+  int ground;
+  float picNum = 0.25;
+  int vx = -5, vy = 0;
+  bool vyShouldReset = false;
+  bool dead = false;
+  int counter = 0;
+  void run();
+};
+
+#endif
+#ifndef KOOPA_HPP
+#define KOOPA_HPP
+#include "defines.hpp"
+#define KOOPA_SIZE 32
+#define KOOPA_FOLDER "assets/sprites/enemies/koopa_troopa/"
+class Koopa {
+public:
+  Koopa(Position _position);
+  void render(Window *window, int cameraX);
+  Position calculateNextMove();
+  void setGround(int g);
+  Position getPosition();
+  void isCrash();
+  bool isMoving();
+  int getY();
+  void die();
+  bool isAlive();
+  void shoot(bool right);
+
+private:
+  Position position;
+  bool moving = false;
+  int ground;
+  float picNum = 0.25;
+  int vx = -2, vy = 0;
+  bool vyShouldReset = false;
+  bool dead = false;
+  int counter = 0;
+  void run();
+};
+
+#endif
+#ifndef MAP_READER_HPP
+#define MAP_READER_HPP
+#include "block.hpp"
+#include "bonus.hpp"
+#include "defines.hpp"
+#include "gumba.hpp"
+#include "koopa.hpp"
+#include <fstream>
+using namespace std;
+struct renderedMap {
+  int height;
+  int width;
+  vector<Block> blocks;
+  vector<Bonus> bonus;
+  vector<Gumba> gumbas;
+  vector<Koopa> koopas;
+  Position mario;
+};
+class MapReader {
+public:
+  MapReader(string _fileAddress) : fileAddress(_fileAddress){};
+  renderedMap getMap();
+
+private:
+  string fileAddress;
+  int mapWidth = 0;
+  int mapHeight = 0;
+  Position mario;
+  vector<string> map;
+  vector<Block> blocks;
+  vector<Bonus> bonus;
+  vector<Gumba> gumbas;
+  vector<Koopa> koopas;
+  void readFile();
+  void translateMap();
+  bool isRightPipe(string line, int i);
+};
+
+#endif
+#ifndef MARIO_HPP
+#define MARIO_HPP
+#include "../src/rsdl.hpp"
+#include "defines.hpp"
+#define MARIO_SMALL_WIDTH 24
+#define MARIO_SMALL_HEIGHT 32
+#define MARIO_FOLDER "assets/sprites/mario/"
+#define MARIO_REACT -20
+#define VX 7
+#define VY -25
+using namespace std;
+
+class Mario {
+public:
+  Mario(Position pos);
+  Mario();
+  void draw(Window *window, int cameraX);
+  int getY();
+  int getX();
+  void setY(int _y);
+  void setX(int _x);
+  Position getPosition();
+  int getVx();
+  int getVy();
+  void setVy(int _y);
+  void setPosition(Position pos);
+  void move(int dir);
+  void stopMoving();
+  void setGround(int g);
+  bool jump();
+  bool stopJump();
+  void crashedTo(int x, int y);
+  void getBig();
+  bool isBig();
+  int getWidth();
+  int getHeight();
+  Position nextPosition();
+  void moveBottom();
+  Position getLastPosition();
+  int getLastVy();
+  void getSmall();
+  void die(bool forceDie = false);
+  bool isDieHard();
+  Rect getRect();
+  void toggleDead();
+  void goDown();
+
+private:
+  bool dead = false;
+  bool dieHard = false;
+  int direction = 1;
+  bool isSmall = true;
+  int initialX, initialY;
+  int x, y;
+  int oldX, oldY;
+  int oldVx, oldVy;
+  int oldGround;
+  int vx = 0;
+  bool sliding = false;
+  int vy = 0;
+  int width = MARIO_SMALL_WIDTH;
+  int height = MARIO_SMALL_HEIGHT;
+  int isWalking = false;
+  float picNum = 1;
+  int ground = 0;
+  int dieHardTimer = 0;
+  void moveMario();
+};
+#endif
+#ifndef SCOREBOARD_HPP
+#define SCOREBOARD_HPP
+#define SCOREBOARD_WIDTH 200
+#define SCOREBOARD_X 50
+#define SCOREBOARD_HEIGHT 50
+#define SCOREBOARD_Y 50
+#include "defines.hpp"
+class ScoreBoard {
+public:
+  ScoreBoard();
+  void show();
+  void addLive();
+  void addCoin();
+  void update(int live, int coin);
+  void decreaseLive();
+  void render(Window *window);
+  bool isDied();
+
+private:
+  int live = 3;
+  int coin = 0;
+};
+
+#endif
+#ifndef VIEW_HPP
+#define VIEW_HPP
+#include "background.hpp"
+#include "block.hpp"
+#include "defines.hpp"
+#include "gumba.hpp"
+#include "koopa.hpp"
+#include "map_reader.hpp"
+#include "mario.hpp"
+#include "scoreboard.hpp"
+
+#include <string>
+#include <vector>
+class View {
+public:
+  View(renderedMap *_map, Mario *_mario, ScoreBoard *_scoreboard);
+  void nextFrame();
+  Window *getWindow();
+  void moveCameraTo(int newX);
+  int getCameraX();
+  void reset();
+  void win();
+  void lost();
+
+private:
+  int cameraX = 0;
+  ScoreBoard *scoreboard;
+  Window *window;
+  renderedMap *map;
+  void createWindow();
+  void renderObjects();
+  Background *bg;
+  Mario *mario;
+};
+
+#endif
+#ifndef VIEW_HPP
+#define VIEW_HPP
+#include "defines.hpp"
+#include "mario.hpp"
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#define WIDTH 800
+#define TITLE_NAME ".: SuperMario :."
+#define BLOCK_SIZE 32
+
+using namespace std;
+class View {
+public:
+  View(string fileAddress);
+  Window *getWindow() { return window; }
+  int getHeight() { return mapHeight; }
+  int getWidth() { return mapWidth; }
+  int cameraX;
+  void drawMap();
+  void moveMario(int dir);
+  void stopMoving() { mario.stopMoving(); }
+
+private:
+  vector<string> map;
+  Mario mario;
+  Window *window;
+  int mapHeight = 0;
+  int mapWidth = 0;
+  vector<Block> blocks;
+  vector<Brick> bricks;
+  vector<Question> questions;
+  vector<Clay> clays;
+  vector<Pipe> pipes;
+  vector<Flag> flags;
+
+  void createWindow();
+  int getSurface(int x, int y);
+  void drawBackground();
+  void drawObjects();
+  void readMapfile(string address);
+};
+#endif
