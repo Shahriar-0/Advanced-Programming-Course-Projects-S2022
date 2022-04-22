@@ -15,6 +15,9 @@ a class for stationary enemy
 a class for moving enemy
 a class for stationary enemy team
 a class for moving enemy team
+and the above two teams should be passed as an 
+pointer to the bullets ( inheritance ) for checking
+hit
 for choosing who should shoot maybe get their alive ships
 and then choose an arbitrary number of them
 a class for my bullets (the thing for now is to keep the pointer of the vector
