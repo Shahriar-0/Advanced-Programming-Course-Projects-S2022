@@ -13,6 +13,10 @@ to remember is that the bullets that are already shot should still be moving)
 a class for hostage
 a class for stationary enemy
 a class for moving enemy
+a class for stationary enemy team
+a class for moving enemy team
+for choosing who should shoot maybe get their alive ships
+and then choose an arbitrary number of them
 a class for my bullets (the thing for now is to keep the pointer of the vector
 which holds the list of all enemies and also the hostage and then i got to check all of them in 
 each frame)
