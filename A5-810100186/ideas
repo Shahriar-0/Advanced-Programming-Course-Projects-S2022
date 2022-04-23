@@ -7,6 +7,8 @@ add things step by step
 
 ------------------------------------------------------------------------------------------
 obviously a class for handling the whole game with a name like star wars
+(typedef the vector<string> to be map and after reading file put it in 
+vector<map> then read it each level and initialise the world)
 a class for my ship (for now i decided to keep all the bullets of a ship inside of it
 it means that there should be a vector of corresponding bullet in each ship, the thing 
 to remember is that the bullets that are already shot should still be moving)

@@ -2,11 +2,14 @@
 #include "star_wars.hpp"
 using namespace std;
 
+constexpr int IMAGE_WIDTH  = 1500;
+constexpr int IMAGE_HEIGHT = 1100;
+
 int main(int argc, char* argv[]) {
 	try {
 		if (argc == 1)
-			throw "haven't passed a map";
-		StarWars starwars(argv[1], new Window(1500, 1100, "a long walk home"));
+			throw string("haven't passed a map");
+		StarWars starwars(argv[1], new Window(IMAGE_WIDTH, IMAGE_HEIGHT, "a long walk home"));
 	}
 	catch (string exception) {
 		cerr << exception << endl;
