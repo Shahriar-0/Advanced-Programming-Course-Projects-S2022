@@ -3,13 +3,11 @@
 #include "rsdl.hpp"
 #include <string>
 #include <cstring>
-#include <iostream>
 
 enum AudioListType {
     THEME,
     SHOOTING, 
     EXPLOTION,
-
 };
 
 const std::string AudioList[] {
