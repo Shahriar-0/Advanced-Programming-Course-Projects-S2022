@@ -2,6 +2,7 @@
 #define SAMPLE_PROJECT_GAME_H
 
 #include "Circle.h"
+#include "rsdl.hpp"
 
 class Game {
 public:

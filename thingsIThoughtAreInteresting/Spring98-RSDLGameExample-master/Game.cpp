@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "rsdl.hpp"
 
 Game::Game() : circle(Point(50,50), 20, this) {}
 

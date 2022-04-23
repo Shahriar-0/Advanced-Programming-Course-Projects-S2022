@@ -44,10 +44,10 @@ void Circle::handle_key_release(char key) {
     std::cout<<"release called:"<<key<<std::endl;
     switch(key) {
         case 'd':
-            if (vx > 0) vx = 0;
+            vx = 0;
             break;
         case 'a':
-            if (vx < 0) vx = 0;
+            vx = 0;
             break;
     }
 }
