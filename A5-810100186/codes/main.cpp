@@ -6,6 +6,7 @@ constexpr int IMAGE_WIDTH  = 2250;
 constexpr int IMAGE_HEIGHT = 1650;
 
 int main(int argc, char* argv[]) {
+    srand(time(NULL));
 	try {
 		if (argc == 1)
 			throw string("haven't passed a map");

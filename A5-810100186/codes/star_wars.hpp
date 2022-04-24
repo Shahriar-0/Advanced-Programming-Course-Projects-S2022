@@ -22,6 +22,7 @@
 class StarWars {
 public:
     StarWars(std::string, Window*);
+    ~StarWars();
     void read_file(std::string);
     void draw_background();
     //void run();

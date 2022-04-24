@@ -18,6 +18,7 @@ public:
     void check_for_hitting_moving_enenmy();
     void check_for_hitting_stationary_enemy();
     bool is_dead();
+    Point get_center();
 private:
     MovingEnemies* listOfMovingEnemies;
     StationaryEnemies* listOfStationaryEnemies;

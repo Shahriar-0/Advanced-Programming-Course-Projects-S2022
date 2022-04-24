@@ -32,3 +32,7 @@ StarWars::StarWars(string filename, Window* _win) : musicPlayer(_win) {
     read_file(filename);
     delay(10000);
 }
+
+StarWars::~StarWars() {
+    delete win;
+}
