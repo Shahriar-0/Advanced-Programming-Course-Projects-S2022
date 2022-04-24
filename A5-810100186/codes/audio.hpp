@@ -7,13 +7,13 @@
 enum AudioListType {
     THEME,
     SHOOTING, 
-    EXPLOTION,
+    EXPLOSION,
 };
 
 const std::string AudioList[] {
     "assets/musics/theme.mp3",
     "assets/musics/shot.wav", 
-    "assets/musics/explotion.wav"
+    "assets/musics/explosion.wav"
 };
 
 class AudioPlayer {

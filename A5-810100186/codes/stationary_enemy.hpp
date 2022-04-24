@@ -6,7 +6,6 @@
 #include <cmath>
 
 #define STATIONARY_ENEMY_PIC "./assets/pictures/spaceships/stationary_enemy.png"
-constexpr double LEAST_DISTANCE = 8;
 
 class StationaryEnemy {
 public:
@@ -16,7 +15,9 @@ public:
     bool is_dead();
     void die();
     bool is_hitting(MyBullet);
+    void shoot();
 private:
+    int frameCounter;
     void update_bullets(); //remember to update bullets no matter what
     Point topLeft;
     std::vector<EnemyBullet> enemyBullets;

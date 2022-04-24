@@ -10,5 +10,5 @@ MyBullet::MyBullet(Point _center, MovingEnemies* _lisrOfMovingEnemies,
     exists = true;
 }
 
-void MyBullet::move_up() { center.y += vy; }
+void MyBullet::move() { center.y += vy; }
 
