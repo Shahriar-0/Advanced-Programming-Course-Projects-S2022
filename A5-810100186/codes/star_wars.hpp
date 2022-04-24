@@ -16,10 +16,14 @@
 // #include "stationary_enemy.hpp"
 #include "audio.hpp"
 
+#define MAP_SPLITTER "-----"
+#define BACKGROUND_ADDRESS "assets/pictures/background/galaxy.jpeg"
+
 class StarWars {
 public:
     StarWars(std::string, Window*);
     void read_file(std::string);
+    void draw_background();
     //void run();
 private:
     AudioPlayer musicPlayer;

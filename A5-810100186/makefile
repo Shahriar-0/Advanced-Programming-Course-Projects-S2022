@@ -5,7 +5,7 @@ CC_OBJECT := $(CC) -c
 CODES := codes/
 BUILDS := builds/
 
-all: star_wars.out
+all: starwars.out
 
 debug_star_wars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)star_wars.o
 	$(CC) $(BUILDS)*.o $(DEBUG) $(SDLFLAGS) -o debug_star_wars.out
