@@ -10,8 +10,8 @@ all: star_wars.out
 debug_star_wars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)star_wars.o
 	$(CC) $(BUILDS)*.o $(DEBUG) $(SDLFLAGS) -o debug_star_wars.out
 
-star_wars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)star_wars.o
-	$(CC) $(BUILDS)*.o $(SDLFLAGS) -o star_wars.out
+starwars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)star_wars.o
+	$(CC) $(BUILDS)*.o $(SDLFLAGS) -o starwars.out
 
 $(BUILDS)main.o: $(CODES)main.cpp $(CODES)star_wars.hpp
 	$(CC_OBJECT) $(CODES)main.cpp -o $(BUILDS)main.o
@@ -27,4 +27,4 @@ $(BUILDS)star_wars.o: $(CODES)star_wars.hpp $(CODES)star_wars.cpp $(CODES)audio.
 
 .PHONY: clean
 clean:
-	rm -r $(BUILDS)*.o debug_star_wars.out star_wars.out
+	rm -r $(BUILDS)*.o debug_star_wars.out starwars.out
