@@ -16,6 +16,8 @@ public:
     void die();
     bool is_hitting(MyBullet*);
     void shoot();
+    Point get_center();
+    void play_explosion_sound();
 private:
     int frameCounter;
     void update_bullets(); //remember to update bullets no matter what

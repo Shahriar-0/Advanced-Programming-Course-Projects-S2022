@@ -3,7 +3,7 @@
 EnemyBullet::EnemyBullet(Point _center) : center(_center) {
     exists = true;
     vy = DOWN_SPEED;
-    length = BULLET_LENGTH;
+    length = MY_BULLET_LENGTH;
 }
 
 void EnemyBullet::check_for_existence(Window* win) {

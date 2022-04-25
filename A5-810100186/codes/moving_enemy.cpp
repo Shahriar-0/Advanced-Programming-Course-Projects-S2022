@@ -23,6 +23,8 @@ void MovingEnemy::move() {
     topLeft.x += vx;
 }
 
+Point MovingEnemy::get_center() { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
+
 bool MovingEnemy::is_hitting(MyBullet bullet) {
     Point center = topLeft + Point(blockWidth / 2, blockHeight / 2);
     Point bulletCenter = bullet.get_center();

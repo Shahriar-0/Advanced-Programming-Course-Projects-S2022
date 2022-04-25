@@ -23,5 +23,6 @@ bool StationaryEnemy::is_hitting(MyBullet bullet) {
         LEAST_DISTANCE_FOR_BULLETS;
 }
 
+Point StationaryEnemy::get_center() { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
 bool StationaryEnemy::is_dead() { return exists == false; }
 void StationaryEnemy::die() { exists = false; }

@@ -1,11 +1,11 @@
 #ifndef __MY_BULLET_HPP__
 #define __MY_BULLET_HPP__
 #include "rsdl.hpp"
-#include "hostage.hpp"
 #include "moving_enemies.hpp"
+#include "hostage.hpp"
 #include "stationary_enemies.hpp"
 constexpr int UP_SPEED = 10;
-constexpr int BULLET_LENGTH = 10;
+constexpr int MY_BULLET_LENGTH = 10;
 constexpr double LEAST_DISTANCE_FOR_MY_BULLETS = 8;
 
 class MyBullet {

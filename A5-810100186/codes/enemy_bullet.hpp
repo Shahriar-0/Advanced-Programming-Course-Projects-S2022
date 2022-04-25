@@ -2,7 +2,7 @@
 #define __ENEMY_BULLET_HPP__
 #include "rsdl.hpp"
 constexpr int DOWN_SPEED = -10;
-constexpr int BULLET_LENGTH = 10;
+constexpr int ENEMY_BULLET_LENGTH = 10;
 constexpr double LEAST_DISTANCE_FOR_ENEMY_BULLETS = 8;
 class SpaceShip;
 

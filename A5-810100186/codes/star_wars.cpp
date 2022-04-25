@@ -31,6 +31,8 @@ StarWars::StarWars(string filename, Window* _win) : musicPlayer(_win) {
     win = _win;
     musicPlayer.play_theme();
     read_file(filename);
+    draw_background();      //todo: delete this line
+    win->update_screen();   //todo: and this one
     delay(10000);
 }
 
