@@ -12,10 +12,10 @@ void MovingEnemy::draw(Window* win) {
 
 void MovingEnemy::update(Window* win) {
     //update_bullets();
-    if (!is_dead()) {
-        move();
-        draw(win);
-    }
+    if (is_dead())
+        return;
+    move();
+    draw(win);
 }
 
 void MovingEnemy::move() {

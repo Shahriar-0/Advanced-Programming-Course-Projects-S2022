@@ -3,11 +3,12 @@
 #include "audio.hpp"
 #include "moving_enemy.hpp"
 #include "rsdl.hpp"
+#include "spaceship.hpp"
 #include <vector>
 
 class MovingEnemies{
 public:
-    MovingEnemies(Window*, AudioPlayer*);
+    MovingEnemies(Window*, AudioPlayer*, SpaceShip*);
     int count_alive();
     bool any_member_is_hitting(); //probably spaceship*
     void update();
@@ -15,6 +16,7 @@ private:
     Window* win;
     AudioPlayer* musicPlayerptr;
     std::vector<MovingEnemy> list;
+    SpaceShip* ptrToShip;
 };
 
 #endif 
