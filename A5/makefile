@@ -7,10 +7,10 @@ BUILDS := builds/
 
 all: starwars.out
 
-debug_star_wars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)stationary_enemies.o $(BUILDS)moving_enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)my_bullet.o $(BUILDS)enemy_bullet.o
+debug_star_wars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)bullet.o
 	$(CC) $(BUILDS)*.o $(DEBUG) $(SDLFLAGS) -o debug_star_wars.out
 
-starwars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)stationary_enemies.o $(BUILDS)moving_enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)my_bullet.o $(BUILDS)enemy_bullet.o
+starwars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)bullet.o
 	$(CC) $(BUILDS)*.o $(SDLFLAGS) -o starwars.out
 
 $(BUILDS)main.o: $(CODES)main.cpp $(CODES)star_wars.hpp
@@ -31,13 +31,13 @@ $(BUILDS)bullet.o: $(CODES)bullet.cpp $(CODES)bullet.hpp
 $(BUILDS)hostage.o: $(CODES)hostage.cpp $(CODES)hostage.hpp
 	$(CC_OBJECT) $(CODES)hostage.cpp -o $(BUILDS)hostage.o
 
-$(BUILDS)stationary_enemies.o: $(CODES)stationary_enemies.cpp $(CODES)stationary_enemies.hpp $(CODES)moving_enemy.hpp
-	$(CC_OBJECT) $(CODES)stationary_enemies.cpp -o $(BUILDS)stationary_enemies.o
+$(BUILDS)enemies.o: $(CODES)enemies.cpp $(CODES)enemies.hpp $(CODES)moving_enemy.hpp
+	$(CC_OBJECT) $(CODES)enemies.cpp -o $(BUILDS)enemies.o
 
-$(BUILDS)moving_enemy.o: $(CODES)moving_enemy.cpp $(CODES)moving_enemy.hpp $(CODES)enemy_bullet.hpp
+$(BUILDS)moving_enemy.o: $(CODES)moving_enemy.cpp $(CODES)moving_enemy.hpp $(CODES)bullet.hpp
 	$(CC_OBJECT) $(CODES)moving_enemy.cpp -o $(BUILDS)moving_enemy.o
 
-$(BUILDS)stationary_enemy.o: $(CODES)stationary_enemy.cpp $(CODES)stationary_enemy.hpp $(CODES)enemy_bullet.hpp 
+$(BUILDS)stationary_enemy.o: $(CODES)stationary_enemy.cpp $(CODES)stationary_enemy.hpp $(CODES)bullet.hpp 
 	$(CC_OBJECT) $(CODES)stationary_enemy.cpp -o $(BUILDS)stationary_enemy.o
 
 

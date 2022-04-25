@@ -1,11 +1,10 @@
 #include "bullet.hpp"
 
-Bullet::Bullet(Point _center, int _blockWidth, int _blockHeight, Type type) : center(_center) { 
+Bullet::Bullet(Point _center, int _blockWidth, int _blockHeight, Type type) : 
+    center(_center), color(WHITE), blockWidth(_blockWidth), blockHeight(_blockHeight) { 
     vy = (type == ENEMY)? DOWN_SPEED : UP_SPEED;
     color = (type == ENEMY)? RED : GREEN;
     exists = true;
-    blockWidth = _blockWidth;
-    blockHeight = _blockHeight;
 }
 
 void Bullet::update(Window* win) {

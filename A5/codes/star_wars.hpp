@@ -21,13 +21,18 @@ public:
     ~StarWars();
     void read_file(std::string);
     void draw_background();
-    //void run();
+    void run();
 private:
+    void initialise();
     AudioPlayer musicPlayer;
     Window* win;
-    //void initialise();
+    Enemies enemies;
+    SpaceShip spaceship;
     std::vector<gameMap> maps;
     int totalHeight, totalWidth;
+    int blockHeight, blockWidth;
+    int frameCounter;
+    int level;
 };
 
 #endif 

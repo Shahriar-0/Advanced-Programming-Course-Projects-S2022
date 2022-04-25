@@ -8,9 +8,12 @@
 
 class SpaceShip {
 public:
-    SpaceShip(Window*, AudioPlayer*, int, int);
+    SpaceShip(Window*);
+    SpaceShip() : center(Point(0, 0)) {};
+    void set_music_player(AudioPlayer*);
+    void set_window_size(int, int);
     void move(char);
-    void stop_moving(char):
+    void stop_moving(char);
     void shoot();
     void check_for_collding_with_ships();
     bool is_dead();
@@ -21,7 +24,7 @@ public:
     void get_shot();
 private:
     Window* win;
-    AudioPlayer* musicPlayerptr;
+    AudioPlayer* musicPlayerPtr;
     Point center;
     std::vector<Bullet> myBullets;
     int vy, vx;

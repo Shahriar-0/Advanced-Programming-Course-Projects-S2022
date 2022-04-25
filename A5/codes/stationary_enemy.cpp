@@ -1,23 +1,21 @@
 #include "stationary_enemy.hpp"
 
-StationaryEnemy::StationaryEnemy(Point _topLeft, int _blockWidth, int _blockHeight) : topLeft(_topLeft) {
-    blockWidth = _blockWidth;
-    blockHeight = _blockHeight;
-}
+StationaryEnemy::StationaryEnemy(Point _topLeft) : topLeft(_topLeft) {}
+StationaryEnemy::StationaryEnemy() : topLeft(Point(0, 0)) {}
 
 void StationaryEnemy::draw(Window* win) {
     win->draw_img(STATIONARY_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight));
 }
 
 void StationaryEnemy::update(Window* win) {
-    update_bullets();
+    update_bullets(win);
     if (!is_dead()) 
         draw(win);
 }
 
-void StationaryEnemy::update_bullets() {
+void StationaryEnemy::update_bullets(Window* win) {
     for (auto& bullet : bullets) 
-        bullet.update();
+        bullet.update(win);
 }
 
 // bool StationaryEnemy::is_hitting(MyBullet bullet) {

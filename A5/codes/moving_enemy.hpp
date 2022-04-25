@@ -7,7 +7,7 @@
 const int MOVING_RIGHT_SPEED = 10;
 const int MOVING_LEFT_SPEED = 10;
 
-class MovingEnemy : public StationaryEnemy{
+class MovingEnemy : public StationaryEnemy {
 public:
     MovingEnemy(Point);
     virtual void draw(Window*);
