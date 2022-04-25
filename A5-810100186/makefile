@@ -25,6 +25,28 @@ $(BUILDS)audio.o: $(CODES)audio.cpp $(CODES)audio.hpp
 $(BUILDS)star_wars.o: $(CODES)star_wars.hpp $(CODES)star_wars.cpp $(CODES)audio.hpp	
 	$(CC_OBJECT) $(CODES)star_wars.cpp -o $(BUILDS)star_wars.o
 
+$(BUILDS)my_bullet.o: $(CODES)my_bullet.cpp $(CODES)my_bullet.hpp $(CODES)moving_enemies.hpp $(CODES)stationary_enemies.hpp $(CODES)hostage.hpp
+	$(CC_OBJECT) $(CODES)my_bullet -o $(BUILDS)my_bullet.o
+
+$(BUILDS)enemy_bulllet.o: $(CODES)enemy_bulllet.cpp $(CODES)enemy_bulllet.hpp
+	$(CC_OBJECT) $(CODES)enemy_bulllet.cpp $(BUILDS) -o $(BUILDS)enemy_bulllet.o
+
+$(BUILDS)hostage.o: $(CODES)hostage.cpp $(CODES)hostage.hpp
+	$(CC_OBJECT) $(CODES)hostage.cpp $(BUILDS) -o $(BUILDS)hostage.o
+
+$(BUILDS)moving_enemies.o: $(CODES)moving_enemies.cpp $(CODES)moving_enemies.hpp $(CODES)moving_enemy.hpp
+	$(CC_OBJECT) $(CODES)moving_enemies.cpp -o $(BUILDS)moving_enemies.o
+
+$(BUILDS)stationary_enemies.o: $(CODES)stationary_enemies.cpp $(CODES)stationary_enemies.hpp $(CODES)moving_enemy.hpp
+	$(CC_OBJECT) $(CODES)stationary_enemies.cpp -o $(BUILDS)stationary_enemies.o
+
+$(BUILDS)moving_enemy.o: $(CODES)moving_enemy.cpp $(CODES)moving_enemy.hpp $(CODES)enemy_bulllet.hpp
+	$(CC_OBJECT) $(CODES)moving_enemy.cpp -o $(BUILDS)moving_enemy.o
+
+$(BUILDS)stationary_enemy.o: $(CODES)stationary_enemy.cpp $(CODES)stationary_enemy.hpp $(CODES)enemy_bulllet.hpp 
+	$(CC_OBJECT) $(CODES)stationary_enemy.cpp -o $(BUILDS)stationary_enemy.o
+
+
 .PHONY: clean
 clean:
 	rm -r $(BUILDS)*.o debug_star_wars.out starwars.out

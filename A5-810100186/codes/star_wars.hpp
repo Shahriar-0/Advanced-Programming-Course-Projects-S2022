@@ -19,6 +19,8 @@
 #define MAP_SPLITTER "-----"
 #define BACKGROUND_ADDRESS "assets/pictures/background/galaxy.jpeg"
 
+typedef std::vector<std::string> gameMap;
+
 class StarWars {
 public:
     StarWars(std::string, Window*);
@@ -30,7 +32,7 @@ private:
     AudioPlayer musicPlayer;
     Window* win;
     //void initialise();
-    std::vector<std::vector<std::string>> maps;
+    std::vector<gameMap> maps;
     int totalHeight, totalWidth;
 };
 

@@ -3,6 +3,7 @@
 #include "my_bullet.hpp"
 #include "moving_enemies.hpp"
 #include "stationary_enemies.hpp"
+#include "hostage.hpp"
 #include "audio.hpp"
 #include <vector>
 #define MY_SPACESHIP_PIC "./assets/pictures/spaceships/my_spaceship.png"
@@ -13,8 +14,8 @@ public:
 private:
     Window* win;
     AudioPlayer* musicPlayerptr;
-    MovingEnemies* listOfMovingEnemies;
     StationaryEnemies* listOfStationaryEnemies;
+    MovingEnemies* listOfMovingEnemies;
     Hostage* hostage;
     Point center;
     std::vector<MyBullet> myBullets;

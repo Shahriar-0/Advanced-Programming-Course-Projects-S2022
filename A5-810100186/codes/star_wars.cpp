@@ -6,8 +6,8 @@ void StarWars::read_file(string filename) {
     int numOfMaps;
     fileStream >> numOfMaps;
     fileStream >> totalHeight >> totalWidth;
-    vector<vector<string>> _maps;
-    vector<string> currentMap;
+    vector<gameMap> _maps;
+    gameMap currentMap;
     while (numOfMaps--) {
         currentMap.clear();
         string line;
@@ -20,6 +20,7 @@ void StarWars::read_file(string filename) {
         _maps.push_back(currentMap);
     }
     maps = _maps;
+    fileStream.close();
 }
 
 void StarWars::draw_background() {

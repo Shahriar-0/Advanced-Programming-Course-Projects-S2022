@@ -1,14 +1,12 @@
 #ifndef __MY_BULLET_HPP__
 #define __MY_BULLET_HPP__
 #include "rsdl.hpp"
-
-constexpr int SPEED_UP = 10;
-constexpr double LEAST_DISTANCE_FOR_BULLETS = 8;
-
-
-class MovingEnemies;
-class StationaryEnemies;
-class Hostage;
+#include "hostage.hpp"
+#include "moving_enemies.hpp"
+#include "stationary_enemies.hpp"
+constexpr int UP_SPEED = 10;
+constexpr int BULLET_LENGTH = 10;
+constexpr double LEAST_DISTANCE_FOR_MY_BULLETS = 8;
 
 class MyBullet {
 public:
@@ -20,8 +18,9 @@ public:
     void check_for_hitting_hostage();
     void check_for_hitting_moving_enenmy();
     void check_for_hitting_stationary_enemy();
+    bool is_colliding(Point);
     bool is_dead();
-    Point get_center();
+    void extinct();
 private:
     MovingEnemies* listOfMovingEnemies;
     StationaryEnemies* listOfStationaryEnemies;

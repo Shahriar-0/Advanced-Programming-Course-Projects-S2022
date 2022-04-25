@@ -1,9 +1,8 @@
 #include "enemy_bullet.hpp"
 
-EnemyBullet::EnemyBullet(Point _center, SpaceShip* _spaceShip) : center(_center) {
-    spaceShip = _spaceShip;
+EnemyBullet::EnemyBullet(Point _center) : center(_center) {
     exists = true;
-    vy = SPEED_DOWN;
+    vy = DOWN_SPEED;
     length = BULLET_LENGTH;
 }
 

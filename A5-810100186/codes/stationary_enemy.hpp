@@ -14,7 +14,7 @@ public:
     void update(Window*); 
     bool is_dead();
     void die();
-    bool is_hitting(MyBullet);
+    bool is_hitting(MyBullet*);
     void shoot();
 private:
     int frameCounter;
