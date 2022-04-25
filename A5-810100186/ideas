@@ -1,28 +1,5 @@
-read mario ali
-read matio zare
-read doodle jump 
-first write the variables not the methods
-add things step by step
-
-
-------------------------------------------------------------------------------------------
-obviously a class for handling the whole game with a name like star wars
-(typedef the vector<string> to be map and after reading file put it in 
-vector<map> then read it each level and initialise the world)
-a class for my ship (for now i decided to keep all the bullets of a ship inside of it
-it means that there should be a vector of corresponding bullet in each ship, the thing 
-to remember is that the bullets that are already shot should still be moving)
-a class for hostage
-a class for stationary enemy
-a class for moving enemy
-a class for stationary enemy team
-a class for moving enemy team
-and the above two teams should be passed as an 
-pointer to the bullets ( inheritance ) for checking
-hit
 for choosing who should shoot maybe get their alive ships
 and then choose an arbitrary number of them
-a class for my bullets (the thing for now is to keep the pointer of the vector
-which holds the list of all enemies and also the hostage and then i got to check all of them in 
-each frame)
-a class for enemy bullet (sth like the last one but holds only my ship)
+
+delete pointer of lists in bullets
+and the checking should be inside those lists class so pass space ship to them
