@@ -1,6 +1,5 @@
 #ifndef __STATIONARY_ENEMY_HPP__
 #define __STATIONARY_ENEMY_HPP__
-#include "my_bullet.hpp"
 #include "enemy_bullet.hpp"
 #include <vector>
 #include <cmath>
@@ -14,13 +13,13 @@ public:
     void update(Window*); 
     bool is_dead();
     void die();
-    bool is_hitting(MyBullet*);
+    // bool is_hitting(MyBullet*);
     void shoot();
     Point get_center();
     void play_explosion_sound();
+    void update_bullets(); //remember to update bullets no matter what
 private:
     int frameCounter;
-    void update_bullets(); //remember to update bullets no matter what
     Point topLeft;
     std::vector<EnemyBullet> enemyBullets;
     bool exists;

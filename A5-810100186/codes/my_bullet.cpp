@@ -1,27 +1,33 @@
 #include "my_bullet.hpp"
 
-MyBullet::MyBullet(Point _center, MovingEnemies* _lisrOfMovingEnemies,
- StationaryEnemies* _listOfStationaryEnemies, Hostage* _hostage) 
-    : center(_center) { 
-    listOfMovingEnemies = _lisrOfMovingEnemies;
-    listOfStationaryEnemies = _listOfStationaryEnemies;
-    hostage = _hostage;
+MyBullet::MyBullet(Point _center, int _blockWidth, int _blockHeight) : center(_center) { 
     vy = UP_SPEED;
     exists = true;
+    blockWidth = _blockWidth;
+    blockHeight = _blockHeight;
+}
+
+void MyBullet::update(Window* win) {
+    check_for_existence(win);
+    if (!does_exist())
+        return;
+    move();
+    draw(win);
+}
+
+void MyBullet::check_for_existence(Window* win) {
+    if (center.x < 0 || center.x >= win->get_width() || center.y < 0 || center.y >= win->get_height())
+        extinct();
 }
 
 void MyBullet::move() { center.y += vy; }
 
 bool MyBullet::is_colliding(Point target) {
-    return sqrt(pow(abs(target.x - center.x), 2) + pow(abs(target.y - center.y), 2)) <= LEAST_DISTANCE_FOR_MY_BULLETS;
+    return sqrt(pow(abs(target.x - center.x), 2) + pow(abs(target.y - center.y), 2)) <= MY_BULLET_RANGE
+    || sqrt(pow(abs(target.x - center.x), 2) + pow(abs(target.y - center.y + blockHeight / 2), 2)) <= MY_BULLET_RANGE
+    || sqrt(pow(abs(target.x - center.x), 2) + pow(abs(target.y - center.y - blockHeight / 2), 2)) <= MY_BULLET_RANGE;
 }
 
-void MyBullet::check_for_hitting_hostage() {
-    if (is_colliding(hostage->get_center())) {
-        hostage->die();
-        extinct();
-    }
-}
-
-bool MyBullet::is_dead() { return exists == false; }
+void MyBullet::draw(Window* win) { win->draw_line(Point(center.x, center.y - blockHeight / 2), Point(center.x, center.y + blockHeight / 2), GREEN); }
+bool MyBullet::does_exist() { return exists == false; }
 void MyBullet::extinct() { exists = false; }

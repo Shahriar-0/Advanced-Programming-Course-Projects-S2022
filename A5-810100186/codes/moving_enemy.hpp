@@ -1,6 +1,5 @@
 #ifndef __MOVING_ENEMY_HPP__
 #define __MOVING_ENEMY_HPP__
-#include "my_bullet.hpp"
 #include "enemy_bullet.hpp"
 #include <vector>
 
@@ -15,14 +14,14 @@ public:
     void update(Window*); 
     bool is_dead();
     void die();
-    bool is_hitting(MyBullet*);
+    // bool is_hitting(MyBullet*);
     void move();
     void shoot();
     Point get_center();
     void play_explosion_sound();
+    void update_bullets(); //remember to update bullets no matter what
 private:
     int frameCounter;
-    void update_bullets(); //remember to update bullets no matter what
     int vx;
     Point topLeft;
     std::vector<EnemyBullet> enemyBullets;

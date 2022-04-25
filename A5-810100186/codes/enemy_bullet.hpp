@@ -3,12 +3,12 @@
 #include "rsdl.hpp"
 constexpr int DOWN_SPEED = -10;
 constexpr int ENEMY_BULLET_LENGTH = 10;
-constexpr double LEAST_DISTANCE_FOR_ENEMY_BULLETS = 8;
+constexpr double ENEMY_BULLET_RANGE = 8;
 class SpaceShip;
 
 class EnemyBullet {
 public:
-    EnemyBullet(Point);
+    EnemyBullet(Point, int, int);
     void move();
     void update(Window*);
     void check_for_existence(Window*);
@@ -21,6 +21,7 @@ private:
     int vy;
     int length;
     bool exists;
+    int blockWidth, blockHeight;
 };
 
 #endif 

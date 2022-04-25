@@ -11,7 +11,7 @@ void MovingEnemy::draw(Window* win) {
 }
 
 void MovingEnemy::update(Window* win) {
-    update_bullets();
+    //update_bullets();
     if (!is_dead()) {
         move();
         draw(win);
@@ -25,12 +25,13 @@ void MovingEnemy::move() {
 
 Point MovingEnemy::get_center() { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
 
-bool MovingEnemy::is_hitting(MyBullet bullet) {
-    Point center = topLeft + Point(blockWidth / 2, blockHeight / 2);
-    Point bulletCenter = bullet.get_center();
-    return sqrt(pow(abs(center.x - bulletCenter.x), 2) + pow(abs(center.y - bulletCenter.y), 2)) <= 
-        LEAST_DISTANCE_FOR_BULLETS;
-}
+// bool MovingEnemy::is_hitting(MyBullet bullet) {
+//     Point center = topLeft + Point(blockWidth / 2, blockHeight / 2);
+//     Point bulletCenter = bullet.get_center();
+//     return sqrt(pow(abs(center.x - bulletCenter.x), 2) + pow(abs(center.y - bulletCenter.y), 2)) <= 
+//         LEAST_DISTANCE_FOR_BULLETS;
+// }
+//todo: fix this
 
 bool MovingEnemy::is_dead() { return exists == false; }
 void MovingEnemy::die() { exists = false; }

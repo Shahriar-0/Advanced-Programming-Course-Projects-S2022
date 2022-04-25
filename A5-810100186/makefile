@@ -26,13 +26,13 @@ $(BUILDS)star_wars.o: $(CODES)star_wars.hpp $(CODES)star_wars.cpp $(CODES)audio.
 	$(CC_OBJECT) $(CODES)star_wars.cpp -o $(BUILDS)star_wars.o
 
 $(BUILDS)my_bullet.o: $(CODES)my_bullet.cpp $(CODES)my_bullet.hpp $(CODES)moving_enemies.hpp $(CODES)stationary_enemies.hpp $(CODES)hostage.hpp
-	$(CC_OBJECT) $(CODES)my_bullet -o $(BUILDS)my_bullet.o
+	$(CC_OBJECT) $(CODES)my_bullet.cpp -o $(BUILDS)my_bullet.o
 
 $(BUILDS)enemy_bullet.o: $(CODES)enemy_bullet.cpp $(CODES)enemy_bullet.hpp
 	$(CC_OBJECT) $(CODES)enemy_bullet.cpp $(BUILDS) -o $(BUILDS)enemy_bullet.o
 
 $(BUILDS)hostage.o: $(CODES)hostage.cpp $(CODES)hostage.hpp
-	$(CC_OBJECT) $(CODES)hostage.cpp $(BUILDS) -o $(BUILDS)hostage.o
+	$(CC_OBJECT) $(CODES)hostage.cpp -o $(BUILDS)hostage.o
 
 $(BUILDS)moving_enemies.o: $(CODES)moving_enemies.cpp $(CODES)moving_enemies.hpp $(CODES)moving_enemy.hpp
 	$(CC_OBJECT) $(CODES)moving_enemies.cpp -o $(BUILDS)moving_enemies.o
