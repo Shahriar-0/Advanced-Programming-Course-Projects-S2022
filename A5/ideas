@@ -1,0 +1,5 @@
+for choosing who should shoot maybe get their alive ships
+and then choose an arbitrary number of them
+
+delete pointer of lists in bullets
+and the checking should be inside those lists class so pass space ship to them
