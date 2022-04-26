@@ -21,7 +21,7 @@ void StationaryEnemy::update_bullets(Window* win) {
 void StationaryEnemy::check_for_hitting_spaceship(SpaceShip* spaceShipPtr) {
     for (auto& bullet : bullets) {
         if (bullet.is_colliding(spaceShipPtr->get_center())) {
-            
+
         }
     }
 }

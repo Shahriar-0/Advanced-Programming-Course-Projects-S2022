@@ -13,7 +13,7 @@ public:
     Enemies(Window*);
     void set_music_player(AudioPlayer*);
     void set_window_size(int, int);
-    void set_music_space_ship(AudioPlayer*);
+    void set_space_ship(SpaceShip*);
     int count_alive();
     void update();
     void check_for_hitting_spaceship();

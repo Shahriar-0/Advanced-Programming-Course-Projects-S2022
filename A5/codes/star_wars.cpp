@@ -4,8 +4,8 @@ using namespace std;
 StarWars::StarWars(string filename, Window* _win) : 
     musicPlayer(_win), enemies(_win), spaceship(_win){
     win = _win;
-    totalHeight = _win->getHeight();
-    totalWidth = _win->getWidth();
+    totalHeight = _win->get_height();
+    totalWidth = _win->get_width();
     frameCounter = 0;
     level = 1;
     musicPlayer.play_theme();

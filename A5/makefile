@@ -10,7 +10,7 @@ all: starwars.out
 debug_star_wars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)bullet.o
 	$(CC) $(BUILDS)*.o $(DEBUG) $(SDLFLAGS) -o debug_star_wars.out
 
-starwars.out: $(BUILDS)main.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)bullet.o
+starwars.out: $(BUILDS)main.o $(BUILDS)spaceship.o $(BUILDS)rsdl.o $(BUILDS)audio.o $(BUILDS)stationary_enemy.o $(BUILDS)moving_enemy.o $(BUILDS)enemies.o $(BUILDS)hostage.o $(BUILDS)star_wars.o $(BUILDS)bullet.o
 	$(CC) $(BUILDS)*.o $(SDLFLAGS) -o starwars.out
 
 $(BUILDS)main.o: $(CODES)main.cpp $(CODES)star_wars.hpp
@@ -39,6 +39,9 @@ $(BUILDS)moving_enemy.o: $(CODES)moving_enemy.cpp $(CODES)moving_enemy.hpp $(COD
 
 $(BUILDS)stationary_enemy.o: $(CODES)stationary_enemy.cpp $(CODES)stationary_enemy.hpp $(CODES)bullet.hpp 
 	$(CC_OBJECT) $(CODES)stationary_enemy.cpp -o $(BUILDS)stationary_enemy.o
+
+$(BUILDS)spaceship.o: $(CODES)spaceship.cpp $(CODES)spaceship.hpp $(CODES)bullet.hpp $(CODES)bullet.hpp 
+	$(CC_OBJECT) $(CODES)spaceship.cpp -o $(BUILDS)spaceship.o
 
 
 .PHONY: clean

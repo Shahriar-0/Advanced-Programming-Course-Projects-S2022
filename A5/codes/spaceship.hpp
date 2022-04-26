@@ -16,7 +16,9 @@ public:
     void set_window_size(int, int);
     void set_move(char);
     void update();
+    void update_bullets();
     void stop_moving(char);
+    void move();
     void shoot();
     void check_for_collding_with_ships();
     bool is_dead();
@@ -30,8 +32,8 @@ public:
 private:
     Window* win;
     AudioPlayer* musicPlayerPtr;
-    Point center;
-    std::vector<Bullet> myBullets;
+    Point topLeft;
+    std::vector<Bullet> bullets;
     int vy, vx;
     bool exists;
     int blockWidth, blockHeight;
