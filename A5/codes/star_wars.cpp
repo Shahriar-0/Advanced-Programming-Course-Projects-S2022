@@ -15,6 +15,10 @@ StarWars::StarWars(string filename, Window* _win) :
     delay(10000);
 }
 
+void StarWars::initialise() {
+    gameMap currentMap = maps[level - 1];
+}
+
 void StarWars::read_file(string filename) {
     ifstream fileStream (filename);
     int numOfMaps;

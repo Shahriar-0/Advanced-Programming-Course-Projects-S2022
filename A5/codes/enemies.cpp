@@ -19,13 +19,14 @@ void Enemies::update() {
 }
 
 void Enemies::check_for_hitting_spaceship() {
-    for (auto& enemy : list) {
+    for (auto& enemy : list) 
         enemy.check_for_hitting_spaceship(spaceShipPtr);
-    }
 }
 
 void Enemies::check_for_getting_hit() {
-    //todo
+    for (auto& enemy : list) 
+        if (enemy.check_for_getting_hit(spaceShipPtr))
+            musicPlayerPtr->play_sound_effect(EXPLOSION);  
 }
 
 void Enemies::add_member(StationaryEnemy enemy) { list.push_back(enemy); }

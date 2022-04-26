@@ -14,6 +14,7 @@ public:
     virtual void update(Window*); 
     void move();
 private:
+    int frameCounter;
     int vx;
     Point topLeft;
     std::vector<Bullet> bullets;

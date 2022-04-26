@@ -11,7 +11,7 @@ constexpr int VERTICAL_SPEED = 8;
 class SpaceShip {
 public:
     SpaceShip(Window*);
-    //SpaceShip() : center(Point(0, 0)) {};
+    std::vector<Bullet>* get_bullets();
     void set_music_player(AudioPlayer*);
     void set_window_size(int, int);
     void set_move(char);

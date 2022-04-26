@@ -12,6 +12,10 @@ void MovingEnemy::update(Window* win) {
         return;
     move();
     draw(win);
+    if (frameCounter == 0) {
+        shoot();
+        frameCounter = rand() % FRAME_LIMIT;
+    }   
 }
 
 void MovingEnemy::move() {
