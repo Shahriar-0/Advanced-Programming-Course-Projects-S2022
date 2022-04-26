@@ -18,13 +18,13 @@ void StationaryEnemy::update_bullets(Window* win) {
         bullet.update(win);
 }
 
-// bool StationaryEnemy::is_hitting(MyBullet bullet) {
-//     Point center = topLeft + Point(blockWidth / 2, blockHeight / 2);
-//     Point bulletCenter = bullet.get_center();
-//     return sqrt(pow(abs(center.x - bulletCenter.x), 2) + pow(abs(center.y - bulletCenter.y), 2)) <= 
-//         LEAST_DISTANCE_FOR_BULLETS;
-// }
-//todo: fix this
+void StationaryEnemy::check_for_hitting_spaceship(SpaceShip* spaceShipPtr) {
+    for (auto& bullet : bullets) {
+        if (bullet.is_colliding(spaceShipPtr->get_center())) {
+            
+        }
+    }
+}
 
 Point StationaryEnemy::get_center() { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
 bool StationaryEnemy::is_dead() { return exists == false; }

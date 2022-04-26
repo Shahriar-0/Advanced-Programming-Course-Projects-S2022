@@ -5,14 +5,17 @@
 #include <vector>
 #define MY_SPACESHIP_PIC "./assets/pictures/spaceships/my_spaceship.png"
 #define INITIAL_HEALTH 3
+constexpr int HORIZONTAL_SPEED = 8; 
+constexpr int VERTICAL_SPEED = 8; 
 
 class SpaceShip {
 public:
     SpaceShip(Window*);
-    SpaceShip() : center(Point(0, 0)) {};
+    //SpaceShip() : center(Point(0, 0)) {};
     void set_music_player(AudioPlayer*);
     void set_window_size(int, int);
-    void move(char);
+    void set_move(char);
+    void update();
     void stop_moving(char);
     void shoot();
     void check_for_collding_with_ships();
@@ -22,6 +25,8 @@ public:
     void play_shooting_sound();
     void play_explosion_sound();
     void get_shot();
+    Point get_center();
+    void reduce_health();
 private:
     Window* win;
     AudioPlayer* musicPlayerPtr;
