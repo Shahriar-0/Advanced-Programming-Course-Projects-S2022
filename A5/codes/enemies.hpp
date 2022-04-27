@@ -12,13 +12,15 @@ class Enemies {
 public:
     Enemies(Window*);
     void set_music_player(AudioPlayer*);
-    void set_window_size(int, int);
+    void set_block_size(int, int);
     void set_space_ship(SpaceShip*);
     int count_alive();
     void update();
     void check_for_hitting_spaceship();
     void check_for_getting_hit();
+    void check_for_collding_with_spaceship();
     void add_member(StationaryEnemy);
+    void initialise();
 private:
     Window* win;
     AudioPlayer* musicPlayerPtr;

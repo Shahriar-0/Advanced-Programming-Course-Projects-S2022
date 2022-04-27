@@ -1,35 +1,37 @@
 #ifndef __SPACESHIP_HPP__
 #define __SPACESHIP_HPP__
+#include <vector>
 #include "bullet.hpp"
 #include "audio.hpp"
-#include <vector>
 #define MY_SPACESHIP_PIC "./assets/pictures/spaceships/my_spaceship.png"
-#define INITIAL_HEALTH 3
+constexpr int INITIAL_HEALTH = 3;
 constexpr int HORIZONTAL_SPEED = 8; 
 constexpr int VERTICAL_SPEED = 8; 
+constexpr int DISTANCE_FROM_BOTTOM = 80;
+enum ARROWS {LEFT_ARROW = 37, UP_ARROW, RIGHT_ARROW, DOWN_ARROW};
 
 class SpaceShip {
 public:
     SpaceShip(Window*);
-    std::vector<Bullet>* get_bullets();
     void set_music_player(AudioPlayer*);
-    void set_window_size(int, int);
+    void set_block_size(int, int);
     void set_move(char);
+    void stop_moving(char);
     void update();
     void update_bullets();
-    void stop_moving(char);
     void move();
     void shoot();
-    void check_for_collding_with_ships();
     bool is_dead();
-    void die();
     void draw();
     void play_shooting_sound();
     void play_explosion_sound();
+    void die();
     void get_shot();
+    void initialise();
     Point get_center();
-    void reduce_health();
+    std::vector<Bullet>* get_bullets();
 private:
+    void reduce_health();
     Window* win;
     AudioPlayer* musicPlayerPtr;
     Point topLeft;

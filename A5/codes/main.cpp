@@ -11,6 +11,7 @@ int main(int argc, char* argv[]) {
 		if (argc == 1)
 			throw string("haven't passed a map");
 		StarWars starwars(argv[1], new Window(IMAGE_WIDTH, IMAGE_HEIGHT, "a long walk home"));
+		starwars.run();
 	}
 	catch (string exception) {
 		cerr << exception << endl;

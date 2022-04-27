@@ -1,6 +1,6 @@
 #include "spaceship.hpp"
 using namespace std;
-SpaceShip::SpaceShip(Window* _win)  : topLeft(Point(rand() % win->get_width(), win->get_height() - 50)) {
+SpaceShip::SpaceShip(Window* _win)  : topLeft(Point(rand() % win->get_width(), win->get_height() - DISTANCE_FROM_BOTTOM)) {
     //50 is just a rational random number for
     win = _win;
     health = INITIAL_HEALTH;
@@ -8,31 +8,31 @@ SpaceShip::SpaceShip(Window* _win)  : topLeft(Point(rand() % win->get_width(), w
 
 
 void SpaceShip::set_move(char move) {
-    if (move == 'a' || move == 'A')
+    if (move == 'a' || move == 'A' || (int)move == LEFT_ARROW)
         vx = -HORIZONTAL_SPEED;
-    else if (move == 'd' || move == 'D') 
-        vx = HORIZONTAL_SPEED;
-    else if (move == 's' || move == 'S') 
-        vy = VERTICAL_SPEED;
-    else if (move == 'w' || move == 'W') 
+    else if (move == 'w' || move == 'W'|| (int)move == UP_ARROW) 
         vy = -VERTICAL_SPEED;
+    else if (move == 'd' || move == 'D' || (int)move == RIGHT_ARROW) 
+        vx = HORIZONTAL_SPEED;
+    else if (move == 's' || move == 'S' || (int)move == DOWN_ARROW) 
+        vy = VERTICAL_SPEED;
+    else if (move == ' ') 
+        shoot();
 }
 
 void SpaceShip::stop_moving(char move) {
-    if (move == 'a' || move == 'A')
+    if (move == 'a' || move == 'A' || (int)move == LEFT_ARROW)
         if (vx < 0)
             vx = 0;
-    else if (move == 'd' || move == 'D') 
-        if (vx > 0)
-            vx = 0;
-    else if (move == 's' || move == 'S') 
-        if (vy > 0)
-            vy = 0;
-    else if (move == 'w' || move == 'W') 
+    else if (move == 'w' || move == 'W' || (int)move == UP_ARROW) 
         if (vy < 0)
             vy = 0;
-    else if (move == ' ') 
-        shoot();
+    else if (move == 'd' || move == 'D' || (int)move == RIGHT_ARROW) 
+        if (vx > 0)
+            vx = 0;
+    else if (move == 's' || move == 'S' || (int)move == DOWN_ARROW) 
+        if (vy > 0)
+            vy = 0;
 }
 
 void SpaceShip::shoot() {
@@ -53,22 +53,12 @@ void SpaceShip::update_bullets() {
         bullet.update(win);
 }
 
-void SpaceShip::play_shooting_sound() { musicPlayerPtr->play_sound_effect(SHOOTING); }
-void SpaceShip::play_explosion_sound() { musicPlayerPtr->play_sound_effect(EXPLOSION); }
-void SpaceShip::die() { exists = false; }
-bool SpaceShip::is_dead() { return exists == false; }
-void SpaceShip::set_window_size(int _blockWidth, int _blockHeight) { blockWidth = _blockWidth; blockHeight = _blockHeight;}
-void SpaceShip::set_music_player(AudioPlayer* _musicPlayerPtr) { musicPlayerPtr = _musicPlayerPtr; }
-Point SpaceShip::get_center() { return topLeft + Point(blockWidth, blockHeight); }
-void SpaceShip::draw() { win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
-vector<Bullet>* SpaceShip::get_bullets() { return &bullets; }
-
 void SpaceShip::move() { 
     topLeft += Point(vx, vy);
     if (topLeft.x < 0) topLeft.x = 0;
+    else if (topLeft.x + blockWidth > win->get_width()) topLeft.x = win->get_width() - blockWidth;
     if (topLeft.y < 0) topLeft.y = 0;
-    if (topLeft.x > win->get_width()) topLeft.x = win->get_width();
-    if (topLeft.x > win->get_height()) topLeft.x = win->get_height();
+    else if (topLeft.y + blockHeight > win->get_height()) topLeft.x = win->get_height() - blockHeight;
 }
 
 
@@ -82,3 +72,19 @@ void SpaceShip::reduce_health() {
     if (health <= 0) 
         die();
 }
+
+void SpaceShip::initialise() {
+    health = INITIAL_HEALTH;
+    topLeft = Point(rand() % win->get_width(), win->get_height() - DISTANCE_FROM_BOTTOM);
+    bullets.clear();
+}
+
+void SpaceShip::play_shooting_sound() { musicPlayerPtr->play_sound_effect(SHOOTING); }
+void SpaceShip::play_explosion_sound() { musicPlayerPtr->play_sound_effect(EXPLOSION); }
+void SpaceShip::die() { exists = false; }
+bool SpaceShip::is_dead() { return exists == false; }
+void SpaceShip::set_block_size(int _blockWidth, int _blockHeight) { blockWidth = _blockWidth; blockHeight = _blockHeight;}
+void SpaceShip::set_music_player(AudioPlayer* _musicPlayerPtr) { musicPlayerPtr = _musicPlayerPtr; }
+void SpaceShip::draw() { win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
+Point SpaceShip::get_center() { return topLeft + Point(blockWidth, blockHeight); }
+vector<Bullet>* SpaceShip::get_bullets() { return &bullets; }

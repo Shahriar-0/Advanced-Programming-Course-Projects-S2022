@@ -6,7 +6,6 @@ constexpr int UP_SPEED = 10;
 constexpr int DOWN_SPEED = -10;
 constexpr int BULLET_LENGTH = 15;
 constexpr double BULLET_RANGE = 8;
-
 enum Type {ENEMY, MY_SPACESHIP};
 
 class Bullet {

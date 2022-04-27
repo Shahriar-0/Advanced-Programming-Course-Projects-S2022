@@ -5,11 +5,12 @@
 
 class Hostage {
 public:
-    Hostage(Point, int, int);
+    Hostage();
     void draw(Window*);
     void die();
     bool is_dead();
     Point get_center();
+    void set_top_left(Point);
 private:
     Point topLeft;
     bool exists;
