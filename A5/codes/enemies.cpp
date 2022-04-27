@@ -35,6 +35,11 @@ void Enemies::check_for_collding_with_spaceship() {
         enemy.check_for_collding_with_ship(spaceShipPtr);
 }
 
+void Enemies::draw() {
+    for (auto& enemy : list)
+        enemy.draw(win);
+}
+
 void Enemies::initialise() { list.clear(); }
 void Enemies::add_member(StationaryEnemy enemy) { list.push_back(enemy); }
 void Enemies::set_block_size(int _blockWidth, int _blockHeight) { blockWidth = _blockWidth; blockHeight = _blockHeight;}

@@ -8,8 +8,8 @@ StarWars::StarWars(string filename, Window* _win) :
     win = _win;
     totalHeight = _win->get_height();
     totalWidth = _win->get_width();
-    frameCounter = 0;
     level = 1;
+    gameMode = RUNNING;
     musicPlayer.play_theme();
     read_file(filename);
 }
@@ -23,6 +23,7 @@ int StarWars::read_sizes_of_map(ifstream& fileStream) {
     blockHeight = totalWidth / numOfBlocksWidth;
     enemies.set_block_size(blockWidth, blockHeight);
     spaceship.set_block_size(blockWidth, blockHeight);
+    return numOfMaps;
 }
 
 void StarWars::read_file(string filename) {
@@ -69,7 +70,69 @@ void StarWars::convert_map_to_positions(singleMap currentMap) {
 }
 
 void StarWars::run() {
+    for (; level <= maps.size() && gameMode != LOST; level++) {
+        initialise();
+        string welcome = "welcome to level " + level;
+        win->show_text(welcome, Point(totalWidth / 10, totalHeight / 5), WHITE, FONT_ADDRESS, 36);
+        win->update_screen();
+        delay(2000);
+        while (gameMode == RUNNING) {
+            process_events();
+            update_frame();
+            check_for_end_round();
+        }
+        check_for_end_game();
+    }
+}
 
+void StarWars::process_events() {
+    while (win->has_pending_event()) {
+        Event event = win->poll_for_event();
+        if (event.get_type() == Event::KEY_PRESS)
+            spaceship.set_move(event.get_type());
+        if (event.get_type() == Event::KEY_RELEASE)
+            spaceship.stop_moving(event.get_type());
+        if (event.get_type() == Event::QUIT)
+            exit(EXIT_SUCCESS);
+    }
+}
+
+void StarWars::update_frame() {
+    win->clear();
+    draw_background();
+
+    spaceship.update();
+    enemies.update();
+    
+    spaceship.draw();
+    enemies.draw();
+    win->update_screen();
+
+    delay(100);
+}
+
+void StarWars::check_for_end_round() {
+    if (hostage.is_dead() || spaceship.is_dead())
+        gameMode = LOST;
+    else if (enemies.count_alive() == 0) 
+        gameMode = WON;
+}
+
+void StarWars::check_for_end_game() {
+    if (gameMode == LOST) {
+        win->clear();
+        win->show_text("YOU LOST!\n", Point(totalWidth / 2, totalHeight / 4), RED, FONT_ADDRESS, 48);
+        win->update_screen();
+        delay(2000);
+        exit(EXIT_SUCCESS);
+    }
+    else if (gameMode == WON && level == maps.size()) {
+        win->clear();
+        win->show_text("YOU WON!\n", Point(totalWidth / 2, totalHeight / 4), GREEN, FONT_ADDRESS, 48);
+        win->update_screen();
+        delay(2000);
+        exit(EXIT_SUCCESS);
+    }
 }
 
 void StarWars::draw_background() { win->draw_img(BACKGROUND_ADDRESS); }
