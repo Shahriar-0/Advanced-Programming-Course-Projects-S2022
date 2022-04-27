@@ -11,9 +11,10 @@ class MovingEnemy : public StationaryEnemy {
 public:
     MovingEnemy(Point, int, int);
     virtual void update(Window*); 
+    virtual void draw(Window*);
+    virtual void shoot();
     void move();
 private:
-    void draw(Window*);
     int frameCounter;
     int vx;
     Point topLeft;

@@ -11,7 +11,7 @@ StarWars::StarWars(string filename, Window* _win) :
     level = 1;
     gameMode = RUNNING;
     //introduction();
-    musicPlayer.play_theme();
+    // musicPlayer.play_theme();
     read_file(filename);
 }
 
@@ -72,7 +72,7 @@ void StarWars::convert_map_to_positions(singleMap currentMap) {
 
 void StarWars::run() {
     for (; level <= maps.size() && gameMode != LOST; level++) {
-        initialise();
+        // initialise();
         string welcome = " welcome to level " + to_string(level);
         win->show_text(welcome, Point(totalWidth / 10, totalHeight / 5), WHITE, FONT_ADDRESS, 54);
         win->update_screen();
@@ -80,7 +80,7 @@ void StarWars::run() {
         while (gameMode == RUNNING) {
             process_events();
             update_frame();
-            check_for_end_round();
+            // check_for_end_round();
         }
         check_for_end_game();
     }
@@ -90,9 +90,9 @@ void StarWars::process_events() {
     while (win->has_pending_event()) {
         Event event = win->poll_for_event();
         if (event.get_type() == Event::KEY_PRESS)
-            spaceship.set_move(event.get_type());
+            spaceship.set_move(event.get_pressed_key());
         if (event.get_type() == Event::KEY_RELEASE)
-            spaceship.stop_moving(event.get_type());
+            spaceship.stop_moving(event.get_pressed_key());
         if (event.get_type() == Event::QUIT)
             exit(EXIT_SUCCESS);
     }
@@ -103,7 +103,7 @@ void StarWars::update_frame() {
     draw_background();
 
     spaceship.update();
-    enemies.update();
+    //enemies.update();
     
     win->update_screen();
 

@@ -17,6 +17,10 @@ void MovingEnemy::update(Window* win) {
     }   
 }
 
+void MovingEnemy::shoot() {
+    bullets.push_back(Bullet(get_center(), blockWidth, blockHeight, ENEMY));
+}
+
 void MovingEnemy::move() {
     vx = (rand() % 2)? MOVING_LEFT_SPEED : MOVING_RIGHT_SPEED;
     topLeft.x += vx;

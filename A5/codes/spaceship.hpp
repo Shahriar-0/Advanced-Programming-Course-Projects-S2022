@@ -5,8 +5,8 @@
 #include "audio.hpp"
 #define MY_SPACESHIP_PIC "./assets/pictures/spaceships/my_spaceship.png"
 constexpr int INITIAL_HEALTH = 3;
-constexpr int HORIZONTAL_SPEED = 8; 
-constexpr int VERTICAL_SPEED = 8; 
+constexpr int HORIZONTAL_SPEED = 50; 
+constexpr int VERTICAL_SPEED = 50; 
 constexpr int DISTANCE_FROM_BOTTOM = 80;
 enum ARROWS {LEFT_ARROW = 37, UP_ARROW, RIGHT_ARROW, DOWN_ARROW};
 

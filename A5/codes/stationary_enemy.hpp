@@ -23,8 +23,8 @@ public:
     void play_explosion_sound();
     void shoot();
     void die();
-private:
     void draw(Window*);
+private:
     int blockWidth, blockHeight;
     int frameCounter;
     Point topLeft;

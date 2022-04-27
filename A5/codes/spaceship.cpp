@@ -1,6 +1,6 @@
 #include "spaceship.hpp"
 using namespace std;
-SpaceShip::SpaceShip(Window* _win)  : topLeft(Point(rand() % win->get_width(), win->get_height() - DISTANCE_FROM_BOTTOM)) {
+SpaceShip::SpaceShip(Window* _win)  : topLeft(30, 40)/*topLeft(Point(rand() % win->get_width(), win->get_height() - DISTANCE_FROM_BOTTOM))*/ {
     //50 is just a rational random number for
     win = _win;
     health = INITIAL_HEALTH;
@@ -22,16 +22,12 @@ void SpaceShip::set_move(char move) {
 
 void SpaceShip::stop_moving(char move) {
     if (move == 'a' || move == 'A' || (int)move == LEFT_ARROW)
-        if (vx < 0)
             vx = 0;
     else if (move == 'w' || move == 'W' || (int)move == UP_ARROW) 
-        if (vy < 0)
             vy = 0;
     else if (move == 'd' || move == 'D' || (int)move == RIGHT_ARROW) 
-        if (vx > 0)
             vx = 0;
     else if (move == 's' || move == 'S' || (int)move == DOWN_ARROW) 
-        if (vy > 0)
             vy = 0;
 }
 
@@ -58,7 +54,7 @@ void SpaceShip::move() {
     if (topLeft.x < 0) topLeft.x = 0;
     else if (topLeft.x + blockWidth > win->get_width()) topLeft.x = win->get_width() - blockWidth;
     if (topLeft.y < 0) topLeft.y = 0;
-    else if (topLeft.y + blockHeight > win->get_height()) topLeft.x = win->get_height() - blockHeight;
+    else if (topLeft.y + blockHeight > win->get_height()) topLeft.y = win->get_height() - blockHeight;
 }
 
 
