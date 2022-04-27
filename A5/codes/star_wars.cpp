@@ -72,8 +72,8 @@ void StarWars::convert_map_to_positions(singleMap currentMap) {
 void StarWars::run() {
     for (; level <= maps.size() && gameMode != LOST; level++) {
         initialise();
-        string welcome = "welcome to level " + level;
-        win->show_text(welcome, Point(totalWidth / 10, totalHeight / 5), WHITE, FONT_ADDRESS, 36);
+        string welcome = " welcome to level " + to_string(level);
+        win->show_text(welcome, Point(totalWidth / 10, totalHeight / 5), WHITE, FONT_ADDRESS, 54);
         win->update_screen();
         delay(2000);
         while (gameMode == RUNNING) {
