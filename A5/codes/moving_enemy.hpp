@@ -10,10 +10,10 @@ const int MOVING_LEFT_SPEED = 10;
 class MovingEnemy : public StationaryEnemy {
 public:
     MovingEnemy(Point, int, int);
-    virtual void draw(Window*);
     virtual void update(Window*); 
     void move();
 private:
+    void draw(Window*);
     int frameCounter;
     int vx;
     Point topLeft;

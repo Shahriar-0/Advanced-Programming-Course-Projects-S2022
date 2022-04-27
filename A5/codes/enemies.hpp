@@ -21,7 +21,6 @@ public:
     void check_for_collding_with_spaceship();
     void add_member(StationaryEnemy);
     void initialise();
-    void draw();
 private:
     Window* win;
     AudioPlayer* musicPlayerPtr;

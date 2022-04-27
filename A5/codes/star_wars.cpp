@@ -10,6 +10,7 @@ StarWars::StarWars(string filename, Window* _win) :
     totalWidth = _win->get_width();
     level = 1;
     gameMode = RUNNING;
+    //introduction();
     musicPlayer.play_theme();
     read_file(filename);
 }
@@ -104,8 +105,6 @@ void StarWars::update_frame() {
     spaceship.update();
     enemies.update();
     
-    spaceship.draw();
-    enemies.draw();
     win->update_screen();
 
     delay(100);

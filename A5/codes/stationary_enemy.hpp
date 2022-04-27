@@ -12,7 +12,6 @@ class StationaryEnemy {
 public:
     StationaryEnemy(Point, int, int);
     StationaryEnemy();
-    void draw(Window*);
     void update(Window*); 
     void check_for_hitting_spaceship(SpaceShip*);
     bool check_for_getting_hit(SpaceShip*);
@@ -25,6 +24,7 @@ public:
     void shoot();
     void die();
 private:
+    void draw(Window*);
     int blockWidth, blockHeight;
     int frameCounter;
     Point topLeft;

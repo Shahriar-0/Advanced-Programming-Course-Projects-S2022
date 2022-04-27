@@ -5,7 +5,6 @@ MovingEnemy::MovingEnemy(Point _topLeft, int _blockWidth, int _blockHeight) : to
     blockHeight = _blockHeight;
 }
 
-
 void MovingEnemy::update(Window* win) {
     update_bullets(win);
     if (is_dead())
@@ -23,4 +22,8 @@ void MovingEnemy::move() {
     topLeft.x += vx;
 }
 
-void MovingEnemy::draw(Window* win) { win->draw_img(MOVING_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
+void MovingEnemy::draw(Window* win) { 
+    win->draw_img(MOVING_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight)); 
+    for (auto& bullet : bullets) 
+        bullet.draw(win);
+}

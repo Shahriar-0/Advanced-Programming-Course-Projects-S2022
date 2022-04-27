@@ -61,8 +61,13 @@ void StationaryEnemy::check_for_collding_with_ship(SpaceShip* spaceShipPtr) {
     }
 }
 
+void StationaryEnemy::draw(Window* win) { 
+    win->draw_img(STATIONARY_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight)); 
+    for (auto& bullet : bullets)
+        bullet.draw(win);
+}
+
 bool StationaryEnemy::are_colliding(Point target) { return (abs(get_center().x - target.x) < COLLISION_RANGE && abs(get_center().y - target.y) < COLLISION_RANGE); }
 Point StationaryEnemy::get_center() { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
 bool StationaryEnemy::is_dead() { return exists == false; }
 void StationaryEnemy::die() { exists = false; }
-void StationaryEnemy::draw(Window* win) { win->draw_img(STATIONARY_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
