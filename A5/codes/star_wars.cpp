@@ -1,11 +1,15 @@
 #include "star_wars.hpp"
 using namespace std;
 
-StarWars::StarWars(string filename, Window* _win) : 
-    musicPlayer(_win), enemies(_win), spaceship(_win) {
+StarWars::StarWars(string filename, Window* _win) {
+    win = _win;
     enemies.set_space_ship(&spaceship);
     enemies.set_music_player(&musicPlayer);
-    win = _win;
+    enemies.set_window(win);
+    spaceship.set_window(win);
+
+    update_frame();
+
     totalHeight = _win->get_height();
     totalWidth = _win->get_width();
     level = 1;
@@ -79,7 +83,7 @@ void StarWars::run() {
         delay(2000);
         while (gameMode == RUNNING) {
             process_events();
-            update_frame();
+            //update_frame();
             // check_for_end_round();
         }
         check_for_end_game();

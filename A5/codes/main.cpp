@@ -2,9 +2,6 @@
 #include "star_wars.hpp"
 using namespace std;
 
-constexpr int IMAGE_WIDTH  = 2250;
-constexpr int IMAGE_HEIGHT = 1650;
-
 int main(int argc, char* argv[]) {
     srand(time(NULL));
 	try {

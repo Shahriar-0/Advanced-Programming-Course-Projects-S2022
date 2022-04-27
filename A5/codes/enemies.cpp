@@ -1,7 +1,5 @@
 #include "enemies.hpp"
 
-Enemies::Enemies(Window* _win) { win = _win; }
-
 int Enemies::count_alive() {
     int alive = 0;
     for (auto& enemy : list) 
@@ -35,6 +33,7 @@ void Enemies::check_for_collding_with_spaceship() {
         enemy.check_for_collding_with_ship(spaceShipPtr);
 }
 
+void Enemies::set_window(Window* _win) { win = _win; }
 void Enemies::initialise() { list.clear(); }
 void Enemies::add_member(StationaryEnemy enemy) { list.push_back(enemy); }
 void Enemies::set_block_size(int _blockWidth, int _blockHeight) { blockWidth = _blockWidth; blockHeight = _blockHeight;}

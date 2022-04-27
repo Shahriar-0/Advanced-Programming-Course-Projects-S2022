@@ -10,7 +10,6 @@ class SpaceShip;
 
 class Enemies {
 public:
-    Enemies(Window*);
     void set_music_player(AudioPlayer*);
     void set_block_size(int, int);
     void set_space_ship(SpaceShip*);
@@ -21,6 +20,7 @@ public:
     void check_for_collding_with_spaceship();
     void add_member(StationaryEnemy);
     void initialise();
+    void set_window(Window*);
 private:
     Window* win;
     AudioPlayer* musicPlayerPtr;

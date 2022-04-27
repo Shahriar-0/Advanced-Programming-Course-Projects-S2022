@@ -18,11 +18,11 @@ const std::string AudioList[] {
 
 class AudioPlayer {
 public:
-    AudioPlayer(Window*);
     void play_sound_effect(AudioListType);
     void play_theme();
     void pause_theme();
     void resume_theme();
+    void set_window(Window*);
 private:
     Window* win;
 };

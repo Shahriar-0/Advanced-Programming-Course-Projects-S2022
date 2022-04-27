@@ -7,12 +7,12 @@
 constexpr int INITIAL_HEALTH = 3;
 constexpr int HORIZONTAL_SPEED = 50; 
 constexpr int VERTICAL_SPEED = 50; 
-constexpr int DISTANCE_FROM_BOTTOM = 80;
+constexpr int DISTANCE_FROM_BOTTOM = 200;
 enum ARROWS {LEFT_ARROW = 37, UP_ARROW, RIGHT_ARROW, DOWN_ARROW};
 
 class SpaceShip {
 public:
-    SpaceShip(Window*);
+    SpaceShip();
     void set_music_player(AudioPlayer*);
     void set_block_size(int, int);
     void set_move(char);
@@ -28,6 +28,7 @@ public:
     void die();
     void get_shot();
     void initialise();
+    void set_window(Window*);
     Point get_center();
     std::vector<Bullet>* get_bullets();
 private:
