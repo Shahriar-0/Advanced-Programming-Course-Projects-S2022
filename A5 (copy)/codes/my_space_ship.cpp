@@ -36,7 +36,6 @@ void MySpaceShip::stop_moving(char move) {
         vy = 0;
 }
 
-
 void MySpaceShip::initialise() {
     topLeft = gen_random_point_in_bottom();
     stamina = INITIAL_STAMINA;
@@ -44,8 +43,9 @@ void MySpaceShip::initialise() {
 }
 
 bool MySpaceShip::is_shot_by(const Bullet& bullet) const {
-    return abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
-           abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  
+    return bullet.get_type() == ENEMY &&  
+        abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
+        abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  
 }
 
 void MySpaceShip::draw() { win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }

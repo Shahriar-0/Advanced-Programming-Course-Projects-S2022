@@ -1,7 +1,7 @@
 #ifndef __BULLET_HPP__
 #define __BULLET_HPP__
 #include "rsdl.hpp"
-#include <cmath>
+
 constexpr int UP_SPEED      = -60;
 constexpr int DOWN_SPEED    = 60;
 constexpr int BULLET_LENGTH = 40;
@@ -22,9 +22,11 @@ public:
     bool does_exist();
     void extinct();
     Point get_center() const;
+    Type get_type() const;
 private:
     Point center;
     RGB color;
+    Type type;
     int vy;
     bool exists;
     int blockWidth, blockHeight;

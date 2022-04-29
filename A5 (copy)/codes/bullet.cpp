@@ -1,10 +1,11 @@
 #include "bullet.hpp"
 
-Bullet::Bullet(Point _center, int _blockWidth, int _blockHeight, Type type) : 
+Bullet::Bullet(Point _center, int _blockWidth, int _blockHeight, Type _type) : 
     center(_center), color(WHITE), blockWidth(_blockWidth), blockHeight(_blockHeight) { 
     vy = (type == ENEMY)? DOWN_SPEED : UP_SPEED;
     color = (type == ENEMY)? RED : GREEN;
     exists = true;
+    type = _type;
 }
 
 void Bullet::update(Window* win) {
@@ -20,8 +21,9 @@ void Bullet::check_for_existence(Window* win) {
         extinct();
 }
 
+Type Bullet::get_type() const { return type; }
 Point Bullet::get_center() const { return center; }
+bool Bullet::does_exist() { return exists == true; }
 void Bullet::move() { center.y += vy; }
 void Bullet::draw(Window* win) { win->fill_rect(Rectangle(Point(center.x - BULLET_WIDTH / 2, center.y - BULLET_LENGTH / 2), Point(center.x + BULLET_WIDTH / 2, center.y + BULLET_LENGTH / 2)), color); }
-bool Bullet::does_exist() { return exists == true; }
 void Bullet::extinct() { exists = false; }
