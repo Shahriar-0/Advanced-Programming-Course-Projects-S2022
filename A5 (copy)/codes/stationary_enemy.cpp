@@ -1,7 +1,8 @@
 #include "stationary_enemy.hpp"
 
-StationaryEnemy::StationaryEnemy(Point _topLeft, Window* _win)
+StationaryEnemy::StationaryEnemy(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight)
     : SpaceShip(_topLeft, _win) {
+    set_block_size(_blockWidth, _blockHeight);
     vx = vy = 0;
     stamina = 1; //cause the enemies have only one life yet
 }
@@ -12,7 +13,7 @@ void StationaryEnemy::update() {
     draw();
 }
 
-bool MySpaceShip::is_shot_by(const Bullet& bullet) const {
+bool StationaryEnemy::is_shot_by(const Bullet& bullet) const {
     return bullet.get_type() == MY_SPACESHIP &&  
         abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
         abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  

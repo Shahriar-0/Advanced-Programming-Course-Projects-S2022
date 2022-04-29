@@ -37,6 +37,7 @@ public:
     virtual void update(); 
     void initialise();
     bool is_shot_by(const Bullet&) const;
+    void play_shooting_sound();
 private:
     Point gen_random_point_in_bottom();
 };

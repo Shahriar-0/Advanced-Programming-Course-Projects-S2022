@@ -3,12 +3,12 @@
 #include "bullet.hpp"
 #include "stationary_enemy.hpp"
 
-#define MOVING_ENEMY_PIC "./assets/pictures/spaceships/moving_enemy.jpeg"
-constexpr int HORIZONTEL_SPEED = 10;
+#define MOVING_ENEMY_PIC "./assets/pictures/spaceships/moving_enemy.png"
+constexpr int HORIZONTEL_SPEED = 6;
 
 class MovingEnemy : public StationaryEnemy {
 public:
-    MovingEnemy(Point, Window*);
+    MovingEnemy(Point, Window*, int, int);
     void put_in_frame();
     virtual void draw();
     virtual void update();

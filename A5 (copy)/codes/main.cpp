@@ -7,8 +7,8 @@ int main(int argc, char* argv[]) {
 	try {
 		if (argc == 1)
 			throw string("haven't passed a map");
-			
-		Window* _win = new Window(IMAGE_WIDTH, IMAGE_HEIGHT, "a long walk home");
+
+		Window* _win = new Window(BACKGROUND_WIDTH, BACKGROUND_HEIGHT, "a long walk home");
 		StarWars starwars(argv[1], _win);
 		starwars.run();
 	}

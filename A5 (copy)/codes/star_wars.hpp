@@ -8,27 +8,31 @@
 #include "bullet.hpp"
 #include "my_space_ship.hpp"
 #include "audio.hpp"
+#include "enemies.hpp"
+#include "hostage.hpp"
 
 #define MAP_SPLITTER "-----"
 #define BACKGROUND_ADDRESS "./assets/pictures/background/galaxy.jpeg"
 #define FONT_ADDRESS "./assets/fonts/Starjedi.ttf"
-constexpr char EMPRY_SYMBOL = '.';
+constexpr char EMPTY_SYMBOL = '.';
 constexpr char STATIONARY_ENEMY_SYMBOL = 'S';
 constexpr char MOVING_ENEMY_SYMBOL = 'M';
 constexpr char HOSTAGE_SYMBOL = 'H';
 enum GameMode {RUNNING, WON, LOST};
+
 typedef std::vector<std::string> singleMap;
 
 class StarWars {
 public:
     StarWars(std::string, Window*);
     ~StarWars();
-    void read_file(std::string);
-    void draw_background();
     void run();
-    int read_sizes_of_map(std::ifstream&);
 private:
+    void read_file(std::string);
+    int read_sizes_of_map(std::ifstream&);
+    void draw_background();
     void update_bullets();
+    void update_hostages();
     void process_events();
     void space_ship_shoot();
     void update_frame();
@@ -38,13 +42,12 @@ private:
     void check_for_end_game();
     AudioPlayer musicPlayer;
     Window* win;
-    // Enemies enemies;
+    Enemies enemies;
     MySpaceShip mySpaceShip;
-    // Hostage hostage;
+    std::vector<Hostage> hostages;
     std::vector<singleMap> maps;
     std::vector<Bullet> bullets;
     GameMode gameMode;
-    int totalHeight, totalWidth;
     int blockHeight, blockWidth;
     int level;
 };

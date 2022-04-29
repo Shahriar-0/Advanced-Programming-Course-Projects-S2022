@@ -4,11 +4,8 @@ using namespace std;
 StarWars::StarWars(string filename, Window* _win) : musicPlayer(_win), mySpaceShip(_win) {
     win = _win;
     musicPlayer.play_theme();
-    // enemies.set_space_ship(&spaceship);
-    // enemies.set_music_player(&musicPlayer);
-    // enemies.set_window(win);
-    totalHeight = win->get_height();
-    totalWidth = win->get_width();
+    mySpaceShip.set_music_player(&musicPlayer);
+
     level = 1;
     gameMode = RUNNING;
     //introduction(); //todo
@@ -20,9 +17,9 @@ int StarWars::read_sizes_of_map(ifstream& fileStream) {
     fileStream >> numOfMaps;
     int numOfBlocksHeight, numOfBlocksWidth;
     fileStream >> numOfBlocksHeight >> numOfBlocksWidth;
-    blockWidth = totalHeight / numOfBlocksHeight;
-    blockHeight = totalWidth / numOfBlocksWidth;
-    // enemies.set_block_size(blockWidth, blockHeight);
+    blockWidth = BACKGROUND_WIDTH / numOfBlocksHeight;
+    blockHeight = BACKGROUND_HEIGHT / numOfBlocksWidth;
+
     mySpaceShip.set_block_size(blockWidth, blockHeight);
     return numOfMaps;
 }
@@ -50,32 +47,32 @@ void StarWars::read_file(string filename) {
 
 void StarWars::initialise() {
     bullets.clear();
-    // enemies.initialise();
+    enemies.initialise();
     mySpaceShip.initialise();
     singleMap currentMap = maps[level - 1];
-    // convert_map_to_positions(currentMap);
+    convert_map_to_positions(currentMap);
 }
 
-// void StarWars::convert_map_to_positions(singleMap currentMap) {
-//     for (int i = 0; i < currentMap.size(); i++) {
-//         for (int j = 0; j < currentMap[0].size(); j++) {
-//             if (currentMap[i][j] == EMPRY_SYMBOL)
-//                 continue;
-//             if (currentMap[i][j] == STATIONARY_ENEMY_SYMBOL)
-//                 enemies.add_member(StationaryEnemy(Point(j * blockWidth, i * blockHeight), blockWidth, blockHeight));
-//             else if (currentMap[i][j] == MOVING_ENEMY_SYMBOL)
-//                 enemies.add_member(MovingEnemy(Point(j * blockWidth, i * blockHeight), blockWidth, blockHeight));
-//             else if (currentMap[i][j] == HOSTAGE_SYMBOL)
-//                 hostage.set_top_left(Point(j * blockWidth, i * blockHeight));
-//         }
-//     }
-// }
+void StarWars::convert_map_to_positions(singleMap currentMap) {
+    for (int i = 0; i < currentMap.size(); i++) {
+        for (int j = 0; j < currentMap[0].size(); j++) {
+            if (currentMap[i][j] == EMPTY_SYMBOL)
+                continue;
+            if (currentMap[i][j] == STATIONARY_ENEMY_SYMBOL)
+                enemies.add_member(new StationaryEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight));
+            else if (currentMap[i][j] == MOVING_ENEMY_SYMBOL)
+                enemies.add_member(new MovingEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight));
+            else if (currentMap[i][j] == HOSTAGE_SYMBOL)
+                hostages.push_back(Hostage(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight));  
+        }
+    }
+}
 
 void StarWars::run() {
     for (; level <= maps.size() && gameMode != LOST; level++) {
         initialise();
         string welcome = " welcome to level " + to_string(level);
-        win->show_text(welcome, Point(totalWidth / 10, totalHeight / 5), WHITE, FONT_ADDRESS, 54);
+        win->show_text(welcome, Point(BACKGROUND_WIDTH / 10, BACKGROUND_HEIGHT / 5), WHITE, FONT_ADDRESS, 54);
         win->update_screen();
         delay(2000);
         while (gameMode == RUNNING) {
@@ -108,8 +105,8 @@ void StarWars::update_frame() {
     draw_background();
     update_bullets();
     mySpaceShip.update();
-    //enemies.update();
-    
+    enemies.update(mySpaceShip, bullets);
+    update_hostages();
     win->update_screen();
 
     delay(100);
@@ -122,6 +119,11 @@ void StarWars::update_frame() {
 //         gameMode = WON;
 // }
 
+void StarWars::update_hostages() {
+    for (auto& hostage : hostages)
+        hostage.update();
+}
+
 void StarWars::update_bullets() {
     for (auto& bullet : bullets)
         bullet.update(win);
@@ -130,14 +132,14 @@ void StarWars::update_bullets() {
 void StarWars::check_for_end_game() {
     if (gameMode == LOST) {
         win->clear();
-        win->show_text("YOU LOST!\n", Point(totalWidth / 2, totalHeight / 4), RED, FONT_ADDRESS, 48);
+        win->show_text("YOU LOST!\n", Point(BACKGROUND_WIDTH / 2, BACKGROUND_HEIGHT / 4), RED, FONT_ADDRESS, 48);
         win->update_screen();
         delay(2000);
         exit(EXIT_SUCCESS);
     }
     else {
         win->clear();
-        win->show_text("YOU WON!\n", Point(totalWidth / 2, totalHeight / 4), GREEN, FONT_ADDRESS, 48);
+        win->show_text("YOU WON!\n", Point(BACKGROUND_WIDTH / 2, BACKGROUND_HEIGHT / 4), GREEN, FONT_ADDRESS, 48);
         win->update_screen();
         delay(2000);
         exit(EXIT_SUCCESS);

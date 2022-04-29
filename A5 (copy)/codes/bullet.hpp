@@ -2,13 +2,13 @@
 #define __BULLET_HPP__
 #include "rsdl.hpp"
 
-constexpr int UP_SPEED      = -60;
-constexpr int DOWN_SPEED    = 60;
-constexpr int BULLET_LENGTH = 40;
-constexpr int BULLET_WIDTH  = 8;
-constexpr int BULLET_RANGE  = 8;
-constexpr int IMAGE_WIDTH   = 2250;
-constexpr int IMAGE_HEIGHT  = 1650;
+constexpr int UP_SPEED          = -60;
+constexpr int DOWN_SPEED        = 60;
+constexpr int BULLET_LENGTH     = 40;
+constexpr int BULLET_WIDTH      = 8;
+constexpr int BULLET_RANGE      = 8;
+constexpr int BACKGROUND_WIDTH  = 2250;
+constexpr int BACKGROUND_HEIGHT = 1650;
 
 enum Type {ENEMY, MY_SPACESHIP};
 

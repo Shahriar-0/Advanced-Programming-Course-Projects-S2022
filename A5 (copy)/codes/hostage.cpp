@@ -1,7 +1,8 @@
 #include "hostage.hpp"
 
-Hostage::Hostage(Point _topLeft, Window* _win)
+Hostage::Hostage(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight)
     : SpaceShip(_topLeft, _win) {
+    set_block_size(_blockWidth, _blockHeight);
     vx = vy = 0;
     stamina = 1;
 }
