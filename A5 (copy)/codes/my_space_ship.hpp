@@ -1,12 +1,16 @@
 #ifndef __MY_SPACE_SHIP_HPP__
 #define __MY_SPACE_SHIP_HPP__
 #include "space_ship.hpp"
+#include "bullet.hpp"
 
 #define MY_SPACESHIP_PIC "./assets/pictures/spaceships/my_spaceship.png"
-constexpr int INITIAL_STAMINA = 3;
-constexpr int HORIZONTAL_SPEED = 50; 
-constexpr int VERTICAL_SPEED = 50; 
-constexpr int DISTANCE_FROM_BOTTOM = 200;
+constexpr int INITIAL_STAMINA        = 3;
+constexpr int HORIZONTAL_SPEED       = 50; 
+constexpr int VERTICAL_SPEED         = 50; 
+constexpr int DISTANCE_FROM_BOTTOM   = 200;
+constexpr int MINIMUM_DELTA_X_BULLET = 8;
+constexpr int MINIMUM_DELTA_Y_BULLET = 8;
+
 
 enum MOVES {
     MOVE_LEFT, 
@@ -32,6 +36,7 @@ public:
     virtual void draw();
     virtual void update(); 
     void initialise();
+    bool is_shot_by(const Bullet&) const;
 private:
     Point gen_random_point_in_bottom();
 };

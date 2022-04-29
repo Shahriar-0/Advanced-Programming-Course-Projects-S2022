@@ -21,11 +21,11 @@ public:
 protected:
     int vx, vy;
     int blockWidth, blockHeight;
+    int stamina;
+    bool exists;
     Point topLeft;
     Window* win;
     AudioPlayer* musicPlayerPtr;
-    bool exists;
-    int stamina;
 };
 
 #endif

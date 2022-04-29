@@ -19,7 +19,7 @@ $(BUILDS)star_wars.o: $(CODES)star_wars.cpp $(CODES)star_wars.hpp $(CODES)bullet
 $(BUILDS)space_ship.o: $(CODES)space_ship.cpp $(CODES)space_ship.hpp 
 	$(CC_OBJECT) $(CODES)space_ship.cpp -o $(BUILDS)space_ship.o
 
-$(BUILDS)my_space_ship.o: $(CODES)my_space_ship.cpp $(CODES)my_space_ship.hpp $(CODES)space_ship.hpp
+$(BUILDS)my_space_ship.o: $(CODES)my_space_ship.cpp $(CODES)my_space_ship.hpp $(CODES)space_ship.hpp $(CODES)bullet.hpp
 	$(CC_OBJECT) $(CODES)my_space_ship.cpp -o $(BUILDS)my_space_ship.o
 
 $(BUILDS)bullet.o: $(CODES)bullet.cpp $(CODES)bullet.hpp 

@@ -21,6 +21,7 @@ public:
     void check_for_existence(Window*);
     bool does_exist();
     void extinct();
+    Point get_center() const;
 private:
     Point center;
     RGB color;
