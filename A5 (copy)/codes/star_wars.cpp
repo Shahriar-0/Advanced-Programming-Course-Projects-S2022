@@ -59,11 +59,11 @@ void StarWars::convert_map_to_positions(singleMap currentMap) {
             if (currentMap[i][j] == EMPTY_SYMBOL)
                 continue;
             if (currentMap[i][j] == STATIONARY_ENEMY_SYMBOL)
-                enemies.add_member(new StationaryEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight));
+                enemies.add_member(new StationaryEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight, &musicPlayer));
             else if (currentMap[i][j] == MOVING_ENEMY_SYMBOL)
-                enemies.add_member(new MovingEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight));
+                enemies.add_member(new MovingEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight, &musicPlayer));
             else if (currentMap[i][j] == HOSTAGE_SYMBOL)
-                hostages.push_back(Hostage(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight));  
+                hostages.push_back(Hostage(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight, &musicPlayer));  
         }
     }
 }
@@ -108,7 +108,6 @@ void StarWars::update_frame() {
     enemies.update(mySpaceShip, bullets);
     update_hostages();
     win->update_screen();
-
     delay(100);
 }
 
@@ -127,6 +126,7 @@ void StarWars::update_hostages() {
 void StarWars::update_bullets() {
     for (auto& bullet : bullets)
         bullet.update(win);
+    erase_extra_bullets();
 }
 
 void StarWars::check_for_end_game() {
@@ -143,6 +143,16 @@ void StarWars::check_for_end_game() {
         win->update_screen();
         delay(2000);
         exit(EXIT_SUCCESS);
+    }
+}
+
+void StarWars::erase_extra_bullets() {
+    auto i = bullets.begin();
+    while (i != bullets.end()) {
+        if (i->does_exist())
+            i++;
+        else
+            i = bullets.erase(i);
     }
 }
 

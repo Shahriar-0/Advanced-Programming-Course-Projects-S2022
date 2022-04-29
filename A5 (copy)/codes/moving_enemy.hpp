@@ -8,7 +8,7 @@ constexpr int HORIZONTEL_SPEED = 6;
 
 class MovingEnemy : public StationaryEnemy {
 public:
-    MovingEnemy(Point, Window*, int, int);
+    MovingEnemy(Point, Window*, int, int, AudioPlayer*);
     void put_in_frame();
     virtual void draw();
     virtual void update();

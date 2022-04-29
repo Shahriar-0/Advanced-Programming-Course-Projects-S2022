@@ -1,8 +1,9 @@
 #include "stationary_enemy.hpp"
 
-StationaryEnemy::StationaryEnemy(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight)
+StationaryEnemy::StationaryEnemy(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight, AudioPlayer* _player)
     : SpaceShip(_topLeft, _win) {
     set_block_size(_blockWidth, _blockHeight);
+    set_music_player(_player);
     vx = vy = 0;
     stamina = 1; //cause the enemies have only one life yet
 }

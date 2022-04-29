@@ -11,9 +11,9 @@ enum AudioListType {
 };
 
 const std::string AudioList[] {
-    "assets/musics/theme.mp3",
-    "assets/musics/shot.wav", 
-    "assets/musics/explosion.wav"
+    "./assets/musics/theme.mp3",
+    "./assets/musics/shot.wav", 
+    "./assets/musics/explosion.wav"
 };
 
 class AudioPlayer {

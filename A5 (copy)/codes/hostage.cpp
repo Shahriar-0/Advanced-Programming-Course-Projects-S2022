@@ -1,8 +1,9 @@
 #include "hostage.hpp"
 
-Hostage::Hostage(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight)
+Hostage::Hostage(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight, AudioPlayer* _player)
     : SpaceShip(_topLeft, _win) {
     set_block_size(_blockWidth, _blockHeight);
+    set_music_player(_player);
     vx = vy = 0;
     stamina = 1;
 }

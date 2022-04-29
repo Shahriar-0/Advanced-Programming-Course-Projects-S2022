@@ -40,6 +40,7 @@ private:
     void initialise();
     void check_for_end_round();
     void check_for_end_game();
+    void erase_extra_bullets();
     AudioPlayer musicPlayer;
     Window* win;
     Enemies enemies;

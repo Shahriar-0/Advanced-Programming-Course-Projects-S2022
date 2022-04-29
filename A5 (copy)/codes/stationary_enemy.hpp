@@ -9,7 +9,7 @@ constexpr int MINIMUM_DELTA_Y_SHIPS = 15;
 
 class StationaryEnemy : public SpaceShip {
 public:
-    StationaryEnemy(Point, Window*, int, int);
+    StationaryEnemy(Point, Window*, int, int, AudioPlayer*);
     bool is_shot_by(const Bullet&) const;
     bool is_hit_by(const MySpaceShip&) const;
     virtual void update();

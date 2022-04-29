@@ -7,6 +7,9 @@ BUILDS := builds/
 
 all: starwars.out
 
+debug.out: $(BUILDS)main.o $(BUILDS)moving_enemy.o $(BUILDS)stationary_enemy.o $(BUILDS)hostage.o $(BUILDS)enemies.o $(BUILDS)audio.o $(BUILDS)rsdl.o $(BUILDS)bullet.o $(BUILDS)star_wars.o $(BUILDS)space_ship.o $(BUILDS)my_space_ship.o
+	$(CC) $(DEBUG) $(BUILDS)*.o $(SDLFLAGS) -o debug.out
+
 starwars.out: $(BUILDS)main.o $(BUILDS)moving_enemy.o $(BUILDS)stationary_enemy.o $(BUILDS)hostage.o $(BUILDS)enemies.o $(BUILDS)audio.o $(BUILDS)rsdl.o $(BUILDS)bullet.o $(BUILDS)star_wars.o $(BUILDS)space_ship.o $(BUILDS)my_space_ship.o
 	$(CC) $(BUILDS)*.o $(SDLFLAGS) -o starwars.out
 
@@ -46,4 +49,4 @@ $(BUILDS)rsdl.o: $(CODES)rsdl.cpp $(CODES)rsdl.hpp
 
 .PHONY: clean
 clean:
-	rm -r $(BUILDS)*.o starwars.out
+	rm -r $(BUILDS)*.o starwars.out debug.out

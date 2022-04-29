@@ -1,7 +1,7 @@
 #include "moving_enemy.hpp"
 
-MovingEnemy::MovingEnemy(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight)
-    : StationaryEnemy(_topLeft, _win, _blockWidth, _blockHeight) {
+MovingEnemy::MovingEnemy(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight, AudioPlayer* _player)
+    : StationaryEnemy(_topLeft, _win, _blockWidth, _blockHeight, _player) {
     vx = HORIZONTAL_SPEED;
 }
 
