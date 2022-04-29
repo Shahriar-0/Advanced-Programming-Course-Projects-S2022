@@ -93,8 +93,11 @@ void StarWars::run() {
 void StarWars::process_events() {
     while (win->has_pending_event()) {
         Event event = win->poll_for_event();
-        if (event.get_type() == Event::KEY_PRESS)
+        if (event.get_type() == Event::KEY_PRESS) {
+            if (event.get_pressed_key() == )
             spaceship.set_move(event.get_pressed_key());
+
+        }
         if (event.get_type() == Event::KEY_RELEASE)
             spaceship.stop_moving(event.get_pressed_key());
         if (event.get_type() == Event::QUIT)

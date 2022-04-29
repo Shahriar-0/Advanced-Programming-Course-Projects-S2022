@@ -2,9 +2,10 @@
 #define __BULLET_HPP__
 #include "rsdl.hpp"
 #include <cmath>
-constexpr int UP_SPEED      = 10;
-constexpr int DOWN_SPEED    = -10;
-constexpr int BULLET_LENGTH = 15;
+constexpr int UP_SPEED      = -60;
+constexpr int DOWN_SPEED    = 60;
+constexpr int BULLET_LENGTH = 40;
+constexpr int BULLET_WIDTH  = 8;
 constexpr int BULLET_RANGE  = 8;
 constexpr int IMAGE_WIDTH   = 2250;
 constexpr int IMAGE_HEIGHT  = 1650;

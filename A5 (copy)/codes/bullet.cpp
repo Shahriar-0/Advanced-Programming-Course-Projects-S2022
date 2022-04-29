@@ -8,9 +8,9 @@ Bullet::Bullet(Point _center, int _blockWidth, int _blockHeight, Type type) :
 }
 
 void Bullet::update(Window* win) {
-    check_for_existence(win);
     if (!does_exist())
         return;
+    check_for_existence(win);
     move();
     draw(win);
 }
@@ -21,6 +21,6 @@ void Bullet::check_for_existence(Window* win) {
 }
 
 void Bullet::move() { center.y += vy; }
-void Bullet::draw(Window* win) { win->draw_line(Point(center.x, center.y - blockHeight / 2), Point(center.x, center.y + blockHeight / 2), color); }
-bool Bullet::does_exist() { return exists == false; }
+void Bullet::draw(Window* win) { win->fill_rect(Rectangle(Point(center.x - BULLET_WIDTH / 2, center.y - BULLET_LENGTH / 2), Point(center.x + BULLET_WIDTH / 2, center.y + BULLET_LENGTH / 2)), color); }
+bool Bullet::does_exist() { return exists == true; }
 void Bullet::extinct() { exists = false; }

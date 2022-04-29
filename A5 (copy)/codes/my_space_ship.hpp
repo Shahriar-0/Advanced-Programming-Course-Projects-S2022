@@ -1,0 +1,39 @@
+#ifndef __MY_SPACE_SHIP_HPP__
+#define __MY_SPACE_SHIP_HPP__
+#include "space_ship.hpp"
+
+#define MY_SPACESHIP_PIC "./assets/pictures/spaceships/my_spaceship.png"
+constexpr int INITIAL_STAMINA = 3;
+constexpr int HORIZONTAL_SPEED = 50; 
+constexpr int VERTICAL_SPEED = 50; 
+constexpr int DISTANCE_FROM_BOTTOM = 200;
+
+enum MOVES {
+    MOVE_LEFT, 
+    MOVE_UP,
+    MOVE_RIGHT,
+    MOVE_DOWN,
+    SHOOT
+};
+
+const char MOVE_SYMBOLS[] = {
+    'a', 
+    'w',
+    'd', 
+    's', 
+    ' '
+};
+
+class MySpaceShip : public SpaceShip {
+public:
+    MySpaceShip(Window*);
+    void set_move(char);
+    void stop_moving(char);
+    virtual void draw();
+    virtual void update(); 
+    void initialise();
+private:
+    Point gen_random_point_in_bottom();
+};
+
+#endif

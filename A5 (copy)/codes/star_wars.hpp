@@ -2,13 +2,11 @@
 #define __STAR_WARS_HPP__
 #include <iostream>
 #include <string>
-#include <algorithm>
 #include <vector>
 #include <cstring>
 #include <fstream>
-#include "myspaceship.hpp"
-#include "enemies.hpp"
-#include "hostage.hpp"
+#include "bullet.hpp"
+#include "my_space_ship.hpp"
 #include "audio.hpp"
 
 #define MAP_SPLITTER "-----"
@@ -30,7 +28,9 @@ public:
     void run();
     int read_sizes_of_map(std::ifstream&);
 private:
+    void update_bullets();
     void process_events();
+    void space_ship_shoot();
     void update_frame();
     void convert_map_to_positions(singleMap);
     void initialise();
@@ -39,9 +39,10 @@ private:
     AudioPlayer musicPlayer;
     Window* win;
     // Enemies enemies;
-    // SpaceShip spaceship;
+    MySpaceShip mySpaceShip;
     // Hostage hostage;
     std::vector<singleMap> maps;
+    std::vector<Bullet> bullets;
     GameMode gameMode;
     int totalHeight, totalWidth;
     int blockHeight, blockWidth;
