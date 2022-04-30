@@ -47,10 +47,12 @@ void StarWars::read_file(string filename) {
 
 void StarWars::initialise() {
     bullets.clear();
+    hostages.clear();
     enemies.initialise();
     mySpaceShip.initialise();
     singleMap currentMap = maps[level - 1];
     convert_map_to_positions(currentMap);
+    gameMode = RUNNING;
 }
 
 void StarWars::convert_map_to_positions(singleMap currentMap) {
@@ -156,7 +158,7 @@ void StarWars::check_for_end_game() {
     }
     else if (gameMode == WON && level < maps.size()) {
         win->clear();
-        win->show_text("you won! now prepare yourself for next level", Point(BACKGROUND_WIDTH / 8, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 80);
+        win->show_text("you won! now prepare yourself for next level", Point(30, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 70);
         win->update_screen();
         delay(2000);
         win->clear();
