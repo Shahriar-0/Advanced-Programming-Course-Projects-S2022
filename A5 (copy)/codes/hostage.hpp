@@ -7,6 +7,7 @@ class Hostage : public SpaceShip {
 public:
     Hostage(Point, Window*, int, int, AudioPlayer*);
     bool is_shot_by(const Bullet&) const;
+    bool is_hit_by(const MySpaceShip&) const;
     virtual void update();
     virtual void draw();
 };

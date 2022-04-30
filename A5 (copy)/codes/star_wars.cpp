@@ -113,21 +113,6 @@ void StarWars::update_frame() {
     delay(100);
 }
 
-void StarWars::check_for_end_round() {
-    if (mySpaceShip.is_dead())
-        gameMode = LOST;
-    
-    for (auto& hostage : hostages) {
-        if (gameMode == LOST)
-            break;
-
-        if (hostage.is_dead()) 
-            gameMode = LOST;
-    }
-
-    if (enemies.count_alive() == 0 && gameMode != LOST) 
-        gameMode = WON;
-}
 
 void StarWars::update_hostages() {
     for (auto& hostage : hostages) {
@@ -139,6 +124,11 @@ void StarWars::update_hostages() {
                 hostage.get_shot();
             }
         }
+
+        if (hostage.is_hit_by(mySpaceShip)) {
+            hostage.get_shot();
+            mySpaceShip.die();
+        }
     }
 }
 
@@ -148,29 +138,6 @@ void StarWars::update_bullets() {
     erase_extra_bullets();
 }
 
-void StarWars::check_for_end_game() {
-    if (gameMode == LOST) {
-        win->clear();
-        win->show_text("you lost!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), RED, FONT_ADDRESS_END_MATCHES, 80);
-        win->update_screen();
-        delay(2000);
-        exit(EXIT_SUCCESS);
-    }
-    else if (gameMode == WON && level < maps.size()) {
-        win->clear();
-        win->show_text("you won! now prepare yourself for next level", Point(30, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 70);
-        win->update_screen();
-        delay(2000);
-        win->clear();
-    }
-    else {
-        win->clear();
-        win->show_text("you won!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 80);
-        win->update_screen();
-        delay(2000);
-        exit(EXIT_SUCCESS);
-    }
-}
 
 void StarWars::erase_extra_bullets() {
     auto i = bullets.begin();
@@ -189,3 +156,46 @@ void StarWars::space_ship_shoot() {
 
 void StarWars::draw_background() { win->draw_img(BACKGROUND_ADDRESS); }
 StarWars::~StarWars() { delete win; }
+
+void StarWars::check_for_end_round() {
+    if (mySpaceShip.is_dead())
+        gameMode = LOST;
+    
+    for (auto& hostage : hostages) {
+        if (gameMode == LOST)
+            break;
+
+        if (hostage.is_dead()) 
+            gameMode = LOST;
+    }
+
+    if (enemies.count_alive() == 0 && gameMode != LOST) 
+        gameMode = WON;
+}
+
+void StarWars::check_for_end_game() {
+    if (gameMode == LOST) {
+        delay(100);
+        win->clear();
+        win->show_text("you lost!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), RED, FONT_ADDRESS_END_MATCHES, 80);
+        win->update_screen();
+        delay(2000);
+        exit(EXIT_SUCCESS);
+    }
+    else if (gameMode == WON && level < maps.size()) {
+        delay(100);
+        win->clear();
+        win->show_text("you won! now prepare yourself for next level", Point(30, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 70);
+        win->update_screen();
+        delay(2000);
+        win->clear();
+    }
+    else {
+        delay(100);
+        win->clear();
+        win->show_text("you won!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 80);
+        win->update_screen();
+        delay(2000);
+        exit(EXIT_SUCCESS);
+    }
+}

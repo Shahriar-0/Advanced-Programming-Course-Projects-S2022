@@ -13,6 +13,11 @@ void Hostage::update() {
     draw();
 }
 
+bool Hostage::is_hit_by(const MySpaceShip& ship) const {
+    return abs(get_center().x - ship.get_center().x) < MINIMUM_DELTA_X_SHIPS &&
+           abs(get_center().y - ship.get_center().y) < MINIMUM_DELTA_Y_SHIPS;
+}
+
 bool Hostage::is_shot_by(const Bullet& bullet) const {
     return bullet.get_type() == MY_SPACESHIP &&  
         abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
