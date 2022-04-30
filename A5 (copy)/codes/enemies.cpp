@@ -12,6 +12,8 @@ int Enemies::count_alive() {
 void Enemies::update(MySpaceShip& mySpaceShip, vector<Bullet>& bullets) {
     for (auto& enemy : list) {
         enemy->update();
+        if (enemy->is_dead())
+            continue;
 
         for (auto& bullet : bullets) {
             if (enemy->is_shot_by(bullet)) {
@@ -26,5 +28,10 @@ void Enemies::update(MySpaceShip& mySpaceShip, vector<Bullet>& bullets) {
     }   
 }
 
-void Enemies::initialise() { list.clear(); }
+void Enemies::initialise() {
+    for (auto& enemy : list) 
+        delete enemy;
+    
+    list.clear();
+}
 void Enemies::add_member(StationaryEnemy* enemy) { list.push_back(enemy); }

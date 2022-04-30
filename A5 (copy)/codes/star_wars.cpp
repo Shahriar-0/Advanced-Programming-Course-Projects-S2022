@@ -78,7 +78,7 @@ void StarWars::run() {
         while (gameMode == RUNNING) {
             process_events();
             update_frame();
-            // check_for_end_round();
+            check_for_end_round();
         }
         check_for_end_game();
     }
@@ -111,12 +111,21 @@ void StarWars::update_frame() {
     delay(100);
 }
 
-// void StarWars::check_for_end_round() {
-//     if (hostage.is_dead() || mySpaceShip.is_dead())
-//         gameMode = LOST;
-//     else if (enemies.count_alive() == 0) 
-//         gameMode = WON;
-// }
+void StarWars::check_for_end_round() {
+    if (mySpaceShip.is_dead())
+        gameMode = LOST;
+    
+    for (auto& hostage : hostages) {
+        if (gameMode == LOST)
+            break;
+
+        if (hostage.is_dead()) 
+            gameMode = LOST;
+    }
+
+    if (enemies.count_alive() == 0 && gameMode != LOST) 
+        gameMode = WON;
+}
 
 void StarWars::update_hostages() {
     for (auto& hostage : hostages)
@@ -137,12 +146,18 @@ void StarWars::check_for_end_game() {
         delay(2000);
         exit(EXIT_SUCCESS);
     }
+    else if (gameMode == WON && level < maps.size()) {
+        win->clear();
+        win->show_text("YOU WON! NOW PREPARE YOURSELF FOR NEXT ROUND\n", Point(BACKGROUND_WIDTH / 5, BACKGROUND_HEIGHT / 4), GREEN, FONT_ADDRESS, 48);
+        win->update_screen();
+        delay(2000);
+        win->clear();
+    }
     else {
         win->clear();
         win->show_text("YOU WON!\n", Point(BACKGROUND_WIDTH / 2, BACKGROUND_HEIGHT / 4), GREEN, FONT_ADDRESS, 48);
         win->update_screen();
         delay(2000);
-        exit(EXIT_SUCCESS);
     }
 }
 
@@ -158,6 +173,7 @@ void StarWars::erase_extra_bullets() {
 
 void StarWars::space_ship_shoot() { 
     bullets.push_back(Bullet(mySpaceShip.get_center() - Point(0, blockHeight / 2), blockWidth, blockHeight, MY_SPACESHIP)); 
+    mySpaceShip.play_shooting_sound();
 }
 
 void StarWars::draw_background() { win->draw_img(BACKGROUND_ADDRESS); }

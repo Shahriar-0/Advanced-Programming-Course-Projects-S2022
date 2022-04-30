@@ -8,8 +8,8 @@ constexpr int INITIAL_STAMINA        = 3;
 constexpr int HORIZONTAL_SPEED       = 50; 
 constexpr int VERTICAL_SPEED         = 50; 
 constexpr int DISTANCE_FROM_BOTTOM   = 200;
-constexpr int MINIMUM_DELTA_X_BULLET = 8;
-constexpr int MINIMUM_DELTA_Y_BULLET = 8;
+constexpr int MINIMUM_DELTA_X_BULLET = 60;
+constexpr int MINIMUM_DELTA_Y_BULLET = 60;
 
 
 enum MOVES {
