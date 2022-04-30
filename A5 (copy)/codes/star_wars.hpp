@@ -13,7 +13,9 @@
 
 #define MAP_SPLITTER "-----"
 #define BACKGROUND_ADDRESS "./assets/pictures/background/galaxy.jpeg"
-#define FONT_ADDRESS "./assets/fonts/Starjedi.ttf"
+#define FONT_ADDRESS_FOR_LEVELS "./assets/fonts/Starjedi.ttf"
+#define FONT_ADDRESS_END_MATCHES "./assets/fonts/Starjhol.ttf"
+
 constexpr char EMPTY_SYMBOL = '.';
 constexpr char STATIONARY_ENEMY_SYMBOL = 'S';
 constexpr char MOVING_ENEMY_SYMBOL = 'M';

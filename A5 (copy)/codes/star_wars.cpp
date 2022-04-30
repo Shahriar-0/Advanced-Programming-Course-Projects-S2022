@@ -72,7 +72,7 @@ void StarWars::run() {
     for (; level <= maps.size() && gameMode != LOST; level++) {
         initialise();
         string welcome = " welcome to level " + to_string(level);
-        win->show_text(welcome, Point(BACKGROUND_WIDTH / 10, BACKGROUND_HEIGHT / 5), WHITE, FONT_ADDRESS, 54);
+        win->show_text(welcome, Point(BACKGROUND_WIDTH / 10, BACKGROUND_HEIGHT / 5), WHITE, FONT_ADDRESS_FOR_LEVELS, 54);
         win->update_screen();
         delay(2000);
         while (gameMode == RUNNING) {
@@ -128,8 +128,16 @@ void StarWars::check_for_end_round() {
 }
 
 void StarWars::update_hostages() {
-    for (auto& hostage : hostages)
+    for (auto& hostage : hostages) {
         hostage.update();
+    
+        for (auto& bullet : bullets) {
+            if (hostage.is_shot_by(bullet)) {
+                bullet.extinct();
+                hostage.get_shot();
+            }
+        }
+    }
 }
 
 void StarWars::update_bullets() {
@@ -141,23 +149,24 @@ void StarWars::update_bullets() {
 void StarWars::check_for_end_game() {
     if (gameMode == LOST) {
         win->clear();
-        win->show_text("YOU LOST!\n", Point(BACKGROUND_WIDTH / 2, BACKGROUND_HEIGHT / 4), RED, FONT_ADDRESS, 48);
+        win->show_text("you lost!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), RED, FONT_ADDRESS_END_MATCHES, 80);
         win->update_screen();
         delay(2000);
         exit(EXIT_SUCCESS);
     }
     else if (gameMode == WON && level < maps.size()) {
         win->clear();
-        win->show_text("YOU WON! NOW PREPARE YOURSELF FOR NEXT ROUND\n", Point(BACKGROUND_WIDTH / 5, BACKGROUND_HEIGHT / 4), GREEN, FONT_ADDRESS, 48);
+        win->show_text("you won! now prepare yourself for next level", Point(BACKGROUND_WIDTH / 8, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 80);
         win->update_screen();
         delay(2000);
         win->clear();
     }
     else {
         win->clear();
-        win->show_text("YOU WON!\n", Point(BACKGROUND_WIDTH / 2, BACKGROUND_HEIGHT / 4), GREEN, FONT_ADDRESS, 48);
+        win->show_text("you won!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 80);
         win->update_screen();
         delay(2000);
+        exit(EXIT_SUCCESS);
     }
 }
 
