@@ -1,41 +1,50 @@
 #include "enemies.hpp"
+using namespace std;
 
 int Enemies::count_alive() {
     int alive = 0;
     for (auto& enemy : list) 
-        alive += !(enemy.is_dead());
+        alive += !(enemy->is_dead());
     
     return alive;
 }
 
-void Enemies::update() {
-    for (auto& enemy : list)
-        enemy.update(win);
+void Enemies::update(MySpaceShip& mySpaceShip, vector<Bullet>& bullets) {
+    for (auto& enemy : list) {
+        enemy->update();
+        if (enemy->is_dead())
+            continue;
+
+        for (auto& bullet : bullets) {
+            if (enemy->is_shot_by(bullet)) {
+                bullet.extinct();
+                enemy->get_shot();
+                
+            }
+        }
+        if (enemy->is_hit_by(mySpaceShip)) {
+            enemy->get_shot();
+            mySpaceShip.die();
+        }
+    }   
+}
+
+vector<int> Enemies::choose_shooter(int level, MySpaceShip& mySpaceShip) {
+    vector<int> result;
+    int percent = INITIAL_PERCENTAGE - INCREASE_PER_LEVEL * level;
+    for (int i = 0; i < list.size(); i++) 
+        if (rand() % percent == 0 && !list[i]->is_dead())
+            result.push_back(i);
     
-    check_for_hitting_spaceship();
-    check_for_getting_hit();
-    check_for_collding_with_spaceship();
+    return result;
 }
 
-void Enemies::check_for_hitting_spaceship() {
+void Enemies::initialise() {
     for (auto& enemy : list) 
-        enemy.check_for_hitting_spaceship(spaceShipPtr);
+        delete enemy;
+    
+    list.clear();
 }
 
-void Enemies::check_for_getting_hit() {
-    for (auto& enemy : list) 
-        if (enemy.check_for_getting_hit(spaceShipPtr))
-            musicPlayerPtr->play_sound_effect(EXPLOSION);  
-}
-
-void Enemies::check_for_collding_with_spaceship() {
-    for (auto& enemy : list)
-        enemy.check_for_collding_with_ship(spaceShipPtr);
-}
-
-void Enemies::set_window(Window* _win) { win = _win; }
-void Enemies::initialise() { list.clear(); }
-void Enemies::add_member(StationaryEnemy enemy) { list.push_back(enemy); }
-void Enemies::set_block_size(int _blockWidth, int _blockHeight) { blockWidth = _blockWidth; blockHeight = _blockHeight;}
-void Enemies::set_music_player(AudioPlayer* _musicPlayerPtr) { musicPlayerPtr = _musicPlayerPtr; }
-void Enemies::set_space_ship(SpaceShip* _SpaceShipPtr) { spaceShipPtr = _SpaceShipPtr; }
+Point Enemies::get_center_of_enemy_in_index(int i) { return list[i]->get_center(); }
+void Enemies::add_member(StationaryEnemy* enemy) { list.push_back(enemy); }

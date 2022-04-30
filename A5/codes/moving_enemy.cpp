@@ -1,33 +1,27 @@
 #include "moving_enemy.hpp"
 
-MovingEnemy::MovingEnemy(Point _topLeft, int _blockWidth, int _blockHeight) : topLeft(_topLeft) {
-    blockWidth = _blockWidth;
-    blockHeight = _blockHeight;
+MovingEnemy::MovingEnemy(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight, AudioPlayer* _player)
+    : StationaryEnemy(_topLeft, _win, _blockWidth, _blockHeight, _player) {
+    vx = HORIZONTAL_SPEED;
 }
 
-void MovingEnemy::update(Window* win) {
-    update_bullets(win);
+void MovingEnemy::update() {
     if (is_dead())
         return;
     move();
-    draw(win);
-    if (frameCounter == 0) {
-        shoot();
-        frameCounter = rand() % FRAME_LIMIT;
-    }   
+    put_in_frame();
+    draw();
 }
 
-void MovingEnemy::shoot() {
-    bullets.push_back(Bullet(get_center(), blockWidth, blockHeight, ENEMY));
+void MovingEnemy::put_in_frame() {
+    if (topLeft.x <= 0) {
+        topLeft.x = 0;
+        vx *= -1;
+    }
+    else if (topLeft.x + blockWidth >= win->get_width()) {
+        topLeft.x = win->get_width() - blockWidth;
+        vx *= -1;
+    }
 }
 
-void MovingEnemy::move() {
-    vx = (rand() % 2)? MOVING_LEFT_SPEED : MOVING_RIGHT_SPEED;
-    topLeft.x += vx;
-}
-
-void MovingEnemy::draw(Window* win) { 
-    win->draw_img(MOVING_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight)); 
-    for (auto& bullet : bullets) 
-        bullet.draw(win);
-}
+void MovingEnemy::draw() { win->draw_img(MOVING_ENEMY_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }

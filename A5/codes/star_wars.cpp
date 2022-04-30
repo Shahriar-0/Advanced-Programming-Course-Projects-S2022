@@ -1,21 +1,13 @@
 #include "star_wars.hpp"
 using namespace std;
 
-StarWars::StarWars(string filename, Window* _win) {
+StarWars::StarWars(string filename, Window* _win) : musicPlayer(_win), mySpaceShip(_win) {
     win = _win;
-    enemies.set_space_ship(&spaceship);
-    enemies.set_music_player(&musicPlayer);
-    enemies.set_window(win);
-    spaceship.set_window(win);
+    musicPlayer.play_theme();
+    mySpaceShip.set_music_player(&musicPlayer);
 
-    update_frame();
-
-    totalHeight = _win->get_height();
-    totalWidth = _win->get_width();
     level = 1;
     gameMode = RUNNING;
-    //introduction();
-    // musicPlayer.play_theme();
     read_file(filename);
 }
 
@@ -24,10 +16,10 @@ int StarWars::read_sizes_of_map(ifstream& fileStream) {
     fileStream >> numOfMaps;
     int numOfBlocksHeight, numOfBlocksWidth;
     fileStream >> numOfBlocksHeight >> numOfBlocksWidth;
-    blockWidth = totalHeight / numOfBlocksHeight;
-    blockHeight = totalWidth / numOfBlocksWidth;
-    enemies.set_block_size(blockWidth, blockHeight);
-    spaceship.set_block_size(blockWidth, blockHeight);
+    blockWidth = BACKGROUND_WIDTH / numOfBlocksHeight;
+    blockHeight = BACKGROUND_HEIGHT / numOfBlocksWidth;
+
+    mySpaceShip.set_block_size(blockWidth, blockHeight);
     return numOfMaps;
 }
 
@@ -48,43 +40,47 @@ void StarWars::read_file(string filename) {
 
         _maps.push_back(currentMap);
     }
-    maps = _maps;   //this line ans the whole local maps is to avoid stack overflow
+    maps = _maps;   //this line and the whole local maps is to avoid stack overflow
     fileStream.close();
 }
 
 void StarWars::initialise() {
+    bullets.clear();
+    hostages.clear();
     enemies.initialise();
-    spaceship.initialise();
+    mySpaceShip.initialise();
     singleMap currentMap = maps[level - 1];
     convert_map_to_positions(currentMap);
+    gameMode = RUNNING;
 }
 
 void StarWars::convert_map_to_positions(singleMap currentMap) {
     for (int i = 0; i < currentMap.size(); i++) {
         for (int j = 0; j < currentMap[0].size(); j++) {
-            if (currentMap[i][j] == EMPRY_SYMBOL)
+            if (currentMap[i][j] == EMPTY_SYMBOL)
                 continue;
             if (currentMap[i][j] == STATIONARY_ENEMY_SYMBOL)
-                enemies.add_member(StationaryEnemy(Point(j * blockWidth, i * blockHeight), blockWidth, blockHeight));
+                enemies.add_member(new StationaryEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight, &musicPlayer));
             else if (currentMap[i][j] == MOVING_ENEMY_SYMBOL)
-                enemies.add_member(MovingEnemy(Point(j * blockWidth, i * blockHeight), blockWidth, blockHeight));
+                enemies.add_member(new MovingEnemy(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight, &musicPlayer));
             else if (currentMap[i][j] == HOSTAGE_SYMBOL)
-                hostage.set_top_left(Point(j * blockWidth, i * blockHeight));
+                hostages.push_back(Hostage(Point(j * blockWidth, i * blockHeight), win, blockWidth, blockHeight, &musicPlayer));  
         }
     }
 }
 
 void StarWars::run() {
     for (; level <= maps.size() && gameMode != LOST; level++) {
-        // initialise();
+        initialise();
         string welcome = " welcome to level " + to_string(level);
-        win->show_text(welcome, Point(totalWidth / 10, totalHeight / 5), WHITE, FONT_ADDRESS, 54);
+        win->show_text(welcome, Point(BACKGROUND_WIDTH / 10, BACKGROUND_HEIGHT / 5), WHITE, FONT_ADDRESS_FOR_LEVELS, 54);
+        musicPlayer.play_sound_effect(LEVEL);
         win->update_screen();
         delay(2000);
         while (gameMode == RUNNING) {
             process_events();
-            //update_frame();
-            // check_for_end_round();
+            update_frame();
+            check_for_end_round();
         }
         check_for_end_game();
     }
@@ -94,13 +90,14 @@ void StarWars::process_events() {
     while (win->has_pending_event()) {
         Event event = win->poll_for_event();
         if (event.get_type() == Event::KEY_PRESS) {
-            if (event.get_pressed_key() == )
-            spaceship.set_move(event.get_pressed_key());
-
+            if (event.get_pressed_key() == MOVE_SYMBOLS[SHOOT])
+                space_ship_shoot(); 
+            else
+                mySpaceShip.set_move(event.get_pressed_key());
         }
-        if (event.get_type() == Event::KEY_RELEASE)
-            spaceship.stop_moving(event.get_pressed_key());
-        if (event.get_type() == Event::QUIT)
+        else if (event.get_type() == Event::KEY_RELEASE)
+            mySpaceShip.stop_moving(event.get_pressed_key());
+        else if (event.get_type() == Event::QUIT)
             exit(EXIT_SUCCESS);
     }
 }
@@ -108,36 +105,110 @@ void StarWars::process_events() {
 void StarWars::update_frame() {
     win->clear();
     draw_background();
-
-    spaceship.update();
-    //enemies.update();
-    
+    update_bullets();
+    mySpaceShip.update();
+    enemies.update(mySpaceShip, bullets);
+    enemies_shoot();
+    update_hostages();
     win->update_screen();
-
-    delay(100);
+    delay(80);
 }
 
+void StarWars::update_hostages() {
+    for (auto& hostage : hostages) {
+        hostage.update();
+    
+        for (auto& bullet : bullets) {
+            if (hostage.is_shot_by(bullet)) {
+                bullet.extinct();
+                hostage.get_shot();
+            }
+        }
+
+        if (hostage.is_hit_by(mySpaceShip)) {
+            hostage.get_shot();
+            mySpaceShip.die();
+        }
+    }
+}
+
+void StarWars::update_bullets() {
+    for (auto& bullet : bullets) {
+        bullet.update(win);
+        
+        if (mySpaceShip.is_shot_by(bullet)) {
+            bullet.extinct();
+            mySpaceShip.get_shot();
+        }
+    }
+    erase_extra_bullets();
+}
+
+
+void StarWars::erase_extra_bullets() {
+    auto i = bullets.begin();
+    while (i != bullets.end()) {
+        if (i->does_exist())
+            i++;
+        else
+            i = bullets.erase(i);
+    }
+}
+
+
 void StarWars::check_for_end_round() {
-    if (hostage.is_dead() || spaceship.is_dead())
+    if (mySpaceShip.is_dead())
         gameMode = LOST;
-    else if (enemies.count_alive() == 0) 
+    
+    for (auto& hostage : hostages) {
+        if (gameMode == LOST)
+            break;
+
+        if (hostage.is_dead()) 
+            gameMode = LOST;
+    }
+
+    if (enemies.count_alive() == 0 && gameMode != LOST) 
         gameMode = WON;
 }
 
 void StarWars::check_for_end_game() {
     if (gameMode == LOST) {
+        delay(100);
         win->clear();
-        win->show_text("YOU LOST!\n", Point(totalWidth / 2, totalHeight / 4), RED, FONT_ADDRESS, 48);
+        win->show_text("you lost!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), RED, FONT_ADDRESS_END_MATCHES, 80);
         win->update_screen();
         delay(2000);
         exit(EXIT_SUCCESS);
     }
-    else if (gameMode == WON && level == maps.size()) {
+    else if (gameMode == WON && level < maps.size()) {
+        delay(100);
         win->clear();
-        win->show_text("YOU WON!\n", Point(totalWidth / 2, totalHeight / 4), GREEN, FONT_ADDRESS, 48);
+        win->show_text("you won! now prepare yourself for next level", Point(30, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 70);
+        win->update_screen();
+        delay(2000);
+        win->clear();
+    }
+    else {
+        delay(100);
+        win->clear();
+        win->show_text("you won!", Point(BACKGROUND_WIDTH / 3, BACKGROUND_HEIGHT / 3), GREEN, FONT_ADDRESS_END_MATCHES, 80);
         win->update_screen();
         delay(2000);
         exit(EXIT_SUCCESS);
+    }
+}
+
+
+void StarWars::space_ship_shoot() { 
+    bullets.push_back(Bullet(mySpaceShip.get_center() - Point(0, blockHeight / 2), MY_SPACESHIP)); 
+    mySpaceShip.play_shooting_sound();
+}
+
+void StarWars::enemies_shoot() {
+    vector<int> enemyShooters = enemies.choose_shooter(level, mySpaceShip);
+    for (auto i : enemyShooters) {
+        bullets.push_back(Bullet(enemies.get_center_of_enemy_in_index(i) + Point(0, blockHeight / 2), ENEMY));
     }
 }
 

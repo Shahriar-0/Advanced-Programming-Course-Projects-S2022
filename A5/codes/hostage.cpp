@@ -1,8 +1,27 @@
 #include "hostage.hpp"
 
-Hostage::Hostage() : topLeft(0, 0) {}
-void Hostage::set_top_left(Point _topLeft) { topLeft = _topLeft; }
-void Hostage::draw(Window* win) { win->draw_img(HOSTAGE_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
-Point Hostage::get_center() { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
-bool Hostage::is_dead() { return exists == false; }
-void Hostage::die() { exists = false; }
+Hostage::Hostage(Point _topLeft, Window* _win, int _blockWidth, int _blockHeight, AudioPlayer* _player)
+    : SpaceShip(_topLeft, _win) {
+    set_block_size(_blockWidth, _blockHeight);
+    set_music_player(_player);
+    vx = vy = 0;
+    stamina = 1;
+}
+void Hostage::update() {
+    if (is_dead())
+        return;
+    draw();
+}
+
+bool Hostage::is_hit_by(const MySpaceShip& ship) const {
+    return abs(get_center().x - ship.get_center().x) < MINIMUM_DELTA_X_SHIPS &&
+           abs(get_center().y - ship.get_center().y) < MINIMUM_DELTA_Y_SHIPS;
+}
+
+bool Hostage::is_shot_by(const Bullet& bullet) const {
+    return bullet.get_type() == MY_SPACESHIP &&  
+        abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
+        abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  
+}
+
+void Hostage::draw() { win->draw_img(HOSTAGE_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }

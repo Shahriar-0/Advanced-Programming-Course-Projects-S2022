@@ -1,6 +1,6 @@
 #include "audio.hpp"
 
-void AudioPlayer::set_window(Window* _win) { win = _win; }
+AudioPlayer::AudioPlayer(Window* _win) { win = _win; }
 void AudioPlayer::play_theme() { win->play_music(AudioList[THEME]); }
 void AudioPlayer::pause_theme() { win->pause_music(); }
 void AudioPlayer::resume_theme() { win->resume_music(); }

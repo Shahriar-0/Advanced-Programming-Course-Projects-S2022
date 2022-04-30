@@ -1,32 +1,27 @@
 #ifndef __ENEMIES_HPP__
 #define __ENEMIES_HPP__
-#include "stationary_enemy.hpp"
+#include <vector>
 #include "moving_enemy.hpp"
 #include "audio.hpp"
-#include "rsdl.hpp"
-#include <vector>
+#include "bullet.hpp"
 
-class SpaceShip;
+constexpr int INITIAL_NUM_OF_SHOOTER = 5;
+constexpr int FRAME_LIMIT            = 100;
+constexpr int INITIAL_PERCENTAGE     = 40;
+constexpr int INCREASE_PER_LEVEL     = 5;
 
 class Enemies {
-public:
-    void set_music_player(AudioPlayer*);
-    void set_block_size(int, int);
-    void set_space_ship(SpaceShip*);
+public: 
+    Enemies() = default;
     int count_alive();
-    void update();
-    void check_for_hitting_spaceship();
-    void check_for_getting_hit();
-    void check_for_collding_with_spaceship();
-    void add_member(StationaryEnemy);
+    void add_member(StationaryEnemy*);
+    void update(MySpaceShip&, std::vector<Bullet>&);
     void initialise();
-    void set_window(Window*);
+    std::vector<int> choose_shooter(int, MySpaceShip&);
+    Point get_center_of_enemy_in_index(int);
 private:
-    Window* win;
-    AudioPlayer* musicPlayerPtr;
-    std::vector<StationaryEnemy> list;
-    SpaceShip* spaceShipPtr;
-    int blockWidth, blockHeight;
+    std::vector<StationaryEnemy*> list;
+    int frameCounter;
 };
 
-#endif 
+#endif
