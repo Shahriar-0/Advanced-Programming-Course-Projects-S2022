@@ -1,9 +1,13 @@
 #include "bullet.hpp"
 
-Bullet::Bullet(Point _center, int _blockWidth, int _blockHeight, Type _type) : 
-    center(_center), color(WHITE), blockWidth(_blockWidth), blockHeight(_blockHeight) { 
-    vy = (type == ENEMY)? DOWN_SPEED : UP_SPEED;
-    color = (type == ENEMY)? RED : GREEN;
+Bullet::Bullet(Point _center, Type _type)  
+    : center(_center), color(WHITE) { 
+    (type == ENEMY)? vy =  DOWN_SPEED : vy = UP_SPEED;
+    (type == ENEMY)? color = RED : color = GREEN;
+    if (vy == UP_SPEED) {
+        std::cout << "got it" << std::endl;
+        std::cin.get();
+    }
     exists = true;
     type = _type;
 }

@@ -109,8 +109,7 @@ void StarWars::update_frame() {
     update_bullets();
     mySpaceShip.update();
     enemies.update(mySpaceShip, bullets);
-    set<int> enemyShooters = enemies.choose_shooter(level, mySpaceShip);
-    enemies_shoot(enemyShooters);
+    enemies_shoot();
     update_hostages();
     win->update_screen();
     delay(100);
@@ -135,8 +134,12 @@ void StarWars::update_hostages() {
 }
 
 void StarWars::update_bullets() {
-    for (auto& bullet : bullets)
+    for (auto& bullet : bullets) {
         bullet.update(win);
+        (bullet.get_type() == ENEMY)? cout << "red" << endl : cout << "green" << endl;
+        cout << bullet.get_v() << endl;
+
+    }
     erase_extra_bullets();
 }
 
@@ -197,13 +200,14 @@ void StarWars::check_for_end_game() {
 
 
 void StarWars::space_ship_shoot() { 
-    bullets.push_back(Bullet(mySpaceShip.get_center() - Point(0, blockHeight / 2), blockWidth, blockHeight, MY_SPACESHIP)); 
+    bullets.push_back(Bullet(mySpaceShip.get_center() - Point(0, blockHeight / 2), MY_SPACESHIP)); 
     mySpaceShip.play_shooting_sound();
 }
 
-void StarWars::enemies_shoot(const set<int>& enemyShootersIndex) {
-    for (auto i : enemyShootersIndex) {
-        bullets.push_back(Bullet(enemies.get_center_of_index(i), blockWidth, blockHeight, ENEMY));
+void StarWars::enemies_shoot() {
+    vector<int> enemyShooters = enemies.choose_shooter(level, mySpaceShip);
+    for (auto i : enemyShooters) {
+        bullets.push_back(Bullet(enemies.get_center_of_enemy_in_index(i), ENEMY));
     }
 }
 

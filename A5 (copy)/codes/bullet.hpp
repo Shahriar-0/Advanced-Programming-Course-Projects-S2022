@@ -14,7 +14,7 @@ enum Type {ENEMY, MY_SPACESHIP};
 
 class Bullet {
 public:
-    Bullet(Point, int, int, Type);
+    Bullet(Point, Type);
     void move();
     void draw(Window*);
     void update(Window*);
@@ -23,13 +23,14 @@ public:
     void extinct();
     Point get_center() const;
     Type get_type() const;
+
+    int get_v() {return vy;}
 private:
     Point center;
     RGB color;
     Type type;
     int vy;
     bool exists;
-    int blockWidth, blockHeight;
 };
 
 #endif

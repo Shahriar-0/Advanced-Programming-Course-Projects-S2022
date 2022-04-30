@@ -4,7 +4,6 @@
 #include <string>
 #include <cstring>
 #include <vector>
-#include <set>
 #include <fstream>
 
 #include "bullet.hpp"
@@ -40,7 +39,7 @@ private:
     void update_hostages();
     void process_events();
     void space_ship_shoot();
-    void enemies_shoot(const std::set<int>&);
+    void enemies_shoot(const std::vector<int>&);
     void update_frame();
     void convert_map_to_positions(singleMap);
     void initialise();
