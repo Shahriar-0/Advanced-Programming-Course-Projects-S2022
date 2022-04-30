@@ -15,24 +15,24 @@ void MySpaceShip::update() {
 
 
 void MySpaceShip::set_move(char move) {
-    if (move == MOVE_SYMBOLS[MOVE_LEFT])
+    if (move == MOVE_SYMBOLS[MOVE_LEFT] || move == MOVE_SYMBOLS[ARROW_LEFT])
         vx = -HORIZONTAL_SPEED;
-    else if (move == MOVE_SYMBOLS[MOVE_UP]) 
+    else if (move == MOVE_SYMBOLS[MOVE_UP] || move == MOVE_SYMBOLS[ARROW_UP]) 
         vy = -VERTICAL_SPEED;
-    else if (move == MOVE_SYMBOLS[MOVE_RIGHT]) 
+    else if (move == MOVE_SYMBOLS[MOVE_RIGHT] || move == MOVE_SYMBOLS[ARROW_RIGHT]) 
         vx = HORIZONTAL_SPEED;
-    else if (move == MOVE_SYMBOLS[MOVE_DOWN]) 
+    else if (move == MOVE_SYMBOLS[MOVE_DOWN] || move == MOVE_SYMBOLS[ARROW_DOWN]) 
         vy = VERTICAL_SPEED;
 }
 
 void MySpaceShip::stop_moving(char move) {
-    if (move == MOVE_SYMBOLS[MOVE_LEFT])
+    if (move == MOVE_SYMBOLS[MOVE_LEFT] || move == MOVE_SYMBOLS[ARROW_LEFT])
         vx = 0;
-    else if (move == MOVE_SYMBOLS[MOVE_UP]) 
+    else if (move == MOVE_SYMBOLS[MOVE_UP] || move == MOVE_SYMBOLS[ARROW_UP]) 
         vy = 0;
-    else if (move == MOVE_SYMBOLS[MOVE_RIGHT]) 
+    else if (move == MOVE_SYMBOLS[MOVE_RIGHT] || move == MOVE_SYMBOLS[ARROW_RIGHT]) 
         vx = 0;
-    else if (move == MOVE_SYMBOLS[MOVE_DOWN]) 
+    else if (move == MOVE_SYMBOLS[MOVE_DOWN] || move == MOVE_SYMBOLS[ARROW_DOWN]) 
         vy = 0;
 }
 

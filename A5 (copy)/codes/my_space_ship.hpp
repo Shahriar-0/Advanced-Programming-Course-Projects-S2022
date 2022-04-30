@@ -14,17 +14,25 @@ constexpr int MINIMUM_DELTA_Y_BULLET = 60;
 
 enum MOVES {
     MOVE_LEFT, 
+    ARROW_LEFT, 
     MOVE_UP,
+    ARROW_UP,
     MOVE_RIGHT,
+    ARROW_RIGHT,
     MOVE_DOWN,
+    ARROW_DOWN,
     SHOOT
 };
 
 const char MOVE_SYMBOLS[] = {
     'a', 
+    'P',
     'w',
-    'd', 
-    's', 
+    'R',
+    'd',
+    'O', 
+    's',
+    'Q', 
     ' '
 };
 
