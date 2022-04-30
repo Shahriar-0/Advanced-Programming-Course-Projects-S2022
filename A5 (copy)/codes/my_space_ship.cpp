@@ -4,6 +4,7 @@ MySpaceShip::MySpaceShip(Window* _win)
     : SpaceShip(gen_random_point_in_bottom(), _win) {
     stamina = INITIAL_STAMINA;
     vx = vy = 0;
+    score = 0;
 }
 
 void MySpaceShip::update() {
@@ -12,7 +13,6 @@ void MySpaceShip::update() {
     move();
     draw();
 }
-
 
 void MySpaceShip::set_move(char move) {
     if (move == MOVE_SYMBOLS[MOVE_LEFT] || move == MOVE_SYMBOLS[ARROW_LEFT])
@@ -48,6 +48,7 @@ bool MySpaceShip::is_shot_by(const Bullet& bullet) const {
         abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  
 }
 
+void MySpaceShip::has_shot_an_enemy() { score++;}
 void MySpaceShip::play_shooting_sound() { musicPlayerPtr->play_sound_effect(SHOOTING); }
 void MySpaceShip::draw() { win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
 Point MySpaceShip::gen_random_point_in_bottom() { return Point(rand() % BACKGROUND_WIDTH, BACKGROUND_HEIGHT - DISTANCE_FROM_BOTTOM); }

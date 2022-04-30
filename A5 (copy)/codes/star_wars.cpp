@@ -75,6 +75,7 @@ void StarWars::run() {
         initialise();
         string welcome = " welcome to level " + to_string(level);
         win->show_text(welcome, Point(BACKGROUND_WIDTH / 10, BACKGROUND_HEIGHT / 5), WHITE, FONT_ADDRESS_FOR_LEVELS, 54);
+        musicPlayer.play_sound_effect(LEVEL);
         win->update_screen();
         delay(2000);
         while (gameMode == RUNNING) {
@@ -108,11 +109,12 @@ void StarWars::update_frame() {
     update_bullets();
     mySpaceShip.update();
     enemies.update(mySpaceShip, bullets);
+    set<int> enemyShooters = enemies.choose_shooter(level, mySpaceShip);
+    enemies_shoot(enemyShooters);
     update_hostages();
     win->update_screen();
     delay(100);
 }
-
 
 void StarWars::update_hostages() {
     for (auto& hostage : hostages) {
@@ -149,13 +151,6 @@ void StarWars::erase_extra_bullets() {
     }
 }
 
-void StarWars::space_ship_shoot() { 
-    bullets.push_back(Bullet(mySpaceShip.get_center() - Point(0, blockHeight / 2), blockWidth, blockHeight, MY_SPACESHIP)); 
-    mySpaceShip.play_shooting_sound();
-}
-
-void StarWars::draw_background() { win->draw_img(BACKGROUND_ADDRESS); }
-StarWars::~StarWars() { delete win; }
 
 void StarWars::check_for_end_round() {
     if (mySpaceShip.is_dead())
@@ -199,3 +194,18 @@ void StarWars::check_for_end_game() {
         exit(EXIT_SUCCESS);
     }
 }
+
+
+void StarWars::space_ship_shoot() { 
+    bullets.push_back(Bullet(mySpaceShip.get_center() - Point(0, blockHeight / 2), blockWidth, blockHeight, MY_SPACESHIP)); 
+    mySpaceShip.play_shooting_sound();
+}
+
+void StarWars::enemies_shoot(const set<int>& enemyShootersIndex) {
+    for (auto i : enemyShootersIndex) {
+        bullets.push_back(Bullet(enemies.get_center_of_index(i), blockWidth, blockHeight, ENEMY));
+    }
+}
+
+void StarWars::draw_background() { win->draw_img(BACKGROUND_ADDRESS); }
+StarWars::~StarWars() { delete win; }

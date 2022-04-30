@@ -5,11 +5,12 @@ using namespace std;
 int main(int argc, char* argv[]) {
     srand(time(NULL));
 	try {
-		if (argc == 1)
-			throw string("haven't passed a map");
+		// if (argc == 1)
+		// 	throw string("haven't passed a map");
 
 		Window* _win = new Window(BACKGROUND_WIDTH, BACKGROUND_HEIGHT, "a long walk home");
-		StarWars starwars(argv[1], _win);
+		// StarWars starwars(argv[1], _win);
+		StarWars starwars("./assets/maps/map.txt", _win);
 		starwars.run();
 	}
 	catch (string exception) {

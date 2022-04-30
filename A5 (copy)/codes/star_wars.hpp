@@ -2,9 +2,11 @@
 #define __STAR_WARS_HPP__
 #include <iostream>
 #include <string>
-#include <vector>
 #include <cstring>
+#include <vector>
+#include <set>
 #include <fstream>
+
 #include "bullet.hpp"
 #include "my_space_ship.hpp"
 #include "audio.hpp"
@@ -29,6 +31,7 @@ public:
     StarWars(std::string, Window*);
     ~StarWars();
     void run();
+    void enemies_shoot();
 private:
     void read_file(std::string);
     int read_sizes_of_map(std::ifstream&);
@@ -37,12 +40,14 @@ private:
     void update_hostages();
     void process_events();
     void space_ship_shoot();
+    void enemies_shoot(const std::set<int>&);
     void update_frame();
     void convert_map_to_positions(singleMap);
     void initialise();
     void check_for_end_round();
     void check_for_end_game();
     void erase_extra_bullets();
+
     AudioPlayer musicPlayer;
     Window* win;
     Enemies enemies;

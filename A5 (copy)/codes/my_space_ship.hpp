@@ -11,7 +11,6 @@ constexpr int DISTANCE_FROM_BOTTOM   = 200;
 constexpr int MINIMUM_DELTA_X_BULLET = 60;
 constexpr int MINIMUM_DELTA_Y_BULLET = 60;
 
-
 enum MOVES {
     MOVE_LEFT, 
     ARROW_LEFT, 
@@ -45,9 +44,11 @@ public:
     virtual void update(); 
     void initialise();
     bool is_shot_by(const Bullet&) const;
+    void has_shot_an_enemy();
     void play_shooting_sound();
 private:
     Point gen_random_point_in_bottom();
+    int score;
 };
 
 #endif

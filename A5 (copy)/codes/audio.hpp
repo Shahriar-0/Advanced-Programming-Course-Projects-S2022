@@ -8,12 +8,14 @@ enum AudioListType {
     THEME,
     SHOOTING, 
     EXPLOSION,
+    LEVEL
 };
 
 const std::string AudioList[] {
     "./assets/musics/theme.mp3",
     "./assets/musics/shot.wav", 
-    "./assets/musics/explosion.wav"
+    "./assets/musics/explosion.wav",
+    "./assets/musics/level.wav"
 };
 
 class AudioPlayer {
