@@ -6,7 +6,9 @@
 #include "bullet.hpp"
 
 constexpr int INITIAL_NUM_OF_SHOOTER = 5;
-constexpr int FRAME_LIMIT = 100;
+constexpr int FRAME_LIMIT            = 100;
+constexpr int INITIAL_PERCENTAGE     = 40;
+constexpr int INCREASE_PER_LEVEL     = 5;
 
 class Enemies {
 public: 

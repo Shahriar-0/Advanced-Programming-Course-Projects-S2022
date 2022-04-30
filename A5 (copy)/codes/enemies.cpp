@@ -29,13 +29,14 @@ void Enemies::update(MySpaceShip& mySpaceShip, vector<Bullet>& bullets) {
     }   
 }
 
-vector<int> Enemies::choose_shooter(int numOfShooters, MySpaceShip& mySpaceShip) {
+vector<int> Enemies::choose_shooter(int level, MySpaceShip& mySpaceShip) {
     vector<int> result;
-
-    for (int i = 0; i < list.size(); i++) {
-        if (rand() % 15 == 0 && !list[i]->is_dead())
+    int percent = INITIAL_PERCENTAGE - INCREASE_PER_LEVEL * level;
+    cout << percent << endl;
+    for (int i = 0; i < list.size(); i++) 
+        if (rand() % percent == 0 && !list[i]->is_dead())
             result.push_back(i);
-    }
+    
     return result;
 }
 
