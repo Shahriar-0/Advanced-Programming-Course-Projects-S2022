@@ -8,7 +8,6 @@ StarWars::StarWars(string filename, Window* _win) : musicPlayer(_win), mySpaceSh
 
     level = 1;
     gameMode = RUNNING;
-    //introduction(); //todo
     read_file(filename);
 }
 
@@ -41,7 +40,7 @@ void StarWars::read_file(string filename) {
 
         _maps.push_back(currentMap);
     }
-    maps = _maps;   //this line ans the whole local maps is to avoid stack overflow
+    maps = _maps;   //this line and the whole local maps is to avoid stack overflow
     fileStream.close();
 }
 
@@ -112,7 +111,7 @@ void StarWars::update_frame() {
     enemies_shoot();
     update_hostages();
     win->update_screen();
-    delay(100);
+    delay(80);
 }
 
 void StarWars::update_hostages() {
@@ -136,9 +135,11 @@ void StarWars::update_hostages() {
 void StarWars::update_bullets() {
     for (auto& bullet : bullets) {
         bullet.update(win);
-        (bullet.get_type() == ENEMY)? cout << "red" << endl : cout << "green" << endl;
-        cout << bullet.get_v() << endl;
-
+        
+        if (mySpaceShip.is_shot_by(bullet)) {
+            bullet.extinct();
+            mySpaceShip.get_shot();
+        }
     }
     erase_extra_bullets();
 }
@@ -207,7 +208,7 @@ void StarWars::space_ship_shoot() {
 void StarWars::enemies_shoot() {
     vector<int> enemyShooters = enemies.choose_shooter(level, mySpaceShip);
     for (auto i : enemyShooters) {
-        bullets.push_back(Bullet(enemies.get_center_of_enemy_in_index(i), ENEMY));
+        bullets.push_back(Bullet(enemies.get_center_of_enemy_in_index(i) + Point(0, blockHeight / 2), ENEMY));
     }
 }
 

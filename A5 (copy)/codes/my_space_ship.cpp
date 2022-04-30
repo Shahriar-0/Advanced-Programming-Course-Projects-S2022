@@ -47,8 +47,13 @@ bool MySpaceShip::is_shot_by(const Bullet& bullet) const {
         abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
         abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  
 }
+void MySpaceShip::draw() { 
+    win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight));
+    for (int i = 0; i < stamina; i++)
+        win->draw_img(HEART_PIC,
+        Rectangle(INITIAL_LOCATION_OF_HEARTS + Point(i * HEARTS_WIDTH, 0), HEARTS_WIDTH, HEARTS_HEIGHT));
+}
 
 void MySpaceShip::has_shot_an_enemy() { score++;}
 void MySpaceShip::play_shooting_sound() { musicPlayerPtr->play_sound_effect(SHOOTING); }
-void MySpaceShip::draw() { win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight)); }
 Point MySpaceShip::gen_random_point_in_bottom() { return Point(rand() % BACKGROUND_WIDTH, BACKGROUND_HEIGHT - DISTANCE_FROM_BOTTOM); }

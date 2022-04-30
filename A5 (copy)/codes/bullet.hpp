@@ -7,7 +7,7 @@ constexpr int DOWN_SPEED        = 60;
 constexpr int BULLET_LENGTH     = 40;
 constexpr int BULLET_WIDTH      = 8;
 constexpr int BULLET_RANGE      = 8;
-constexpr int BACKGROUND_WIDTH  = 2250;
+constexpr int BACKGROUND_WIDTH  = 2500;
 constexpr int BACKGROUND_HEIGHT = 1650;
 
 enum Type {ENEMY, MY_SPACESHIP};
@@ -23,8 +23,6 @@ public:
     void extinct();
     Point get_center() const;
     Type get_type() const;
-
-    int get_v() {return vy;}
 private:
     Point center;
     RGB color;

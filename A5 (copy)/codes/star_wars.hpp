@@ -13,7 +13,7 @@
 #include "hostage.hpp"
 
 #define MAP_SPLITTER "-----"
-#define BACKGROUND_ADDRESS "./assets/pictures/background/galaxy.jpeg"
+#define BACKGROUND_ADDRESS "./assets/pictures/background/galaxy.jpg"
 #define FONT_ADDRESS_FOR_LEVELS "./assets/fonts/Starjedi.ttf"
 #define FONT_ADDRESS_END_MATCHES "./assets/fonts/Starjhol.ttf"
 

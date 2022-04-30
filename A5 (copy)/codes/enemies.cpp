@@ -33,7 +33,7 @@ vector<int> Enemies::choose_shooter(int numOfShooters, MySpaceShip& mySpaceShip)
     vector<int> result;
 
     for (int i = 0; i < list.size(); i++) {
-        if (rand() % 2 == 0 && !list[i]->is_dead())
+        if (rand() % 15 == 0 && !list[i]->is_dead())
             result.push_back(i);
     }
     return result;
