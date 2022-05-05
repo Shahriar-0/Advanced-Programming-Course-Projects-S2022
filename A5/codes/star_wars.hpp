@@ -17,10 +17,10 @@
 #define FONT_ADDRESS_FOR_LEVELS "./assets/fonts/Starjedi.ttf"
 #define FONT_ADDRESS_END_MATCHES "./assets/fonts/Starjhol.ttf"
 
-constexpr char EMPTY_SYMBOL = '.';
-constexpr char STATIONARY_ENEMY_SYMBOL = 'S';
-constexpr char MOVING_ENEMY_SYMBOL = 'M';
-constexpr char HOSTAGE_SYMBOL = 'H';
+constexpr char EMPTY_SYMBOL             = '.';
+constexpr char STATIONARY_ENEMY_SYMBOL  = 'S';
+constexpr char MOVING_ENEMY_SYMBOL      = 'M';
+constexpr char HOSTAGE_SYMBOL           = 'H';
 enum GameMode {RUNNING, WON, LOST};
 
 typedef std::vector<std::string> singleMap;
@@ -30,8 +30,8 @@ public:
     StarWars(std::string, Window*);
     ~StarWars();
     void run();
-    void enemies_shoot();
 private:
+    void enemies_shoot();
     void read_file(std::string);
     int read_sizes_of_map(std::ifstream&);
     void draw_background();

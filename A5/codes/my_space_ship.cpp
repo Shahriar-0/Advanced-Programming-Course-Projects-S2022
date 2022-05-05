@@ -47,6 +47,7 @@ bool MySpaceShip::is_shot_by(const Bullet& bullet) const {
         abs(get_center().x - bullet.get_center().x) < MINIMUM_DELTA_X_BULLET &&
         abs(get_center().y - bullet.get_center().y) < MINIMUM_DELTA_Y_BULLET;  
 }
+
 void MySpaceShip::draw() { 
     win->draw_img(MY_SPACESHIP_PIC, Rectangle(topLeft, blockWidth, blockHeight));
     for (int i = 0; i < stamina; i++)

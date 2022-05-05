@@ -25,8 +25,8 @@ void SpaceShip::reduce_stamina() {
 }
 
 Point SpaceShip::get_center() const { return topLeft + Point(blockWidth / 2, blockHeight / 2); }
+bool SpaceShip::is_dead() const { return exists == false; }
 void SpaceShip::play_explosion_sound() { musicPlayerPtr->play_sound_effect(EXPLOSION); }
 void SpaceShip::set_block_size(int _blockWidth, int _blockHeight) { blockWidth = _blockWidth; blockHeight = _blockHeight;}
 void SpaceShip::set_music_player(AudioPlayer * _musicPlayerPtr) { musicPlayerPtr = _musicPlayerPtr; }
-bool SpaceShip::is_dead() const { return exists == false; }
 void SpaceShip::die() { exists = false; }
