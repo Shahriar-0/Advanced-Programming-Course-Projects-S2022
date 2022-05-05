@@ -5,6 +5,9 @@ CC_OBJECT := $(CC) -c
 CODES := codes/
 BUILDS := builds/
 
+#let the dance be eternal
+#it could have been hell lot better but I decided I rather help others than improving this one :)
+
 all: starwars.out
 
 debug.out: $(BUILDS)main.o $(BUILDS)moving_enemy.o $(BUILDS)stationary_enemy.o $(BUILDS)hostage.o $(BUILDS)enemies.o $(BUILDS)audio.o $(BUILDS)rsdl.o $(BUILDS)bullet.o $(BUILDS)star_wars.o $(BUILDS)space_ship.o $(BUILDS)my_space_ship.o
@@ -47,6 +50,19 @@ $(BUILDS)rsdl.o: $(CODES)rsdl.cpp $(CODES)rsdl.hpp
 	$(CC_OBJECT) $(CODES)rsdl.cpp -o $(BUILDS)rsdl.o
 
 
-.PHONY: clean
-clean:
+.PHONY: clean_all clean_obj clean_exe help
+
+clean_all:
 	rm -r $(BUILDS)*.o starwars.out debug.out
+
+clean_exe:
+	rm -r starwars.out debug.out
+
+clean_obj:
+	rm -r $(BUILDS)*.o
+
+run:
+	./star_wars.out ./assets/maps/map.txt 
+
+help:
+	@echo Targets: all clean clean-obj clean-exe run
