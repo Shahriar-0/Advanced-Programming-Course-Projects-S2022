@@ -3,9 +3,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
-class Person;
-class Document;
+#include "book.hh"
+#include "magazine.hh"
+#include "refernce.hh"
+#include "professor.hh"
+#include "student.hh"
 
 class Library {
 public:
@@ -21,7 +23,8 @@ public:
 	std::vector<std::string> available_titles();
 	void time_pass(int days);
 private:
-    // private implementation
+	std::vector<Document*> documents;
+	std::vector<Person*> people;
 };
 
 #endif
