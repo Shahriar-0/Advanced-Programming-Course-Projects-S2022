@@ -10,11 +10,11 @@ public:
     void initialise();
     bool operator ==(std::string) const;
     void time_pass(int);
-    
+
     virtual void extend() = 0;
     virtual int calculate_penalty() const = 0;
 protected:
-    virtual bool can_be_extended() const = 0;
+    virtual bool can_be_extended() const;
     bool isBorrowed;
     std::string title;
     int numOfExtension;

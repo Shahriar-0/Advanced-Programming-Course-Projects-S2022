@@ -14,4 +14,11 @@ void Document::initialise() {
     dayPassed = 0; //this variable holds the value of the corresponding day in which we are
 }
 
+bool Document::can_be_extended() const { 
+    if (dayPassed == 0)
+        errorHandler->show_error(EXTENDING_ON_FIRST_DAY);
+    if (dayPassed > maxDay)
+        errorHandler->show_error(EXTENDING_AFTER_RECEIVING_PENALTY);
+}
+
 bool Document::operator ==(std::string _title) const { return title == _title; }

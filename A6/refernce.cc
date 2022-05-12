@@ -13,7 +13,8 @@ void Reference::extend() {
 bool Reference::can_be_extended() const {
     if (numOfExtension == REFERNCE_MAX_EXTENSION)
         errorHandler->show_error(EXCEEDED_MAX_BORROW);
-    return true; //there's an exit in show error function so if we pass that point it's allright
+    //there's an exit in show error function so if we pass that point it's allright
+    return Document::can_be_extended();
 }
 
 int Reference::calculate_penalty() const {

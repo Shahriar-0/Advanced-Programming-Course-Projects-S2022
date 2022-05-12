@@ -12,9 +12,8 @@ void Book::extend() {
 bool Book::can_be_extended() const {
     if (numOfExtension == BOOK_MAX_EXTENSION)
         errorHandler->show_error(EXCEEDED_MAX_BORROW);
-    if (dayPassed == 0)
-        errorHandler->show_error(same)
-    return true; //there's an exit in show error function so if we pass that point it's allright
+    //there's an exit in show error function so if we pass that point it's allright
+    return Document::can_be_extended();
 }
 
 int Book::calculate_penalty() const {
