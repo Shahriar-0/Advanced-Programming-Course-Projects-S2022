@@ -6,15 +6,20 @@
 
 class Person {
 public:
-    virtual bool can_borrow() const = 0;
-    virtual int calculate_penalty() const = 0;
-    void borrow_document(Document*);
+    Person(std::string);
+    virtual int calculate_penalty() const;
     void return_document(std::string);
     void extend(std::string);
+    void time_pass(int);
+
+    virtual bool can_borrow() const = 0;
+    virtual void borrow_document(Document*) = 0;
 protected:
-    Document* find_document(std::string);
+    int find_document_index(std::string);
     int returnDocumentsPenalty;
     std::vector<Document*> documents;
+    std::string name;
+    ErrorHandler* errorHandler;
 };
 
 #endif
