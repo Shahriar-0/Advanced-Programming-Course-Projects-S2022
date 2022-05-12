@@ -12,12 +12,13 @@ void Book::extend() {
 bool Book::can_be_extended() const {
     if (numOfExtension == BOOK_MAX_EXTENSION)
         errorHandler->show_error(EXCEEDED_MAX_BORROW);
+    return true; //there's an exit in show error function so if we pass that point it's allright
 }
 
 int Book::calculate_penalty() const {
     int dayLate = dayPassed - maxDay;   
     int penalty = 0;
-    
+
     if (dayLate <= FIRST_PENALTY_PERIOD)
         penalty = dayLate * FIRST_PENALTY;
     else if (dayLate <= SECOND_PENALTY_PERIOD)
