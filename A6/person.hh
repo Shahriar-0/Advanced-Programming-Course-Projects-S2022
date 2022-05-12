@@ -14,7 +14,7 @@ public:
     void time_pass(int);
     void borrow_document(Document*);
     int calculate_penalty() const;
-
+    bool operator ==(std::string);
 protected:
     virtual bool can_borrow(std::string);
     int find_document_index(std::string);

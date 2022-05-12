@@ -1,6 +1,11 @@
 #include "magazine.hh"
 
-Magazine::Magazine(std::string _title, int _year, int _number) : Document(_title), year(_year), number(_number) {};
+Magazine::Magazine(std::string _title, int _year, int _number) : Document(_title), year(_year), number(_number) {
+    if (_year <= 0)
+        errorHandler->show_error(INVALID_YEAR);
+    if (_number < 0)
+        errorHandler->show_error(INVALID_NUMBER);
+};
 
 void Magazine::extend() {
     if (can_be_extended()) {

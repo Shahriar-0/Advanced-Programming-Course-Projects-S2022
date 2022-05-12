@@ -10,7 +10,8 @@ public:
     void initialise();
     bool operator ==(std::string) const;
     void time_pass(int);
-
+    bool is_available() const;
+    std::string get_name() const;
     virtual void extend() = 0;
     virtual int calculate_penalty() const = 0;
 protected:

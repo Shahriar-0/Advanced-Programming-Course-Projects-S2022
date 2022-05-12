@@ -21,4 +21,6 @@ bool Document::can_be_extended() const {
         errorHandler->show_error(EXTENDING_AFTER_RECEIVING_PENALTY);
 }
 
+std::string Document::get_name() const { return title; }
+bool Document::is_available() const { return isBorrowed == false; }
 bool Document::operator ==(std::string _title) const { return title == _title; }

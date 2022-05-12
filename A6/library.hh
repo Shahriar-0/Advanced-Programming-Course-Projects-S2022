@@ -23,8 +23,13 @@ public:
 	std::vector<std::string> available_titles();
 	void time_pass(int days);
 private:
+	Person* search_people(std::string) const;
+	Document* search_document(std::string) const;
+	void check_for_repetition_in_document(std::string) const;
+	void check_for_repetition_in_people(std::string) const;
 	std::vector<Document*> documents;
 	std::vector<Person*> people;
+	ErrorHandler* errorHandler;
 };
 
 #endif

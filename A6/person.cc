@@ -45,4 +45,5 @@ bool Person::can_borrow(std::string title) {
     return true;
 }
 
+bool Person::operator ==(std::string _name) { return name == _name; }
 void Person::borrow_document(Document* document) { documents.push_back(document); }
