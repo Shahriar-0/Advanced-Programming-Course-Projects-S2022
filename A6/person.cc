@@ -21,15 +21,28 @@ int Person::find_document_index(std::string title) {
     for (int i = 0; i < documents.size(); i++) 
         if (*(documents[i]) == title) 
             return i;
+    return NOT_FOUND_INDEX;
 }
 
 void Person::return_document(std::string title) {
     int index = find_document_index(title);
+    if (index == NOT_FOUND_INDEX)
+        errorHandler->show_error(WORK_WITH_A_NOT_BORROWED_DOCUMENT);
     documents[index]->initialise();
     documents.erase(documents.begin() + index);
 }
 
 void Person::extend(std::string title) {
     int index = find_document_index(title);
+    if (index == NOT_FOUND_INDEX)
+        errorHandler->show_error(WORK_WITH_A_NOT_BORROWED_DOCUMENT);
     documents[index]->extend();
 }
+
+bool Person::can_borrow(std::string title) {
+    if (find_document_index(title) != NOT_FOUND_INDEX)
+        errorHandler->show_error(ALREADY_BORROWED);
+    return true;
+}
+
+void Person::borrow_document(Document* document) { documents.push_back(document); }

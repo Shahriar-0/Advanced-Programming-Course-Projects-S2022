@@ -4,17 +4,19 @@
 #include "error_handler.hh"
 #include "document.hh"
 
+constexpr int NOT_FOUND_INDEX = -1;
+
 class Person {
 public:
     Person(std::string);
-    virtual int calculate_penalty() const;
     void return_document(std::string);
     void extend(std::string);
     void time_pass(int);
+    void borrow_document(Document*);
+    int calculate_penalty() const;
 
-    virtual bool can_borrow() const = 0;
-    virtual void borrow_document(Document*) = 0;
 protected:
+    virtual bool can_borrow(std::string);
     int find_document_index(std::string);
     int returnDocumentsPenalty;
     std::vector<Document*> documents;
