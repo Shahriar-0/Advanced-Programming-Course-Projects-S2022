@@ -84,7 +84,7 @@ void Library::time_pass(int days) {
 std::vector<std::string> Library::available_titles() {
     std::vector<std::string> result;
     for (auto& document : documents) {
-        if (result.size() > 0 && !(*document == result[result.size() - 1]) && document->is_available())
+        if (((result.size() > 0 && !(*document == result[result.size() - 1])) || result.size() == 0) && document->is_available())
             result.push_back(document->get_name());
     }
 }
