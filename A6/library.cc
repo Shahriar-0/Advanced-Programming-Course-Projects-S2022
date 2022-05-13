@@ -56,9 +56,12 @@ void Library::add_magazine(std::string title, int year, int number, int copies) 
 
 void Library::borrow(std::string name, std::string title) {
     Document* document = search_document(title);
+    Person* person = search_people(name);
     if (document == nullptr)
         errorHandler->show_error(DOES_NOT_EXIST_DOCUMENT);
-    search_people(name)->borrow_document(document);
+    
+    if (person->can_borrow(title))
+        person->borrow_document(document);
 }
 
 void Library::extend(std::string name, std::string title) {

@@ -15,8 +15,8 @@ public:
     void borrow_document(Document*);
     int calculate_penalty() const;
     bool operator ==(std::string);
-protected:
     virtual bool can_borrow(std::string);
+protected:
     int find_document_index(std::string);
     int returnDocumentsPenalty;
     std::vector<Document*> documents;
