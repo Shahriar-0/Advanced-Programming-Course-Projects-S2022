@@ -11,6 +11,7 @@
 
 class Library {
 public:
+	~Library();
 	void add_student_member(std::string student_id, std::string student_name);
 	void add_prof_member(std::string prof_name);
 	void add_book(std::string book_title, int copies);

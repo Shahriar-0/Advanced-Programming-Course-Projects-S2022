@@ -89,3 +89,11 @@ std::vector<std::string> Library::available_titles() {
     }
     return result;
 }
+
+Library::~Library() {
+    for (auto& document : documents)
+        delete document;
+    
+    for (auto& person : people)
+        delete person;
+}
