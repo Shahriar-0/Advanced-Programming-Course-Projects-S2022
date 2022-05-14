@@ -14,6 +14,7 @@ public:
     std::string get_name() const;
     virtual void extend() = 0;
     virtual int calculate_penalty() const = 0;
+    virtual void is_getting_borrowed() = 0;
 protected:
     virtual bool can_be_extended() const;
     bool isBorrowed;

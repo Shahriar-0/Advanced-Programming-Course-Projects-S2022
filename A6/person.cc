@@ -28,6 +28,8 @@ void Person::return_document(std::string title) {
     int index = find_document_index(title);
     if (index == NOT_FOUND_INDEX)
         errorHandler->show_error(WORK_WITH_A_NOT_BORROWED_DOCUMENT);
+
+    returnDocumentsPenalty += documents[index]->calculate_penalty();
     documents[index]->initialise();
     documents.erase(documents.begin() + index);
 }
@@ -45,5 +47,8 @@ bool Person::can_borrow(std::string title) {
     return true;
 }
 
+void Person::borrow_document(Document* document) { 
+    document->is_getting_borrowed();
+    documents.push_back(document);
+}
 bool Person::operator ==(std::string _name) { return name == _name; }
-void Person::borrow_document(Document* document) { documents.push_back(document); }

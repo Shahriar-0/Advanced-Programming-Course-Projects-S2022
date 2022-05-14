@@ -22,10 +22,18 @@ int Magazine::calculate_penalty() const {
     int dayLate = dayPassed - maxDay;   
     int penalty = 0;
     
+    if (dayLate < 0)
+        return penalty;
+
     if (year < CHANGING_PRICE_YEAR)
         penalty = dayLate * BEFORE_1390_PENALTY;
     else 
         penalty = dayLate * AFTER_1390_PENALTY;
     
     return penalty;
+}
+
+void Magazine::is_getting_borrowed() {
+    dayPassed = 0;
+    maxDay = MAGAZINE_RETURN_TIME_PERIOD;
 }

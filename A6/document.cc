@@ -19,6 +19,8 @@ bool Document::can_be_extended() const {
         errorHandler->show_error(EXTENDING_ON_FIRST_DAY);
     if (dayPassed > maxDay)
         errorHandler->show_error(EXTENDING_AFTER_RECEIVING_PENALTY);
+        
+    return true;
 }
 
 std::string Document::get_name() const { return title; }

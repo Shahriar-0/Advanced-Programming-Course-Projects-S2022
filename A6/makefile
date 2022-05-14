@@ -3,14 +3,14 @@ CC_OBJECT := $(CC) -c
 
 all: main
 
-main: main.o library.o magazine.o book.o refernce.o professor.o document.o person.o error_handler.o
+main: main.o Library.o magazine.o book.o refernce.o professor.o document.o person.o error_handler.o student.o
 	$(CC) *.o -o main 
 
-main.o: main.cc library.hh
+main.o: main.cc Library.hh
 	$(CC_OBJECT) main.cc -o main.o
 
-library.o: library.hh library.cc book.hh magazine.hh refernce.hh students.hh professor.hh
-	$(CC_OBJECT) library.cc -o library.o
+Library.o: Library.hh Library.cc book.hh magazine.hh refernce.hh student.hh professor.hh
+	$(CC_OBJECT) Library.cc -o Library.o
 
 magazine.o: magazine.hh magazine.cc document.hh
 	$(CC_OBJECT) magazine.cc -o magazine.o

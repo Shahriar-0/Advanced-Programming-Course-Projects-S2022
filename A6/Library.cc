@@ -1,4 +1,4 @@
-#include "library.hh"
+#include "Library.hh"
 
 Document* Library::search_document(std::string title) const {
     for (auto& document : documents)
@@ -87,4 +87,5 @@ std::vector<std::string> Library::available_titles() {
         if (((result.size() > 0 && !(*document == result[result.size() - 1])) || result.size() == 0) && document->is_available())
             result.push_back(document->get_name());
     }
+    return result;
 }
