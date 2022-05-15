@@ -1,4 +1,4 @@
-I wrote this shit in just 48 hours :) so it's not perfect or anything but I like it<br /><br />
+I wrote this shit in just 30 hours :) so it's not perfect or anything but I like it<br /><br />
 for playing simply type this in your terminal
 ```
   make
