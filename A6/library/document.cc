@@ -6,8 +6,6 @@ Document::Document(std::string _title) : title(_title) {
     initialise();
 }
 
-void Document::time_pass(int days) { dayPassed += days; }
-
 void Document::initialise() {
     isBorrowed = false;
     numOfExtension = 0; //we haven't extended our document yet
@@ -23,6 +21,7 @@ bool Document::can_be_extended() const {
     return true;
 }
 
+void Document::time_pass(int days) { dayPassed += days; }
 std::string Document::get_name() const { return title; }
 bool Document::is_available() const { return isBorrowed == false; }
 bool Document::operator ==(std::string _title) const { return title == _title; }
