@@ -3,21 +3,22 @@
 
 #include <cstring>
 #include <string>
+#include "error_handler.hpp"
 
 class Trip;
 
-enum State { IS_TRAVELING, IS_WAITING, FINISHED };
+enum PersonState { IS_TRAVELING, IS_WAITING, FINISHED };
 
 class Person {
 public:
     Person(std::string username);
-    virtual void can_accept_a_trip() = 0;
+    virtual void can_accept_a_trip(Trip* trip) = 0;
     virtual void can_ask_for_trip() = 0;
-    void add_trip(Trip* trip);
     void reached_destination();
+    void has_begun_a_journey(Trip* _trip);
 protected:
     std::string username;
-    State state;
+    PersonState state;
     Trip* trip;
 };
 

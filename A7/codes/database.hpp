@@ -14,6 +14,7 @@ public:
     void add_location(Location* location);
     void add_person(Person* person);
     void add_trip(Trip* trip);
+    Trip* find_trip(int id);
 private:
     std::vector<Location*> locations;
     std::vector<Person*> people;
