@@ -1,5 +1,14 @@
 {
     "cSpell.words": [
         "UTAXI"
-    ]
+    ],
+    "files.associations": {
+        "numeric": "cpp",
+        "fstream": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "system_error": "cpp",
+        "typeinfo": "cpp"
+    }
 }
