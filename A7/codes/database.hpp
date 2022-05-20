@@ -8,17 +8,22 @@
 #include "trip.hpp"
 #include "location.hpp"
 
+const std::string PASSENGER = "passenger";
+const std::string DRIVER    = "driver";
+
+
 class DataBase {
 public:
     DataBase() = default;
     ~DataBase();
     void add_location(Location* location);
-    void add_person(Person* person);
+    void check_and_add_person(std::string username, std::string role);
     void add_trip(Trip* trip);
     Trip* find_trip(int id);
     Person* find_person(std::string username);
     Location* find_location(std::string name);
 private:
+    void add_person(Person* person);
     std::vector<Location*> locations;
     std::vector<Person*> people;
     std::vector<Trip*> trips;

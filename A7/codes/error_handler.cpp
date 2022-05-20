@@ -2,3 +2,4 @@
 
 ErrorHandler::ErrorHandler(std::string _message, std::string _detail) : invalid_argument(_message), detail(_detail) {}
 void ErrorHandler::show_error() { std::cout << what() << std::endl; }
+void ErrorHandler::show_detail() { std::cout << detail << std::endl; }

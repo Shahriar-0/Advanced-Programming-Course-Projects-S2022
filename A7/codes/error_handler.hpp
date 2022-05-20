@@ -17,6 +17,7 @@ class ErrorHandler : public std::invalid_argument {
 public:
     ErrorHandler(std::string message, std::string detail);
     void show_error();
+    void show_detail();
 private:
     std::string detail;
 };

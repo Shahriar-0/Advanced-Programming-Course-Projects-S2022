@@ -7,7 +7,7 @@ void Driver::can_accept_a_trip(Trip* _trip) {
     if (state == IS_TRAVELING)
         throw ErrorHandler(BAD_REQUEST, "you still have a passenger");
     //this function is checked last so if we're here then it's alright to proceed
-    
+    has_accepted_a_trip(_trip);
 }
 
 void Driver::has_accepted_a_trip(Trip* _trip) {
