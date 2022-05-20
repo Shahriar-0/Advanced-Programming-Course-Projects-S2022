@@ -10,7 +10,8 @@ public:
     Passenger(std::string username);
     virtual void can_accept_a_trip();
     virtual void can_ask_for_trip();
-    virtual void has_asked_for_trip();
+private:
+    void has_asked_for_trip();
 };
 
 #endif

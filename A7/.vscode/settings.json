@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "stoi",
         "UTAXI"
     ],
     "files.associations": {
@@ -9,6 +10,7 @@
         "istream": "cpp",
         "ostream": "cpp",
         "system_error": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "iosfwd": "cpp"
     }
 }

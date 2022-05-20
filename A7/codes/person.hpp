@@ -13,7 +13,6 @@ public:
     Person(std::string username);
     virtual void can_accept_a_trip() = 0;
     virtual void can_ask_for_trip() = 0;
-    virtual void has_asked_for_trip() = 0;
     void add_trip(Trip* trip);
     void reached_destination();
 protected:
