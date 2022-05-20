@@ -1,0 +1,17 @@
+POST signup ? username passenger1 role passenger
+POST signup ? username passenger2 role passenger
+POST signup ? username passenger3 role passenger
+POST signup ? username passenger4 role passenger
+POST signup ? role driver username deriver1
+POST signup ? role driver username deriver2
+POST trips ? username passenger1 destination SaadatAbad origin Enghelab
+POST trips ? username passenger2 destination SaadatAbad origin Marzdaran
+POST trips ? username passenger3 destination Tehranpars origin Enghelab
+POST trips ? username passenger4 destination Marzdaran origin Enghelab
+DELETE trips ? username passenger1 id 1
+POST accept ? username deriver1 id 2
+GET trips ? username deriver1
+POST accept ? username deriver2 id 3
+POST finish ? username deriver1 id 2
+GET trips ? id 2 username deriver2
+GET trips ? username deriver1
