@@ -16,7 +16,7 @@ public:
     void assign_driver(Driver* driver);
     void is_done();
     void has_begun(Driver* driver);
-    bool operator==(int _id);
+    bool operator==(int _id) const;
 private:
     Passenger* passenger;
     Driver* driver;

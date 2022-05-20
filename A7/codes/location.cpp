@@ -24,3 +24,5 @@ std::ifstream& operator>>(std::ifstream& inputStream, Location& location) {
 
     return inputStream;
 }
+
+bool Location::operator==(std::string _name) const {  return name == _name; }

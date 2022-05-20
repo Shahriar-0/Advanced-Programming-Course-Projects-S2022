@@ -16,6 +16,7 @@ public:
     virtual void can_ask_for_trip() = 0;
     void reached_destination();
     void has_begun_a_journey(Trip* _trip);
+    bool operator==(std::string username) const;
 protected:
     std::string username;
     PersonState state;

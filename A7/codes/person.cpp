@@ -15,3 +15,5 @@ void Person::has_begun_a_journey(Trip* _trip) {
     trip = _trip;
     state = IS_TRAVELING;
 }
+
+bool Person::operator==(std::string _username) const { return username == _username; }

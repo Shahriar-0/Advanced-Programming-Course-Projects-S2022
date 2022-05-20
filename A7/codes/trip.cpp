@@ -5,8 +5,8 @@ Trip::Trip(Passenger* _passenger, int _id) : passenger(_passenger), id(_id) {
 }
 
 void Trip::is_done() {
-    driver = nullptr;
-    passenger = nullptr;
+    driver->reached_destination();
+    passenger->reached_destination();
     state = DONE;
 }
 
@@ -20,5 +20,5 @@ void Trip::has_begun(Driver* _driver) {
     state = ON_GOING;
 }
 
-bool Trip::operator==(int _id) { return id == _id; }
+bool Trip::operator==(int _id) const { return id == _id; }
 void Trip::assign_driver(Driver* _driver) { driver = _driver; }
