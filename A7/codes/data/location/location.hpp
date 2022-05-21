@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <cstring>
 #include "../error/error_handler.hpp"
 
