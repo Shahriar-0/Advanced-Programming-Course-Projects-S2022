@@ -25,4 +25,8 @@ std::ifstream& operator>>(std::ifstream& inputStream, Location& location) {
     return inputStream;
 }
 
+std::ostream& operator<<(std::ostream& stream, Location& location) {
+    std::cout << location.name << location.latitude << " " << location.longitude << std::endl;
+}
+
 bool Location::operator==(std::string _name) const {  return name == _name; }

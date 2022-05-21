@@ -1,5 +1,5 @@
 #include "person.hpp"
-#include "trip.hpp"
+#include "../trip/trip.hpp"
 
 Person::Person(std::string _username) : username(_username) {
     trip = nullptr;
