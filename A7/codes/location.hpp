@@ -7,7 +7,7 @@
 #include <cstring>
 #include "error_handler.hpp"
 
-constexpr char DELIMETER = ',';
+constexpr char FILE_DELIMITER = ',';
 
 class Location {
 public:
