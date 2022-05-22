@@ -9,13 +9,6 @@ DataBase::~DataBase() {
         delete i;
 }
 
-Location* DataBase::find_location(std::string name) {
-    std::vector<Location*>::iterator it;
-    it = std::find(locations.begin(), locations.end(), name);
-    if (it == locations.end())
-        return nullptr;
-    return *it;
-}
 
 void DataBase::check_and_add_person(std::string username, std::string role) {
     Person* ptr = find_person(username);
@@ -28,20 +21,25 @@ void DataBase::check_and_add_person(std::string username, std::string role) {
         add_person(new Passenger(username));
 }
 
+Location* DataBase::find_location(std::string name) {
+    for (auto it : locations) 
+        if (*it == name)
+            return it;
+    return nullptr;
+}
+
 Person* DataBase::find_person(std::string username) {
-    std::vector<Person*>::iterator it;
-    it = std::find(people.begin(), people.end(), username);
-    if (it == people.end())
-        return nullptr;
-    return *it;
+    for (auto it : people) 
+        if (*it == username)
+            return it;
+    return nullptr;
 }
 
 Trip* DataBase::find_trip(int id) {
-    std::vector<Trip*>::iterator it;
-    it = std::find(trips.begin(), trips.end(), id);
-    if (it == trips.end())
-        return nullptr;
-    return *it;
+    for (auto it : trips) 
+        if (*it == id)
+            return it;
+    return nullptr;
 }
 
 void DataBase::add_location(Location* location) { locations.push_back(location); }

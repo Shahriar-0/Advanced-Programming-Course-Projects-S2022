@@ -5,17 +5,19 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "../error/error_handler.hpp"
+#include "error_handler.hpp"
+
+constexpr char DELIMETER = ',';
 
 class Location {
 public:
     Location() = default;
     Location(std::string name, int latitude, int longitude);
     bool operator==(std::string name) const;
-    friend std::ifstream& operator>>(std::ifstream& stream, Location& location);
+    friend void operator>>(std::string& stream, Location& location);
     friend std::ostream& operator<<(std::ostream& stream, Location& location);
 private:
-    int latitude, longitude;
+    double latitude, longitude;
     std::string name;
 };
 

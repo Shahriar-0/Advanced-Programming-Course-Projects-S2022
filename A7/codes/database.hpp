@@ -3,10 +3,10 @@
 
 #include <algorithm>
 #include <vector>
-#include "../people/passenger.hpp"
-#include "../people/driver.hpp"
-#include "../trip/trip.hpp"
-#include "../location/location.hpp"
+#include "passenger.hpp"
+#include "driver.hpp"
+#include "trip.hpp"
+#include "location.hpp"
 
 const std::string PASSENGER = "passenger";
 const std::string DRIVER    = "driver";
@@ -25,8 +25,7 @@ public:
 
     void print_loc() {
         for (auto i : locations) 
-            std::cout << i;
-        
+            std::cout << *i;
     }
 private:
     void add_person(Person* person);

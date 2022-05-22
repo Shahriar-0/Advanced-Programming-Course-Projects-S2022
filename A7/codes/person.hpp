@@ -3,7 +3,7 @@
 
 #include <cstring>
 #include <string>
-#include "../error/error_handler.hpp"
+#include "error_handler.hpp"
 
 class Trip;
 

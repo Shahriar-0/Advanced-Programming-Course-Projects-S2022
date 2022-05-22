@@ -4,8 +4,8 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
-#include "../request/request.hpp"
-#include "../data/database/database.hpp"
+#include "request.hpp"
+#include "database.hpp"
 
 class IOHandler {
 public:

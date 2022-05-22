@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <cstring>
-#include "../people/driver.hpp"
-#include "../people/passenger.hpp"
+#include "driver.hpp"
+#include "passenger.hpp"
 
 class Person;
 

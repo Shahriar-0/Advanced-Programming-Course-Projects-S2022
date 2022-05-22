@@ -1,5 +1,5 @@
 #include "driver.hpp"
-#include "../trip/trip.hpp"
+#include "trip.hpp"
 
 Driver::Driver(std::string _username) : Person(_username) {}
 
