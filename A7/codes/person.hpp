@@ -1,7 +1,4 @@
 #ifndef __PERSON_HPP__
-#define __PERSON_HPP__
-
-#include <cstring>
 #include <string>
 #include "error_handler.hpp"
 

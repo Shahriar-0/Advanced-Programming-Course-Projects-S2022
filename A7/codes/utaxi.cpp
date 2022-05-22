@@ -3,3 +3,7 @@
 UTaxi::UTaxi(std::string filename) : IOHandlerVar(filename) {
     IOHandlerVar.read_locations(database);
 }
+
+void UTaxi::run() {
+
+}

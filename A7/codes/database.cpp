@@ -9,7 +9,6 @@ DataBase::~DataBase() {
         delete i;
 }
 
-
 void DataBase::check_and_add_person(std::string username, std::string role) {
     Person* ptr = find_person(username);
     if (ptr != nullptr)

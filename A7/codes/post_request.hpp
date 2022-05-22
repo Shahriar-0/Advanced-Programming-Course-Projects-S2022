@@ -4,8 +4,7 @@
 #include "request.hpp"
 
 class PostRequest : public Request {
-
+    virtual void handle(DataBase& database);
 };
-
 
 #endif
