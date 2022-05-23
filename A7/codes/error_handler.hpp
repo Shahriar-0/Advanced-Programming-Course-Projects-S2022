@@ -10,7 +10,6 @@
 const std::string NOT_FOUND         = "Not Found";
 const std::string BAD_REQUEST       = "Bad Request";
 const std::string PERMISSION_DENIED = "Permission Denied";
-const std::string EMPTY             = "Empty";
 
 
 class ErrorHandler : public std::invalid_argument {

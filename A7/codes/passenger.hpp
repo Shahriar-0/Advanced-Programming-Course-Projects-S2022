@@ -10,6 +10,7 @@ public:
     virtual void can_accept_a_trip(Trip* _trip);
     virtual void can_ask_for_a_trip();
     virtual void can_finish_a_trip(Trip* _trip);
+    virtual void can_see_trips();
 
     void has_cancelled();
     void has_found_a_driver();

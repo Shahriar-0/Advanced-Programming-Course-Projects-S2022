@@ -10,10 +10,12 @@ GetRequest::GetRequest(std::string line) : Request(line) {
 
 void GetRequest::check_for_type() {
     if (getRequestCommands[0] == commands[0])
-        return; //this line should change if we add more commands for get request
+        return;     //this line should change if we add more commands for get request
     throw ErrorHandler(BAD_REQUEST, "not one of get-request commands");
 }
 
 void GetRequest::handle(DataBase& database) {
+    Person* person = database.find_person(username);
+    person->can_see_trips();
     database.show_trips(id);
 }

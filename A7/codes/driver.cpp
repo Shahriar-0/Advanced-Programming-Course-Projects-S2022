@@ -26,6 +26,8 @@ void Driver::can_finish_a_trip(Trip* _trip) {
 void Driver::has_accepted_a_trip(Trip* _trip) {
     state = IS_TRAVELING;
     trip->has_begun(this);
+    std::cout << SUCCESS_MESSAGE << std::endl;
 }
 
+void Driver::can_see_trips() {}
 void Driver::can_ask_for_a_trip() { throw ErrorHandler(PERMISSION_DENIED, "driver can't ask for a trip"); }

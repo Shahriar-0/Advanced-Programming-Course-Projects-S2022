@@ -90,7 +90,7 @@ void PostRequest::handle_trips(DataBase& database) {
     if (passenger == NULL)
         throw ErrorHandler(BAD_REQUEST, "not a passenger");
 
-    database.add_trip(passenger,  origin, destination);
+    database.check_and_add_trip(passenger,  origin, destination);
 }
 
 void PostRequest::handle_signup(DataBase& database) { database.check_and_add_person(username, role); }

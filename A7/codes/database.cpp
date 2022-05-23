@@ -43,12 +43,22 @@ Trip* DataBase::find_trip(int id) {
 
 void DataBase::show_trips(int id) {
     if (id == ALL_TRIPS_ID) {
-        for (auto it : trips)
-            std::cout << *it << std::endl;
+        if (trips.size() == 0) 
+            std::cout << EMPTY << std::endl;
+        else
+            for (auto it : trips)
+                std::cout << *it << std::endl;
+    }
+    else {
+        Trip* trip = find_trip(id);
+        if (trip == nullptr)
+            std::cout << EMPTY << std::endl;
+        else
+            std::cout << *trip << std::endl;
     }
 }
 
-void DataBase::add_trip(Passenger* passenger, std::string origin, std::string destination) { 
+void DataBase::check_and_add_trip(Passenger* passenger, std::string origin, std::string destination) { 
     Location* originLoc = find_location(origin);
     Location* destinationLoc = find_location(destination);
     
@@ -58,8 +68,9 @@ void DataBase::add_trip(Passenger* passenger, std::string origin, std::string de
         throw ErrorHandler(NOT_FOUND, "destination not found");
 
     //the + 1 is for id, cause each trip should have a unique id 
-    trips.push_back(new Trip(passenger, trips.size() + 1, originLoc, destinationLoc));
+    add_trip(new Trip(passenger, trips.size(), originLoc, destinationLoc));
 }
 
 void DataBase::add_location(Location* location) { locations.push_back(location); }
-void DataBase::add_person(Person* person) { people.push_back(person); }
+void DataBase::add_trip(Trip* trip) { trips.push_back(trip); std::cout << SUCCESS_MESSAGE << std::endl; }
+void DataBase::add_person(Person* person) { people.push_back(person); std::cout << SUCCESS_MESSAGE << std::endl; }
