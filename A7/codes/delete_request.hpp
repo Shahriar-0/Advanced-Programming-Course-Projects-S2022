@@ -4,7 +4,12 @@
 #include "request.hpp"
 
 class DeleteRequest : public Request {
+public:
+    DeleteRequest(std::string _line);
     virtual void handle(DataBase& database);
+
+private:
+    int id;    
 };
 
 #endif

@@ -3,10 +3,7 @@
 
 #include "request.hpp"
 
-constexpr int EMPTY_ID                  = 0;
-
 const std::string ROLE_KEYWORD          = "role";
-const std::string ID_KEYWORD            = "id";
 const std::string DESTINATION_KEYWORD   = "destination";
 const std::string ORIGIN_KEYWORD        = "origin";
 
@@ -15,7 +12,6 @@ enum PostType { SIGNUP, ACCEPT, TRIPS, FINISH };
 
 
 class PostRequest : public Request {
-
 public:
     PostRequest(std::string line, PostType type);
     virtual void handle(DataBase& database);

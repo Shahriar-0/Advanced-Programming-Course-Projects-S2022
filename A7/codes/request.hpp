@@ -5,9 +5,11 @@
 
 constexpr char COMMAND_DELIMITER        = ' ';
 
+constexpr int EMPTY_ID                  = 0;
 constexpr int NOT_FOUND_INDEX           = -1;
 
 const std::string EMPTY_STRING          = "";
+const std::string ID_KEYWORD            = "id";
 const std::string USERNAME_KEYWORD      = "username";
 
 class Request {
