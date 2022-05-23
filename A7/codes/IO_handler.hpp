@@ -16,7 +16,7 @@ class IOHandler {
 public:
     IOHandler(std::string filename);
     void read_locations(DataBase& database);
-    Request* generate_request();
+    Request* generate_request(std::string line);
 private:
     std::string filename;
 };

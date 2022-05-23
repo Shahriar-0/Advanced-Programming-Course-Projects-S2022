@@ -18,9 +18,7 @@ void IOHandler::read_locations(DataBase& database) {
     }
 }
 
-Request* IOHandler::generate_request() {
-    std::string line;
-    getline(std::cin, line);
+Request* IOHandler::generate_request(std::string line) {
     size_t index = line.find(COMMAND_DELIMITER);
     std::string type = line.substr(0, index);
     if (type == RequestTypeString[GET])

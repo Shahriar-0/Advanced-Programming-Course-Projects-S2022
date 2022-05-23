@@ -5,5 +5,14 @@ UTaxi::UTaxi(std::string filename) : IOHandlerVar(filename) {
 }
 
 void UTaxi::run() {
-
+    std::string line;
+    while (getline(std::cin, line)) {
+        try {
+            request = IOHandlerVar.generate_request(line);
+            request->handle(database);
+        }
+        catch(ErrorHandler& error) {
+            error.show_error();
+        }
+    }
 }
