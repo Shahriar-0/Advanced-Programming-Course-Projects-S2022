@@ -1,6 +1,6 @@
 #include "post_request.hpp"
 
-PostRequest::PostRequest(std::string _line, PostType _type) : type(_type), Request(_line) {
+PostRequest::PostRequest(std::string _line) : Request(_line) {
     origin = destination = role = EMPTY_STRING;
     id = EMPTY_ID;
 
@@ -11,6 +11,21 @@ PostRequest::PostRequest(std::string _line, PostType _type) : type(_type), Reque
     if (type == SIGNUP)
         check_for_signup_validation();
 }
+
+void PostRequest::check_for_type() {
+    std::string firstWord = commands[0];
+    if (firstWord == postRequestCommands[SIGNUP])
+        type = SIGNUP;
+    else if (firstWord == postRequestCommands[TRIPS])
+        type = TRIPS;
+    else if (firstWord == postRequestCommands[FINISH])
+        type = FINISH;
+    else if (firstWord == postRequestCommands[ACCEPT])
+        type = ACCEPT;
+    else 
+        throw ErrorHandler(BAD_REQUEST, "not one of the post-request commands");
+}
+
 
 void PostRequest::check_for_finish_and_accept_validation() {
     int idIndex = find_index(ID_KEYWORD);

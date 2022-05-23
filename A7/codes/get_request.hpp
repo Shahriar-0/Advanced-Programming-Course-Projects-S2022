@@ -3,12 +3,17 @@
 
 #include "request.hpp"
 
+const std::string getRequestCommands[] = {
+    "trips"
+};
+
 class GetRequest : public Request {
 public:
     GetRequest(std::string line);
     virtual void handle(DataBase& database);
 
 private:
+    void check_for_type();
     int id;
 };
 

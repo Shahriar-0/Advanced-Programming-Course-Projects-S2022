@@ -7,6 +7,12 @@ DeleteRequest::DeleteRequest(std::string line) : Request(line) {
     id = stoi(commands[idIndex]);
 }
 
+void DeleteRequest::check_for_type() {
+    if (DeleteRequestCommands[0] == commands[0])
+        return; //this line should change if we add more commands for get request
+    throw ErrorHandler(BAD_REQUEST, "not one of delete-request commands");
+}
+
 void DeleteRequest::handle(DataBase& database) {
     
 }
