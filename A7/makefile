@@ -37,6 +37,7 @@ $(BUILDS)get_request.o: $(CODES)get_request.cpp $(CODES)get_request.hpp
 
 $(BUILDS)IO_handler.o: $(CODES)IO_handler.cpp $(CODES)IO_handler.hpp
 	$(CC_OBJECT) $< -o $@
+	
 $(BUILDS)location.o: $(CODES)location.cpp $(CODES)location.hpp
 	$(CC_OBJECT) $< -o $@
 

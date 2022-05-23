@@ -27,6 +27,7 @@ public:
         for (auto i : locations) 
             std::cout << *i;
     }
+    
 private:
     void add_person(Person* person);
     std::vector<Location*> locations;

@@ -1,7 +1,7 @@
 #include "post_request.hpp"
 
 PostRequest::PostRequest(std::string _line, PostType _type) : type(_type) {
-    split_input_line(_line);
+    Request::split_input_line(_line);
     if (type == ACCEPT)
         check_for_accept_validation();
     if (type == FINISH)
@@ -24,6 +24,10 @@ void PostRequest::check_for_accept_validation() {
     int roleIndex = find_index("role");
     if (usernameIndex == NOT_FOUND_INDEX || roleIndex == NOT_FOUND_INDEX)
         throw ErrorHandler(BAD_REQUEST, "username or role not found");
+    
+}
+
+void PostRequest::handle(DataBase& database) {
     
 }
 

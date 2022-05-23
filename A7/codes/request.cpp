@@ -9,4 +9,4 @@ void Request::split_input_line(std::string line) {
         line = line.substr(0, pos + 1);
     }
     commands.push_back(line);
-} 
+}

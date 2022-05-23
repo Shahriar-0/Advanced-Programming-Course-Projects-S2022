@@ -2,7 +2,6 @@
 #define __PASSENGER_HPP__
 
 #include "error_handler.hpp"
-#include "request.hpp"
 #include "person.hpp"
 
 class Passenger : public Person {

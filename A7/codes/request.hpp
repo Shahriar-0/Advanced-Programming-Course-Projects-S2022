@@ -6,7 +6,9 @@ constexpr char COMMAND_DELIMITER = ' ';
 
 class Request {
 public:
-    virtual void handle(DataBase& database);
+    Request() = default;
+    ~Request() = default;
+    virtual void handle(DataBase& database) = 0;
 protected:
     std::vector<std::string> commands;
     void split_input_line(std::string line);
