@@ -3,21 +3,28 @@
 
 #include "request.hpp"
 
+constexpr int EMPTY_ID                  = 0;
+
+const std::string ROLE_KEYWORD          = "role";
+const std::string ID_KEYWORD            = "id";
+const std::string DESTINATION_KEYWORD   = "destination";
+const std::string ORIGIN_KEYWORD        = "origin";
+
+
 enum PostType { SIGNUP, ACCEPT, TRIPS, FINISH };
 
-constexpr int NOT_FOUND_INDEX = -1;
 
 class PostRequest : public Request {
+
 public:
     PostRequest(std::string line, PostType type);
     virtual void handle(DataBase& database);
+
 private:
-    void split_input_line(std::string line);
     void check_for_signup_validation();
-    void check_for_accept_validation();
-    void check_for_finish_validation();
+    void check_for_finish_and_accept_validation();
     void check_for_trips_validation();
-    int find_index(std::string word);
+    
     PostType type;
     std::string username;
     std::string origin;
