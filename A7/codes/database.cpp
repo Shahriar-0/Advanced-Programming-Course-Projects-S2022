@@ -50,6 +50,7 @@ void DataBase::add_trip(Passenger* passenger, std::string origin, std::string de
     if (destinationLoc == nullptr)
         throw ErrorHandler(NOT_FOUND, "destination not found");
 
+    //the + 1 is for id, cause each trip should have a unique id 
     trips.push_back(new Trip(passenger, trips.size() + 1, originLoc, destinationLoc));
 }
 

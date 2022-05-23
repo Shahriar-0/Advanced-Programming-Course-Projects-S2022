@@ -6,6 +6,9 @@ Driver::Driver(std::string _username) : Person(_username) {}
 void Driver::can_accept_a_trip(Trip* _trip) {
     if (state == IS_TRAVELING)
         throw ErrorHandler(BAD_REQUEST, "you still have a passenger");
+        
+    if (!trip->can_be_accepted())
+        throw ErrorHandler(BAD_REQUEST, "trip is on going or it's over");
     //this function is checked last so if we're here then it's alright to proceed
     has_accepted_a_trip(_trip);
 }
@@ -17,7 +20,7 @@ void Driver::can_finish_a_trip(Trip* _trip) {
     if (*_trip != *trip)
         throw ErrorHandler(PERMISSION_DENIED, "you can only finish a your trip");
     
-    trip->is_done();
+    trip->has_ended();
 }
 
 void Driver::has_accepted_a_trip(Trip* _trip) {

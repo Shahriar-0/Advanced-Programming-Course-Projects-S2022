@@ -21,7 +21,7 @@ protected:
     int find_index(std::string word);
     std::vector<std::string> commands;
     void split_input_line(std::string line);
-    std::string username;
+    std::string username;   //this variable holds the username of the person who has submitted this request
 };
 
 #endif

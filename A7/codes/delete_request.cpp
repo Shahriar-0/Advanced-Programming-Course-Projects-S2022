@@ -15,5 +15,10 @@ void DeleteRequest::check_for_type() {
 }
 
 void DeleteRequest::handle(DataBase& database) {
-    
+    Trip* trip = database.find_trip(id);
+    if (trip == nullptr) 
+        throw ErrorHandler(NOT_FOUND, "trip does not exist");
+    if (!trip->is_for_this_passenger(username))
+        throw ErrorHandler(PERMISSION_DENIED, "you can't cancel other's trip");
+    trip->is_cancelled();
 }

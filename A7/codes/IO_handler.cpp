@@ -19,5 +19,5 @@ void IOHandler::read_locations(DataBase& database) {
 }
 
 Request* IOHandler::generate_request() {
-    
+    //todo
 }

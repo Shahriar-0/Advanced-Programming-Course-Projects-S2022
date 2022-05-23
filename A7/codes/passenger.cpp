@@ -10,6 +10,7 @@ void Passenger::can_ask_for_a_trip() {
     has_asked_for_trip();
 }
 
-void Passenger::can_finish_a_trip(Trip* _trip) { throw ErrorHandler(PERMISSION_DENIED, "passenger can't finish a trip"); }
+void Passenger::has_cancelled() { state = FINISHED; }
 void Passenger::has_asked_for_trip() { state = IS_WAITING; }
+void Passenger::can_finish_a_trip(Trip* _trip) { throw ErrorHandler(PERMISSION_DENIED, "passenger can't finish a trip"); }
 void Passenger::can_accept_a_trip(Trip* _trip) { throw ErrorHandler(PERMISSION_DENIED, "passengers can't accept trip"); }
