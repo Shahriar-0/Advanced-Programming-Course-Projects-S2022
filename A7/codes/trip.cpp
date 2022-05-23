@@ -9,6 +9,7 @@ void Trip::has_ended() {
     driver->reached_destination();
     passenger->reached_destination();
     state = DONE;
+    std::cout << SUCCESS_MESSAGE << std::endl;
 }
 
 void Trip::has_begun(Driver* _driver) {
@@ -21,6 +22,7 @@ void Trip::has_begun(Driver* _driver) {
 void Trip::is_cancelled() {
     passenger->has_cancelled();
     state = DONE;
+    std::cout << SUCCESS_MESSAGE << std::endl;
     //we haven't assign a driver yet so there is no need to do anything about it
 }
 

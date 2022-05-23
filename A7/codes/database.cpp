@@ -68,9 +68,9 @@ void DataBase::check_and_add_trip(Passenger* passenger, std::string origin, std:
         throw ErrorHandler(NOT_FOUND, "destination not found");
 
     //the + 1 is for id, cause each trip should have a unique id 
-    add_trip(new Trip(passenger, trips.size(), originLoc, destinationLoc));
+    add_trip(new Trip(passenger, trips.size() +  1, originLoc, destinationLoc));
 }
 
 void DataBase::add_location(Location* location) { locations.push_back(location); }
-void DataBase::add_trip(Trip* trip) { trips.push_back(trip); std::cout << SUCCESS_MESSAGE << std::endl; }
+void DataBase::add_trip(Trip* trip) { trips.push_back(trip); std::cout << trips.size() << std::endl; }
 void DataBase::add_person(Person* person) { people.push_back(person); std::cout << SUCCESS_MESSAGE << std::endl; }
