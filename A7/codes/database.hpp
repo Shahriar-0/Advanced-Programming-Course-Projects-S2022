@@ -8,9 +8,10 @@
 #include "trip.hpp"
 #include "location.hpp"
 
-const std::string PASSENGER = "passenger";
-const std::string DRIVER    = "driver";
+const std::string PASSENGER    = "passenger";
+const std::string DRIVER       = "driver";
 
+constexpr int ALL_TRIPS_ID     = 0;
 
 class DataBase {
 public:
@@ -19,6 +20,7 @@ public:
     void add_location(Location* location);
     void check_and_add_person(std::string username, std::string role);
     void add_trip(Passenger* passenger, std::string origin, std::string destination);
+    void show_trips(int id = ALL_TRIPS_ID);
     Trip* find_trip(int id);
     Person* find_person(std::string username);
     Location* find_location(std::string name);

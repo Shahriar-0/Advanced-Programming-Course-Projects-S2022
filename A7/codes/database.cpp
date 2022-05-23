@@ -41,6 +41,13 @@ Trip* DataBase::find_trip(int id) {
     return nullptr;
 }
 
+void DataBase::show_trips(int id) {
+    if (id == ALL_TRIPS_ID) {
+        for (auto it : trips)
+            std::cout << *it << std::endl;
+    }
+}
+
 void DataBase::add_trip(Passenger* passenger, std::string origin, std::string destination) { 
     Location* originLoc = find_location(origin);
     Location* destinationLoc = find_location(destination);

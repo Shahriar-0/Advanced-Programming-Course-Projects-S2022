@@ -10,6 +10,11 @@ void Passenger::can_ask_for_a_trip() {
     has_asked_for_trip();
 }
 
+std::ostream& operator<<(std::ostream& out, const Passenger& passenger) {
+    out << passenger.username;
+    return out;
+}
+
 void Passenger::has_cancelled() { state = FINISHED; }
 void Passenger::has_asked_for_trip() { state = IS_WAITING; }
 void Passenger::can_finish_a_trip(Trip* _trip) { throw ErrorHandler(PERMISSION_DENIED, "passenger can't finish a trip"); }

@@ -22,6 +22,7 @@ public:
     bool can_be_accepted() const;
     bool is_for_this_passenger(std::string username) const;
     bool can_get_canceled() const;
+    friend std::ostream& operator<<(std::ostream& out, const Trip& trip);
 private:
     Passenger* passenger;
     Driver* driver;

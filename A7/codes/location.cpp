@@ -20,9 +20,9 @@ void operator>>(std::string& line, Location& location) {
     location.longitude = stod(line);
 }
 
-std::ostream& operator<<(std::ostream& stream, Location& location) {
-    std::cout << location.name << " " << location.latitude << " " << location.longitude << std::endl;
-    return stream;
+std::ostream& operator<<(std::ostream& out, Location& location) {
+    out << location.name;
+    return out;
 }
 
 bool Location::operator==(std::string _name) const {  return name == _name; }

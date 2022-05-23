@@ -15,5 +15,5 @@ void GetRequest::check_for_type() {
 }
 
 void GetRequest::handle(DataBase& database) {
-    
+    database.show_trips(id);
 }

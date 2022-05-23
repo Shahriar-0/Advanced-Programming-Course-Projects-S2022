@@ -20,7 +20,23 @@ void Trip::has_begun(Driver* _driver) {
 
 void Trip::is_cancelled() {
     passenger->has_cancelled();
-    //we haven't assign a driver so there is no need to do anything about it
+    state = DONE;
+    //we haven't assign a driver yet so there is no need to do anything about it
+}
+
+std::ostream& operator<<(std::ostream& out, TripState state) {
+    if (state == NOT_ACCEPTED_YET)
+        out << "waiting";
+    else if (state == ON_GOING)
+        out << "traveling";
+    else if (state == DONE)
+        out << "finished";
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const Trip& trip) {
+    out << trip.id << " " << *(trip.passenger) << " " << *(trip.origin) << " " <<  *(trip.destination) << " " << trip.state << std::endl;
+    return out;
 }
 
 bool Trip::is_for_this_passenger(std::string username) const { return *passenger == username; }

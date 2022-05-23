@@ -13,6 +13,8 @@ public:
 
     void has_cancelled();
     void has_found_a_driver();
+
+    friend std::ostream& operator<<(std::ostream& out, const Passenger& passenger);
 private:
     void has_asked_for_trip();
 };
