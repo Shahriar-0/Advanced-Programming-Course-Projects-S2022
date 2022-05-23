@@ -52,7 +52,7 @@ void DataBase::show_trips(int id) {
     else {
         Trip* trip = find_trip(id);
         if (trip == nullptr)
-            std::cout << EMPTY << std::endl;
+            throw ErrorHandler(NOT_FOUND, "that trip does not exist");
         else
             std::cout << *trip << std::endl;
     }
