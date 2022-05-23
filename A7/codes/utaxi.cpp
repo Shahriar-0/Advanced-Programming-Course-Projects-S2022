@@ -10,6 +10,7 @@ void UTaxi::run() {
         try {
             request = IOHandlerVar.generate_request(line);
             request->handle(database);
+            delete request;
         }
         catch(ErrorHandler& error) {
             error.show_error();
