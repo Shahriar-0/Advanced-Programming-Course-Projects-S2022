@@ -11,7 +11,8 @@ class Person {
 public:
     Person(std::string username);
     virtual void can_accept_a_trip(Trip* trip) = 0;
-    virtual void can_ask_for_trip() = 0;
+    virtual void can_ask_for_a_trip() = 0;
+    virtual void can_finish_a_trip(Trip* trip) = 0;
     void reached_destination();
     void has_begun_a_journey(Trip* _trip);
     bool operator==(std::string username) const;

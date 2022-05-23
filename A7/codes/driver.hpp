@@ -6,8 +6,9 @@
 class Driver : public Person {
 public:
     Driver(std::string username);
-    virtual void can_ask_for_trip();
+    virtual void can_ask_for_a_trip();
     virtual void can_accept_a_trip(Trip* _trip);
+    virtual void can_finish_a_trip(Trip* _trip);
 private:
     void has_accepted_a_trip(Trip* _trip);
 };

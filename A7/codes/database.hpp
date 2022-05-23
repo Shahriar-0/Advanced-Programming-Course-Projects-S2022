@@ -18,7 +18,7 @@ public:
     ~DataBase();
     void add_location(Location* location);
     void check_and_add_person(std::string username, std::string role);
-    void add_trip(Trip* trip);
+    void add_trip(Passenger* passenger, std::string origin, std::string destination);
     Trip* find_trip(int id);
     Person* find_person(std::string username);
     Location* find_location(std::string name);

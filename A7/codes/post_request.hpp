@@ -23,6 +23,10 @@ public:
     virtual void handle(DataBase& database);
 
 private:
+    void handle_signup(DataBase& database);
+    void handle_trips(DataBase& database);
+    void handle_accept(DataBase& database);
+    void handle_finish(DataBase& database);
     void check_for_type();
     void check_for_signup_validation();
     void check_for_finish_and_accept_validation();
@@ -34,6 +38,8 @@ private:
     std::string destination;
     std::string role;
     int id;
+    Person* person;
+    Trip* trip;
 };
 
 #endif

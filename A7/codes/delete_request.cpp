@@ -2,6 +2,7 @@
 
 DeleteRequest::DeleteRequest(std::string line) : Request(line) {
     int idIndex = find_index(ID_KEYWORD);
+    check_for_type();
     if (idIndex == NOT_FOUND_INDEX)
         throw ErrorHandler(BAD_REQUEST, "id not found in command");
     id = stoi(commands[idIndex]);

@@ -17,3 +17,7 @@ void IOHandler::read_locations(DataBase& database) {
         error.show_error(); 
     }
 }
+
+Request* IOHandler::generate_request() {
+    
+}

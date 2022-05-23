@@ -9,8 +9,9 @@
 
 class IOHandler {
 public:
-    IOHandler(std::string filename);\
+    IOHandler(std::string filename);
     void read_locations(DataBase& database);
+    Request* generate_request();
 private:
     std::string filename;
 };

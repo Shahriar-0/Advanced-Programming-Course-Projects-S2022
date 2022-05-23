@@ -41,6 +41,17 @@ Trip* DataBase::find_trip(int id) {
     return nullptr;
 }
 
+void DataBase::add_trip(Passenger* passenger, std::string origin, std::string destination) { 
+    Location* originLoc = find_location(origin);
+    Location* destinationLoc = find_location(destination);
+    
+    if (originLoc == nullptr)
+        throw ErrorHandler(NOT_FOUND, "origin not found");
+    if (destinationLoc == nullptr)
+        throw ErrorHandler(NOT_FOUND, "destination not found");
+
+    trips.push_back(new Trip(passenger, trips.size() + 1, originLoc, destinationLoc));
+}
+
 void DataBase::add_location(Location* location) { locations.push_back(location); }
 void DataBase::add_person(Person* person) { people.push_back(person); }
-void DataBase::add_trip(Trip* trip) { trips.push_back(trip); }

@@ -3,6 +3,9 @@
 PostRequest::PostRequest(std::string _line) : Request(_line) {
     origin = destination = role = EMPTY_STRING;
     id = EMPTY_ID;
+    person = nullptr;
+    trip = nullptr;
+    check_for_type();
 
     if (type == FINISH || type == ACCEPT)
         check_for_finish_and_accept_validation();
@@ -56,5 +59,40 @@ void PostRequest::check_for_signup_validation() {
 }
 
 void PostRequest::handle(DataBase& database) {
-    
+    if (type == SIGNUP)
+        handle_signup(database);    
+    else {
+        //other functions require person
+        person = database.find_person(username);
+        if (person == nullptr)
+            throw ErrorHandler(NOT_FOUND, "person not found");
+        
+        if (type == TRIPS)
+            handle_trips(database);
+
+        //other functions require trip and person
+        trip = database.find_trip(id);
+        if (trip == nullptr)
+            throw ErrorHandler(NOT_FOUND, "trip not found");
+        
+        if (type == ACCEPT)
+            handle_accept(database);    
+        if (type == FINISH)
+            handle_finish(database);    
+        //cause we checked the type there's no need for else here    
+    }
 }
+
+void PostRequest::handle_trips(DataBase& database) {
+    person->can_ask_for_a_trip();
+
+    Passenger* passenger = dynamic_cast<Passenger*> (person);
+    if (passenger == NULL)
+        throw ErrorHandler(BAD_REQUEST, "not a passenger");
+
+    database.add_trip(passenger,  origin, destination);
+}
+
+void PostRequest::handle_signup(DataBase& database) { database.check_and_add_person(username, role); }
+void PostRequest::handle_accept(DataBase& database) { person->can_accept_a_trip(trip); }
+void PostRequest::handle_finish(DataBase& database) { person->can_finish_a_trip(trip); }
