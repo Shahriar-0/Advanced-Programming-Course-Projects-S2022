@@ -16,6 +16,7 @@ void IOHandler::read_locations(DataBase& database) {
     catch (ErrorHandler& error) {
         error.show_error(); 
     }
+    input.close();
 }
 
 Request* IOHandler::generate_request(std::string line) {
