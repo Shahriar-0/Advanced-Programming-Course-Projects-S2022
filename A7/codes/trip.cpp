@@ -19,9 +19,9 @@ void Trip::has_begun(Driver* _driver) {
     state = ON_GOING;
 }
 
-void Trip::is_cancelled() {
+void Trip::has_cancelled() {
     passenger->has_cancelled();
-    state = DONE;
+    state = CANCELLED;
     std::cout << SUCCESS_MESSAGE << std::endl;
     //we haven't assign a driver yet so there is no need to do anything about it
 }
@@ -41,6 +41,7 @@ std::ostream& operator<<(std::ostream& out, const Trip& trip) {
     return out;
 }
 
+bool Trip::is_cancelled() const { return state == CANCELLED; }
 bool Trip::is_for_this_passenger(std::string username) const { return *passenger == username; }
 bool Trip::can_get_canceled() const { return state == NOT_ACCEPTED_YET; }
 bool Trip::can_be_accepted() const { return state == NOT_ACCEPTED_YET; }

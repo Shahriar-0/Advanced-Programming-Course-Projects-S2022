@@ -23,7 +23,7 @@ Request* IOHandler::generate_request(std::string line) {
     std::string type = line.substr(0, index);
     if (type == RequestTypeString[GET])
         return new GetRequest(line.substr(index + 1));
-    else if (type == RequestTypeString[POST])
+    else if (type == RequestTypeString[POST]) 
         return new PostRequest(line.substr(index + 1));
     else if (type == RequestTypeString[DELETE])
         return new DeleteRequest(line.substr(index + 1));

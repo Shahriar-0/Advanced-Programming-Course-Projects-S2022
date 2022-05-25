@@ -6,7 +6,6 @@ PostRequest::PostRequest(std::string _line) : Request(_line) {
     person = nullptr;
     trip = nullptr;
     check_for_type();
-
     if (type == FINISH || type == ACCEPT)
         check_for_finish_and_accept_validation();
     if (type == TRIPS)
@@ -26,7 +25,7 @@ void PostRequest::check_for_type() {
     else if (firstWord == postRequestCommands[ACCEPT])
         type = ACCEPT;
     else 
-        throw ErrorHandler(BAD_REQUEST, "not one of the post-request commands");
+        throw ErrorHandler(NOT_FOUND, "not one of the post-request commands");
 }
 
 
@@ -67,8 +66,10 @@ void PostRequest::handle(DataBase& database) {
         if (person == nullptr)
             throw ErrorHandler(NOT_FOUND, "person not found");
         
-        if (type == TRIPS)
+        if (type == TRIPS) {
             handle_trips(database);
+            return;
+        }
 
         //other functions require trip and person
         trip = database.find_trip(id);

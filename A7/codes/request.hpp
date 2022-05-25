@@ -1,6 +1,8 @@
 #ifndef __REQUEST_HPP__
 #define __REQUEST_HPP__
 #include "database.hpp"
+#include <map>
+#include <utility>
 #include <string>
 
 constexpr char COMMAND_DELIMITER        = ' ';

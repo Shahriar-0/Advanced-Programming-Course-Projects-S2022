@@ -43,19 +43,32 @@ Trip* DataBase::find_trip(int id) {
 
 void DataBase::show_trips(int id) {
     if (id == ALL_TRIPS_ID) {
-        if (trips.size() == 0) 
-            std::cout << EMPTY << std::endl;
+        if (check_for_trip_existence()) {
+            for (auto it : trips) {
+                if (it->is_cancelled())
+                    continue;
+                std::cout << *it;
+            }
+        }
         else
-            for (auto it : trips)
-                std::cout << *it << std::endl;
+            std::cout << EMPTY << std::endl;
     }
     else {
         Trip* trip = find_trip(id);
-        if (trip == nullptr)
+        if (trip == nullptr || trip->is_cancelled())
             std::cout << EMPTY << std::endl;
         else
-            std::cout << *trip << std::endl;
+            std::cout << *trip;
     }
+}
+
+bool DataBase::check_for_trip_existence() const {
+    if (trips.size() == 0)
+        return false;
+    for (auto it : trips)
+        if (!it->is_cancelled())
+            return true;
+    return false;
 }
 
 void DataBase::check_and_add_trip(Passenger* passenger, std::string origin, std::string destination) { 

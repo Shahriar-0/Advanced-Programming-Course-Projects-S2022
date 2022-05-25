@@ -11,10 +11,10 @@ const std::string ORIGIN_KEYWORD        = "origin";
 enum PostType { SIGNUP, ACCEPT, TRIPS, FINISH };
 
 const std::string postRequestCommands[] = {
-    "signup"
+    "signup",
     "accept",
     "trips",
-    "finish",
+    "finish"
 };
 
 class PostRequest : public Request {
@@ -33,7 +33,6 @@ private:
     void check_for_trips_validation();
     
     PostType type;
-    std::string username;
     std::string origin;
     std::string destination;
     std::string role;

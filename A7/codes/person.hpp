@@ -17,6 +17,7 @@ public:
     void reached_destination();
     void has_begun_a_journey(Trip* _trip);
     bool operator==(std::string username) const;
+    friend std::ostream& operator<<(std::ostream& out, const Person& person);
 protected:
     std::string username;
     PersonState state;

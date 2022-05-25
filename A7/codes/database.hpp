@@ -25,6 +25,7 @@ public:
     Location* find_location(std::string name);
 
 private:
+    bool check_for_trip_existence() const;
     void add_trip(Trip* trip); 
     void add_person(Person* person);
     std::vector<Location*> locations;

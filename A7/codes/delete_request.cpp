@@ -11,7 +11,7 @@ DeleteRequest::DeleteRequest(std::string line) : Request(line) {
 void DeleteRequest::check_for_type() {
     if (DeleteRequestCommands[0] == commands[0])
         return; //this line should change if we add more commands for get request
-    throw ErrorHandler(BAD_REQUEST, "not one of delete-request commands");
+    throw ErrorHandler(NOT_FOUND, "not one of delete-request commands");
 }
 
 void DeleteRequest::handle(DataBase& database) {
@@ -20,5 +20,5 @@ void DeleteRequest::handle(DataBase& database) {
         throw ErrorHandler(NOT_FOUND, "trip does not exist");
     if (!trip->is_for_this_passenger(username))
         throw ErrorHandler(PERMISSION_DENIED, "you can't cancel other's trip");
-    trip->is_cancelled();
+    trip->has_cancelled();
 }

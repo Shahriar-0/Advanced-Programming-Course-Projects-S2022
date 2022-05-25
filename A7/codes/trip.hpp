@@ -9,14 +9,15 @@
 
 class Person;
 
-enum TripState { DONE, ON_GOING, NOT_ACCEPTED_YET };
+enum TripState { DONE, ON_GOING, NOT_ACCEPTED_YET, CANCELLED };
 
 class Trip {
 public:
     Trip(Passenger* passenger, int id, Location* origin, Location* destination);
     void has_ended();
     void has_begun(Driver* driver);
-    void is_cancelled();
+    void has_cancelled();
+    bool is_cancelled() const;
     bool operator==(int _id) const;
     bool operator!=(Trip _trip) const;
     bool can_be_accepted() const;
