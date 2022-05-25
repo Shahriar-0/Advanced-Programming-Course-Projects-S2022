@@ -1,5 +1,5 @@
 UTAXI :) <br /><br />
-my final project in advanced prpgramming course in university of tehran<br /><br />
+my final project in advanced programming course in university of tehran<br />
 for now it's only in phase one but I'm gonna work on it
 for running the app just do these
 ```
