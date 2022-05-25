@@ -4,10 +4,10 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
-#include "get_request.hpp"
-#include "post_request.hpp"
-#include "delete_request.hpp"
-#include "database.hpp"
+#include "../requests/get_request.hpp"
+#include "../requests/delete_request.hpp"
+#include "../requests/post_request.hpp"
+#include "../datas/database.hpp"
 
 enum RequestType { GET, POST, DELETE };
 const std::string RequestTypeString[] { "GET", "POST", "DELETE" };

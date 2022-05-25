@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "error_handler.hpp"
+#include "../error/error_handler.hpp"
 
 constexpr char FILE_DELIMITER = ',';
 

@@ -1,7 +1,7 @@
 #ifndef __PERSON_HPP__
 #define __PERSON_HPP__
 #include <string>
-#include "error_handler.hpp"
+#include "../error/error_handler.hpp"
 
 class Trip;
 const std::string SUCCESS_MESSAGE   = "OK";

@@ -1,7 +1,6 @@
 #ifndef __PASSENGER_HPP__
 #define __PASSENGER_HPP__
 
-#include "error_handler.hpp"
 #include "person.hpp"
 
 class Passenger : public Person {

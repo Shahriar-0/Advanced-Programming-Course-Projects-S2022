@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <cstring>
 
-
     // errors list
 const std::string NOT_FOUND         = "Not Found";
 const std::string BAD_REQUEST       = "Bad Request";
