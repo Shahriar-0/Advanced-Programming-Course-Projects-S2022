@@ -18,11 +18,13 @@ public:
     void has_begun(Driver* driver);
     void has_cancelled();
     bool is_cancelled() const;
-    bool operator==(int _id) const;
-    bool operator!=(Trip _trip) const;
     bool can_be_accepted() const;
     bool is_for_this_passenger(std::string username) const;
     bool can_get_canceled() const;
+
+    bool operator==(int _id) const;
+    bool operator!=(Trip _trip) const;
+    
     friend std::ostream& operator<<(std::ostream& out, const Trip& trip);
 private:
     Passenger* passenger;

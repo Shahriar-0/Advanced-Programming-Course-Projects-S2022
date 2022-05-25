@@ -14,9 +14,9 @@ void DataBase::check_and_add_person(std::string username, std::string role) {
     if (ptr != nullptr)
         throw ErrorHandler(BAD_REQUEST, "member already exists");
     
-    if (role == DRIVER)
+    if (role == DRIVER_KEYWORD)
         add_person(new Driver(username));
-    else if (role == PASSENGER)
+    else if (role == PASSENGER_KEYWORD)
         add_person(new Passenger(username));
     else 
         throw ErrorHandler(BAD_REQUEST, "roles can only be driver and passenger");
@@ -45,20 +45,16 @@ Trip* DataBase::find_trip(int id) {
 
 void DataBase::show_trips(int id) {
     if (id == ALL_TRIPS_ID) {
-        if (check_for_trip_existence()) {
-            for (auto it : trips) {
-                if (it->is_cancelled())
-                    continue;
+        if (check_for_trip_existence()) 
+            for (auto it : trips) 
                 std::cout << *it;
-            }
-        }
         else
-            std::cout << EMPTY << std::endl;
+            std::cout << EMPTY_KEYWORD << std::endl;
     }
     else {
         Trip* trip = find_trip(id);
         if (trip == nullptr || trip->is_cancelled())
-            std::cout << EMPTY << std::endl;
+            std::cout << EMPTY_KEYWORD << std::endl;
         else
             std::cout << *trip;
     }

@@ -39,6 +39,8 @@ std::ostream& operator<<(std::ostream& out, TripState state) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Trip& trip) {
+    if (trip.is_cancelled())
+        return out;
     out << trip.id << " " << *(trip.passenger) << " " << *(trip.origin) << " " <<  *(trip.destination) << " " << trip.state << std::endl;
     return out;
 }

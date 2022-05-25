@@ -6,9 +6,9 @@
 #include "trip.hpp"
 #include "location.hpp"
 
-const std::string PASSENGER         = "passenger";
-const std::string DRIVER            = "driver";
-const std::string EMPTY             = "Empty";
+const std::string PASSENGER_KEYWORD = "passenger";
+const std::string DRIVER_KEYWORD    = "driver";
+const std::string EMPTY_KEYWORD     = "Empty";
 
 constexpr int ALL_TRIPS_ID          = 0;
 

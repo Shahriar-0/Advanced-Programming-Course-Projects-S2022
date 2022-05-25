@@ -7,14 +7,14 @@ void IOHandler::read_locations(DataBase& database) {
     std::string tempLine;
     input >> tempLine;
     Location tempLoc;
-    try {
-        while (input >> tempLine) {
+    while (input >> tempLine) {
+        try {
             tempLine >> tempLoc;
             database.add_location(new Location(tempLoc));
+        }    
+        catch (ErrorHandler& error) {
+            error.show_error(); 
         }
-    }
-    catch (ErrorHandler& error) {
-        error.show_error(); 
     }
 }
 

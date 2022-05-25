@@ -4,7 +4,7 @@
 Request::Request(std::string line) {
     split_input_line(line);
 
-    //cause every request has a username in it 
+    //cause every request has an username in it 
     int usernameIndex = find_index(USERNAME_KEYWORD);
     if (usernameIndex == NOT_FOUND_INDEX)
         throw ErrorHandler(BAD_REQUEST, "username not found in command");
