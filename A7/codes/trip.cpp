@@ -20,6 +20,8 @@ void Trip::has_begun(Driver* _driver) {
 }
 
 void Trip::has_cancelled() {
+    if (state != NOT_ACCEPTED_YET)
+        throw ErrorHandler(BAD_REQUEST, "can't cancel it anymore");
     passenger->has_cancelled();
     state = CANCELLED;
     std::cout << SUCCESS_MESSAGE << std::endl;

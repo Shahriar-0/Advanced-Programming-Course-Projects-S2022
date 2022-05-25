@@ -18,6 +18,8 @@ void DataBase::check_and_add_person(std::string username, std::string role) {
         add_person(new Driver(username));
     else if (role == PASSENGER)
         add_person(new Passenger(username));
+    else 
+        throw ErrorHandler(BAD_REQUEST, "roles can only be driver and passenger");
 }
 
 Location* DataBase::find_location(std::string name) {
