@@ -1,0 +1,22 @@
+POST signup ? role passenger username amin
+POST signup ? role player username arshia
+POST signup ? username mina role driver
+POST signup ? username amin role passenger
+POST signup ? role passenger username mmd
+POST signup ? role driver username mobina
+POST signup ? username elahe role passenger
+POST signup ? role driver username aliH
+POST trips ? username elahe destination Tehranpars
+POST trips ? destination Farahzad username mmd origin Enghelab
+POST trips ? origin Marzdaran destination SaadatAbad username zahra
+POST trips ? origin Marzdaran destination SaadatAbad username amin
+POST trips ? username elahe origin Marzdaran destination Enghelab
+POST trips ? username mina origin Enghelab destination Marzdaran
+GET trips ? username mobina
+GET trips ? id 1 username mina
+POST accept ? username mina id 1
+POST accept ? id 1 username aliH
+POST delete ? id 1 username elahe
+POST finish ? username mina id 5
+POST finish ? username mina id 2
+GET trips ? username aliH
