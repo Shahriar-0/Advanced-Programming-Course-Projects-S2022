@@ -1,9 +1,4 @@
-CC := g++ --std=c++11
-DEBUG := -g
-CC_OBJECT := $(CC) -c
-CODES := codes/
-BUILDS := builds/
-
+include common_vars.mk
 #let the dance be eternal
 
 all: utaxi.out
@@ -14,59 +9,66 @@ debug.out: $(BUILDS)main.o $(BUILDS)get_request.o $(BUILDS)request.o $(BUILDS)tr
 utaxi.out: $(BUILDS)main.o $(BUILDS)get_request.o $(BUILDS)request.o $(BUILDS)trip.o $(BUILDS)post_request.o $(BUILDS)IO_handler.o $(BUILDS)location.o $(BUILDS)passenger.o $(BUILDS)person.o $(BUILDS)utaxi.o $(BUILDS)database.o $(BUILDS)delete_request.o $(BUILDS)driver.o $(BUILDS)error_handler.o
 	$(CC) $(BUILDS)*.o -o $@
 
-$(BUILDS)main.o: $(CODES)main.cpp $(CODES)utaxi.hpp
+#managing part
+$(BUILDS)main.o: $(MANAGER)main.cpp $(MANAGER)utaxi.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)utaxi.o: $(CODES)utaxi.cpp $(CODES)utaxi.hpp
+$(BUILDS)utaxi.o: $(MANAGER)utaxi.cpp $(MANAGER)utaxi.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)database.o: $(CODES)database.cpp $(CODES)database.hpp
-	$(CC_OBJECT) $< -o $@
-
-$(BUILDS)delete_request.o: $(CODES)delete_request.cpp $(CODES)delete_request.hpp
-	$(CC_OBJECT) $< -o $@
-
-$(BUILDS)driver.o: $(CODES)driver.cpp $(CODES)driver.hpp
-	$(CC_OBJECT) $< -o $@
-
-$(BUILDS)error_handler.o: $(CODES)error_handler.cpp $(CODES)error_handler.hpp
-	$(CC_OBJECT) $< -o $@
-
-$(BUILDS)get_request.o: $(CODES)get_request.cpp $(CODES)get_request.hpp
-	$(CC_OBJECT) $< -o $@
-
-$(BUILDS)IO_handler.o: $(CODES)IO_handler.cpp $(CODES)IO_handler.hpp
+#datas
+$(BUILDS)database.o: $(DATA)database.cpp $(DATA)database.hpp
 	$(CC_OBJECT) $< -o $@
 	
-$(BUILDS)location.o: $(CODES)location.cpp $(CODES)location.hpp
+$(BUILDS)location.o: $(DATA)location.cpp $(DATA)location.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)passenger.o: $(CODES)passenger.cpp $(CODES)passenger.hpp
+$(BUILDS)passenger.o: $(DATA)passenger.cpp $(DATA)passenger.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)person.o: $(CODES)person.cpp $(CODES)person.hpp
+$(BUILDS)person.o: $(DATA)person.cpp $(DATA)person.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)post_request.o: $(CODES)post_request.cpp $(CODES)post_request.hpp
+$(BUILDS)trip.o: $(DATA)trip.cpp $(DATA)trip.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)request.o: $(CODES)request.cpp $(CODES)request.hpp
+$(BUILDS)driver.o: $(DATA)driver.cpp $(DATA)driver.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)trip.o: $(CODES)trip.cpp $(CODES)trip.hpp
+#error
+$(BUILDS)error_handler.o: $(ERROR)error_handler.cpp $(ERROR)error_handler.hpp
 	$(CC_OBJECT) $< -o $@
+
+#requests
+$(BUILDS)delete_request.o: $(REQUEST)delete_request.cpp $(REQUEST)delete_request.hpp
+	$(CC_OBJECT) $< -o $@
+
+$(BUILDS)get_request.o: $(REQUEST)get_request.cpp $(REQUEST)get_request.hpp
+	$(CC_OBJECT) $< -o $@
+
+$(BUILDS)post_request.o: $(REQUEST)post_request.cpp $(REQUEST)post_request.hpp
+	$(CC_OBJECT) $< -o $@
+
+$(BUILDS)request.o: $(REQUEST)request.cpp $(REQUEST)request.hpp
+	$(CC_OBJECT) $< -o $@
+
+#IO
+$(BUILDS)IO_handler.o: $(IO)IO_handler.cpp $(IO)IO_handler.hpp
+	$(CC_OBJECT) $< -o $@
+
+
 
 #----------------------------------------------------------------
 .PHONY: clean clean_obj clean_exe help
 
 clean:
-	rm -r $(BUILDS)*.o utaxi.out debug.out
+	rm -r $(BUILDS)*.o utaxi.out debug.out 2> $(NULL_DEVICE)
 
 clean_exe:
-	rm -r utaxi.out debug.out
+	rm -r utaxi.out debug.out 2> $(NULL_DEVICE)
 
 clean_obj:
-	rm -r $(BUILDS)*.o
+	rm -r $(BUILDS)*.o 2> $(NULL_DEVICE)
 
 run:
 	./utaxi.out location.csv 
