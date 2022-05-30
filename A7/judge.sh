@@ -30,7 +30,7 @@ fi
 WRONG_ANSWERS=0
 TOTAL_TESTS=$(ls -1q tests/in/ | wc -l)
 
-rm tests/err/*.err
+rm tests/err/*.err 2> $NULL_DEVICE
 
 for (( i=1 ; i<=TOTAL_TESTS ; i++ ))
 do
