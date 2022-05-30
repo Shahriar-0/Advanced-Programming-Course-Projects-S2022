@@ -7,7 +7,7 @@ const std::string ROLE_KEYWORD          = "role";
 
 
 
-enum PostType { SIGNUP, ACCEPT, TRIPS, FINISH };
+enum PostType { SIGNUP, ACCEPT, POST_TRIPS, FINISH };
 
 const std::string postRequestCommands[] = {
     "signup",

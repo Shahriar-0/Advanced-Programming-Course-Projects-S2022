@@ -8,7 +8,7 @@ PostRequest::PostRequest(std::string _line) : Request(_line) {
     check_for_type();
     if (type == FINISH || type == ACCEPT)
         check_for_finish_and_accept_validation();
-    else if (type == TRIPS)
+    else if (type == POST_TRIPS)
         check_for_trips_validation();
     else if (type == SIGNUP)
         check_for_signup_validation();
@@ -18,8 +18,8 @@ void PostRequest::check_for_type() {
     std::string firstWord = commands[0];
     if (firstWord == postRequestCommands[SIGNUP])
         type = SIGNUP;
-    else if (firstWord == postRequestCommands[TRIPS])
-        type = TRIPS;
+    else if (firstWord == postRequestCommands[POST_TRIPS])
+        type = POST_TRIPS;
     else if (firstWord == postRequestCommands[FINISH])
         type = FINISH;
     else if (firstWord == postRequestCommands[ACCEPT])
@@ -70,7 +70,7 @@ void PostRequest::handle(DataBase& database) {
         if (person == nullptr)
             throw ErrorHandler(NOT_FOUND, "person not found");
         
-        if (type == TRIPS) {
+        if (type == POST_TRIPS) {
             handle_trips(database);
             return;
         }

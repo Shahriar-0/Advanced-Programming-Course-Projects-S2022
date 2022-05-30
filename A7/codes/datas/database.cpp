@@ -43,7 +43,7 @@ Trip* DataBase::find_trip(int id) {
     return nullptr;
 }
 
-void DataBase::show_trips(int id, bool sortedByCist) {
+void DataBase::show_trips(int id, bool sortedByCost) {
     if (id != ALL_TRIPS_ID) {
         Trip* trip = find_trip(id);
         if (trip == nullptr || trip->is_cancelled())
@@ -55,7 +55,7 @@ void DataBase::show_trips(int id, bool sortedByCist) {
         if (!check_for_trip_existence()) 
             std::cout << EMPTY_KEYWORD << std::endl;
         else {
-            (sortedByCist) ? show_all_trips_cost() : show_all_trips_id();
+            (sortedByCost) ? show_all_trips_cost() : show_all_trips_id();
         }
     }
 }
@@ -65,7 +65,7 @@ void DataBase::show_all_trips_id() const {
         std::cout << *it;
 }
 
-bool compare(const Trip* first, const Trip* second) { return first->cost < second->cost; }
+bool compare(const Trip* first, const Trip* second) { return first->cost > second->cost; }
 
 void DataBase::show_all_trips_cost() const {
     std::vector<Trip*> sortedByCostTrips(trips);

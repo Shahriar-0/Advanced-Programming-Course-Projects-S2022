@@ -9,7 +9,7 @@
 
 const std::string PASSENGER_KEYWORD = "passenger";
 const std::string DRIVER_KEYWORD    = "driver";
-const std::string EMPTY_KEYWORD     = "Empty";
+const std::string EMPTY_KEYWORD     = "EMPTY";
 
 constexpr int ALL_TRIPS_ID          = 0;
 

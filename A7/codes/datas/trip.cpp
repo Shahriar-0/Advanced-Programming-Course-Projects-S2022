@@ -37,7 +37,7 @@ void Trip::has_cancelled() {
 double Trip::calculate_cost() const { 
     double inHurryCoefficient = (inHurry)? 1.2 : 1;
     return (*origin - *destination) * 
-        (origin->get_traffic_coefficient() - destination->get_traffic_coefficient()) *
+        (origin->get_traffic_coefficient() + destination->get_traffic_coefficient()) *
         DISTANCE_TO_COST_CONVERTER * inHurryCoefficient;
 }
 
@@ -54,7 +54,10 @@ std::ostream& operator<<(std::ostream& out, TripState state) {
 std::ostream& operator<<(std::ostream& out, const Trip& trip) {
     if (trip.is_cancelled())
         return out;
-    out << trip.id << " " << *(trip.passenger) << " " << *(trip.origin) << " " <<  *(trip.destination) << " " << trip.cost << " " << trip.state << std::endl;
+    out << trip.id << " " << *(trip.passenger) << " " 
+        << *(trip.origin) << " " <<  *(trip.destination) << " ";
+    out << std::fixed << std::setprecision(2) << trip.cost << " ";
+    out << trip.state << std::endl;
     return out;
 }
 

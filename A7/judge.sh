@@ -41,9 +41,7 @@ do
     then   
         if [ $WRONG_ANSWERS -eq 0 ];
         then 
-            echo ;
             echo -e "${RED}SOME FAILED :(${ESC}"
-            echo ;
         fi
 
         WRONG_ANSWERS=$((WRONG_ANSWERS+1))
@@ -55,9 +53,7 @@ done
 
 if [ $WRONG_ANSWERS -eq 0 ];
 then
-    echo ;
     echo -e "${GREEN}ALL PASSED :)${ESC}"
 else 
     echo "$WRONG_ANSWERS out of ${TOTAL_TESTS} failed."
 fi
-echo ;

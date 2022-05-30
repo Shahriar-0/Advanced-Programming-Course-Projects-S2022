@@ -8,20 +8,32 @@ GetRequest::GetRequest(std::string line) : Request(line) {
     //here opposite the other scenarios it's alright not to pass an id
     id = (idIndex == NOT_FOUND_INDEX) ? EMPTY_ID : stoi(commands[idIndex]);
     check_for_type();
-    //trips validation is done in the constructor of Request
-    //so we only need to check for cost
+
     if (type == COST)
         check_for_cost_validation();
+    else if (type == GET_TRIPS)
+        check_for_trips_validation();
 }
 
 void GetRequest::check_for_type() {
     std::string firstWord = commands[0];
-    if (getRequestCommands[TRIPS] == firstWord) 
-        type = TRIPS;
+    if (getRequestCommands[GET_TRIPS] == firstWord) 
+        type = GET_TRIPS;
     else if (getRequestCommands[COST] == firstWord) 
         type = COST;
     else
         throw ErrorHandler(NOT_FOUND, "not one of get-request commands");
+}
+
+void GetRequest::check_for_trips_validation() {
+    if (id != EMPTY_ID)
+        return; //here we check for sort_by_cost parameter if we have id there's no need to sort
+
+    int sortIndex = find_index(SORT_BY_COST_KEYWORD);
+    if (sortIndex == NOT_FOUND_INDEX)
+        throw ErrorHandler(BAD_REQUEST, "sorting value not found in command");
+
+    sortByCost = (commands[sortIndex] == AGREE)? true : false;
 }
 
 void GetRequest::check_for_cost_validation() {
@@ -45,16 +57,15 @@ void GetRequest::handle(DataBase& database) {
     if (person == nullptr)
             throw ErrorHandler(NOT_FOUND, "person not found");
 
-    if (type == TRIPS) 
+    if (type == GET_TRIPS) 
         handle_trips(database);
     else if (type == COST) 
         handle_cost(database);
-    
 }
 
 void GetRequest::handle_trips(DataBase& database) {
     person->can_see_trips();
-    database.show_trips(id, inHurry);
+    database.show_trips(id, sortByCost);
 }
 
 void GetRequest::handle_cost(DataBase& database) {
@@ -68,5 +79,5 @@ void GetRequest::handle_cost(DataBase& database) {
         throw ErrorHandler(PERMISSION_DENIED, "not a passenger");
 
     Trip trip(origin, destination, inHurry);
-    std::cout << trip.calculate_cost() << std::endl;
+    std::cout << std::fixed << std::setprecision(2) << trip.calculate_cost() << std::endl;
 }

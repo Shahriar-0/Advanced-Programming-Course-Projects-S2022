@@ -68,6 +68,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "valarray": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "iomanip": "cpp"
     }
 }
