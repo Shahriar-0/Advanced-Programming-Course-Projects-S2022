@@ -1,22 +1,23 @@
-POST signup ? role passenger username amin
-POST signup ? role player username arshia
-POST signup ? username mina role driver
-POST signup ? username amin role passenger
-POST signup ? role passenger username mmd
+POST signup ? role driver username arshia
 POST signup ? role driver username mobina
+POST signup ? username mina role driver
+POST signup ? role passenger username mmd_n
+POST signup ? role passenger username amin
 POST signup ? username elahe role passenger
-POST signup ? role driver username aliH
-POST trips ? username elahe destination Tehranpars
-POST trips ? destination Farahzad username mmd origin Enghelab
-POST trips ? origin Marzdaran destination SaadatAbad username zahra
-POST trips ? origin Marzdaran destination SaadatAbad username amin
-POST trips ? username elahe origin Marzdaran destination Enghelab
-POST trips ? username mina origin Enghelab destination Marzdaran
-GET trips ? username mobina
-GET trips ? id 1 username mina
+GET cost ? username amin origin Tehranpars destination SaadatAbad in_hurry yes
+GET cost ? origin Enghelab destination Marzdaran in_hurry no username mmd_n
+GET cost ? username arshia origin Enghelab destination Tehranpars in_hurry no
+POST trips ? username amin origin Tehranpars destination SaadatAbad in_hurry yes
+GET trips ? username arshia sort_by_cost no
+POST accept ? username arshia id 5
+POST accept ? username arshia id 1
 POST accept ? username mina id 1
-POST accept ? id 1 username aliH
-POST delete ? id 1 username elahe
-POST finish ? username mina id 5
-POST finish ? username mina id 2
-GET trips ? username aliH
+POST trips ? username mmd_n destination SaadatAbad in_hurry no origin Enghelab
+POST trips ? username elahe origin Enghelab destination Tehranpars in_hurry yes
+GET trips ? username mobina sort_by_cost yes
+POST accept ? id 2 username mobina
+POST finish ? id 1 username arshia
+POST accept ? id 3 username mobina
+GET trips ? id 2 username arshia
+POST finish ? id 2 username mobina
+GET trips ? username arshia sort_by_cost no

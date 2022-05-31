@@ -13,6 +13,11 @@ constexpr int NOT_FOUND_INDEX           = -1;
 const std::string EMPTY_STRING          = "";
 const std::string ID_KEYWORD            = "id";
 const std::string USERNAME_KEYWORD      = "username";
+const std::string DESTINATION_KEYWORD   = "destination";
+const std::string ORIGIN_KEYWORD        = "origin";
+const std::string IN_HURRY_KEYWORD      = "in_hurry";
+const std::string AGREE                 = "yes";
+const std::string DISAGREE              = "no";
 
 class Request {
 public:

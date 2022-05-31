@@ -4,11 +4,10 @@
 #include "request.hpp"
 
 const std::string ROLE_KEYWORD          = "role";
-const std::string DESTINATION_KEYWORD   = "destination";
-const std::string ORIGIN_KEYWORD        = "origin";
 
 
-enum PostType { SIGNUP, ACCEPT, TRIPS, FINISH };
+
+enum PostType { SIGNUP, ACCEPT, POST_TRIPS, FINISH };
 
 const std::string postRequestCommands[] = {
     "signup",
@@ -36,9 +35,10 @@ private:
     std::string origin;
     std::string destination;
     std::string role;
-    int id;
     Person* person;
     Trip* trip;
+    int id;
+    bool inHurry;
 };
 
 #endif

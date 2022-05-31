@@ -43,21 +43,35 @@ Trip* DataBase::find_trip(int id) {
     return nullptr;
 }
 
-void DataBase::show_trips(int id) {
-    if (id == ALL_TRIPS_ID) {
-        if (check_for_trip_existence()) 
-            for (auto it : trips) 
-                std::cout << *it;
-        else
-            std::cout << EMPTY_KEYWORD << std::endl;
-    }
-    else {
+void DataBase::show_trips(int id, bool sortedByCost) {
+    if (id != ALL_TRIPS_ID) {
         Trip* trip = find_trip(id);
         if (trip == nullptr || trip->is_cancelled())
             std::cout << EMPTY_KEYWORD << std::endl;
         else
             std::cout << *trip;
     }
+    else {
+        if (!check_for_trip_existence()) 
+            std::cout << EMPTY_KEYWORD << std::endl;
+        else {
+            (sortedByCost) ? show_all_trips_cost() : show_all_trips_id();
+        }
+    }
+}
+
+void DataBase::show_all_trips_id() const {
+    for (auto it : trips) 
+        std::cout << *it;
+}
+
+bool compare(const Trip* first, const Trip* second) { return first->cost > second->cost; }
+
+void DataBase::show_all_trips_cost() const {
+    std::vector<Trip*> sortedByCostTrips(trips);
+    std::sort(sortedByCostTrips.begin(), sortedByCostTrips.end(), compare);
+    for (auto it : sortedByCostTrips) 
+        std::cout << *it;
 }
 
 bool DataBase::check_for_trip_existence() const {
@@ -69,7 +83,7 @@ bool DataBase::check_for_trip_existence() const {
     return false;
 }
 
-void DataBase::check_and_add_trip(Passenger* passenger, std::string origin, std::string destination) { 
+void DataBase::check_and_add_trip(Passenger* passenger, std::string origin, std::string destination, bool inHurry) { 
     Location* originLoc = find_location(origin);
     Location* destinationLoc = find_location(destination);
     
@@ -79,7 +93,7 @@ void DataBase::check_and_add_trip(Passenger* passenger, std::string origin, std:
         throw ErrorHandler(NOT_FOUND, "destination not found");
 
     //the + 1 is for id, cause each trip should have a unique id 
-    add_trip(new Trip(passenger, trips.size() +  1, originLoc, destinationLoc));
+    add_trip(new Trip(passenger, trips.size() +  1, originLoc, destinationLoc, inHurry));
 }
 
 void DataBase::add_location(Location* location) { locations.push_back(location); }

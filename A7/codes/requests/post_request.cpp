@@ -8,9 +8,9 @@ PostRequest::PostRequest(std::string _line) : Request(_line) {
     check_for_type();
     if (type == FINISH || type == ACCEPT)
         check_for_finish_and_accept_validation();
-    if (type == TRIPS)
+    else if (type == POST_TRIPS)
         check_for_trips_validation();
-    if (type == SIGNUP)
+    else if (type == SIGNUP)
         check_for_signup_validation();
 }
 
@@ -18,8 +18,8 @@ void PostRequest::check_for_type() {
     std::string firstWord = commands[0];
     if (firstWord == postRequestCommands[SIGNUP])
         type = SIGNUP;
-    else if (firstWord == postRequestCommands[TRIPS])
-        type = TRIPS;
+    else if (firstWord == postRequestCommands[POST_TRIPS])
+        type = POST_TRIPS;
     else if (firstWord == postRequestCommands[FINISH])
         type = FINISH;
     else if (firstWord == postRequestCommands[ACCEPT])
@@ -40,13 +40,17 @@ void PostRequest::check_for_finish_and_accept_validation() {
 void PostRequest::check_for_trips_validation() {
     int originId = find_index(ORIGIN_KEYWORD);
     int destinationId = find_index(DESTINATION_KEYWORD);
+    int inHurryIndex = find_index(IN_HURRY_KEYWORD);
     if (originId == NOT_FOUND_INDEX)
         throw ErrorHandler(BAD_REQUEST, "origin not found in command");
     if (destinationId == NOT_FOUND_INDEX)
         throw ErrorHandler(BAD_REQUEST, "destination not found in command");
-    
+    if (inHurryIndex == NOT_FOUND_INDEX)
+        throw ErrorHandler(BAD_REQUEST, "in hurry not found in command");
+
     origin = commands[originId];
-    destination = commands[destinationId];
+    destination = commands[destinationId];    
+    inHurry = (commands[inHurryIndex] == AGREE)? true : false;
 }
 
 void PostRequest::check_for_signup_validation() {
@@ -66,7 +70,7 @@ void PostRequest::handle(DataBase& database) {
         if (person == nullptr)
             throw ErrorHandler(NOT_FOUND, "person not found");
         
-        if (type == TRIPS) {
+        if (type == POST_TRIPS) {
             handle_trips(database);
             return;
         }
@@ -89,9 +93,9 @@ void PostRequest::handle_trips(DataBase& database) {
 
     Passenger* passenger = dynamic_cast<Passenger*> (person);
     if (passenger == NULL)
-        throw ErrorHandler(BAD_REQUEST, "not a passenger");
+        throw ErrorHandler(PERMISSION_DENIED, "not a passenger");
 
-    database.check_and_add_trip(passenger,  origin, destination);
+    database.check_and_add_trip(passenger,  origin, destination, inHurry);
 }
 
 void PostRequest::handle_signup(DataBase& database) { database.check_and_add_person(username, role); }

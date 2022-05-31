@@ -5,23 +5,29 @@ Location::Location(std::string _name, int _latitude, int _longitude)
 
 void operator>>(std::string& line, Location& location) {
     size_t index = line.find(FILE_DELIMITER);
-    if (index == std::string::npos)
-        throw ErrorHandler(BAD_REQUEST, "invalid input file");
     location.name = line.substr(0, index);
     line = line.substr(index + 1);
 
     index = line.find(FILE_DELIMITER);
-    if (index == std::string::npos)
-        throw ErrorHandler(BAD_REQUEST, "invalid input file");
     location.latitude = stod(line.substr(0, index));
     line = line.substr(index + 1);
 
-    location.longitude = stod(line);
+    index = line.find(FILE_DELIMITER);
+    location.longitude = stod(line.substr(0, index));
+    line = line.substr(index + 1);
+
+    location.trafficCoefficient = stoi(line);
 }
+
 
 std::ostream& operator<<(std::ostream& out, Location& location) {
     out << location.name;
     return out;
 }
 
+double Location::operator-(const Location& other) const {
+    return EUCLIDEAN_CONVERTER * (sqrt(pow(latitude - other.latitude, 2) + pow(longitude - other.longitude, 2)));
+}
+
+int Location::get_traffic_coefficient() const { return trafficCoefficient; }
 bool Location::operator==(std::string _name) const {  return name == _name; }

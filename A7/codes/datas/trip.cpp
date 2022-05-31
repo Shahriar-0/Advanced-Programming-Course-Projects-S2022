@@ -1,8 +1,14 @@
 #include "trip.hpp"
 
-Trip::Trip(Passenger* _passenger, int _id, Location* _origin, Location* _destination)
-    : passenger(_passenger), id(_id), origin(_origin), destination(_destination) {
+Trip::Trip(Passenger* _passenger, int _id, Location* _origin, Location* _destination, bool _inHurry)
+    : passenger(_passenger), id(_id), origin(_origin), destination(_destination), inHurry(_inHurry) {
     state = NOT_ACCEPTED_YET;
+    cost = calculate_cost();
+} 
+
+Trip::Trip(Location* _origin, Location* _destination, bool _inHurry)
+    : origin(_origin), destination(_destination), inHurry(_inHurry) {
+    //this constructor is only for calculating the cost
 } 
 
 void Trip::has_ended() {
@@ -28,6 +34,13 @@ void Trip::has_cancelled() {
     //we haven't assign a driver yet so there is no need to do anything about it
 }
 
+double Trip::calculate_cost() const { 
+    double inHurryCoefficient = (inHurry)? 1.2 : 1;
+    return (*origin - *destination) * 
+        (origin->get_traffic_coefficient() + destination->get_traffic_coefficient()) *
+        DISTANCE_TO_COST_CONVERTER * inHurryCoefficient;
+}
+
 std::ostream& operator<<(std::ostream& out, TripState state) {
     if (state == NOT_ACCEPTED_YET)
         out << "waiting";
@@ -41,7 +54,10 @@ std::ostream& operator<<(std::ostream& out, TripState state) {
 std::ostream& operator<<(std::ostream& out, const Trip& trip) {
     if (trip.is_cancelled())
         return out;
-    out << trip.id << " " << *(trip.passenger) << " " << *(trip.origin) << " " <<  *(trip.destination) << " " << trip.state << std::endl;
+    out << trip.id << " " << *(trip.passenger) << " " 
+        << *(trip.origin) << " " <<  *(trip.destination) << " ";
+    out << std::fixed << std::setprecision(2) << trip.cost << " ";
+    out << trip.state << std::endl;
     return out;
 }
 

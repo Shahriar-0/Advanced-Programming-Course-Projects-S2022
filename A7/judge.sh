@@ -30,7 +30,7 @@ fi
 WRONG_ANSWERS=0
 TOTAL_TESTS=$(ls -1q tests/in/ | wc -l)
 
-rm tests/err/*.err
+rm tests/err/*.err 2> $NULL_DEVICE
 
 for (( i=1 ; i<=TOTAL_TESTS ; i++ ))
 do
@@ -41,9 +41,7 @@ do
     then   
         if [ $WRONG_ANSWERS -eq 0 ];
         then 
-            echo ;
             echo -e "${RED}SOME FAILED :(${ESC}"
-            echo ;
         fi
 
         WRONG_ANSWERS=$((WRONG_ANSWERS+1))
@@ -55,9 +53,7 @@ done
 
 if [ $WRONG_ANSWERS -eq 0 ];
 then
-    echo ;
     echo -e "${GREEN}ALL PASSED :)${ESC}"
 else 
     echo "$WRONG_ANSWERS out of ${TOTAL_TESTS} failed."
 fi
-echo ;

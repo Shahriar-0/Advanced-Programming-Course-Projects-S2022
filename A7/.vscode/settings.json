@@ -67,6 +67,8 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "ranges": "cpp",
+        "iomanip": "cpp"
     }
 }

@@ -1,22 +1,20 @@
-POST signup ? username passenger1 role passenger
-POST signup ? username passenger2 role passenger
-POST signup ? username passenger2 role passenger
-POST signup ? username passenger3 role passenger
-POST signup ? username passenger4 role passenger
-POST signup ? role driver username passenger1
-POST signup ? role driver username deriver1
-POST signup ? role driver username deriver2
-POST signup ? role driver username deriver3
-POST trips ? username passenger1 destination Tehranpars origin Enghelab
-POST trips ? username passenger2 destination Enghelab origin Marzdaran
-POST trips ? username passenger3 destination Enghelab origin Tehranpars
-POST trips ? username passenger4 destination Marzdaran origin Enghelab
-DELETE trips ? username passenger1 id 5
-DELETE trips ? username passenger1 id 1
-POST accept ? username deriver1 id 2
-POST accept ? username deriver1 id 3
-POST accept ? username deriver2 id 4
-GET trips ? username deriver1
-POST finish ? username deriver1 id 2
-POST finish ? username deriver2 id 4
-GET trips ? username deriver2
+POST signup ? username mmd_arshia role driver
+POST signup ? role driver username mmd_S
+POST signup ? username mobina role driver
+POST signup ? role driver username elahe
+POST signup ? role passenger username amin
+POST signup ? role passenger username zeinab
+POST signup ? username parsa role passenger
+GET cost ? username amin origin Enghelab destination SaadatAbad in_hurry yes
+GET cost ? origin Tehranpars destination Marzdaran username zeinab in_hurry no
+POST trips ? username amin origin Enghelab destination SaadatAbad in_hurry yes
+POST trips ? username mmd_arshia origin SaadatAbad destination Marzdaran in_hurry no
+POST trips ? in_hurry no username zeinab destination Marzdaran origin Enghelab
+POST trips ? username parsa destination SaadatAbad origin Farahzad in_hurry yes
+GET trips ? username mobina sort_by_cost yes
+POST accept ? username mmd_arshia id 2
+POST finish ? username mmd_arshia id 2
+POST accept ? username elahe id 3
+POST accept ? id 3 username mmd_S
+POST trips ? username mobina origin Enghelab destination SaadatAbad in_hurry yes
+GET trips ? username elahe sort_by_cost no
