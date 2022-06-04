@@ -4,8 +4,8 @@ DEBUG 		:= -g
 CC_OBJECT 	:= $(CC) -c
 
 #directories
-CODES 		:= codes/
-BUILDS 		:= builds/
+CODES 		:= code/
+BUILDS 		:= build/
 DATA 		:= $(CODES)datas/
 ERROR 		:= $(CODES)error/
 IO 			:= $(CODES)IO/
