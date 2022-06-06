@@ -3,6 +3,9 @@
                 "xstring": "cpp",
                 "iostream": "cpp",
                 "algorithm": "cpp",
-                "stdexcept": "cpp"
+                "stdexcept": "cpp",
+                "cstddef": "cpp",
+                "ranges": "cpp",
+                "functional": "cpp"
         }
 }
