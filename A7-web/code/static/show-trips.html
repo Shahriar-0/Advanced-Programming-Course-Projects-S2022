@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="home.css">
+    <meta charset="UTF-8">
+    <title>UTAXI</title>
+</head>
+
+<h1 class="title">UTAXI!</h1>
+
+<body class="body">
+    <div>
+        <form action="/show-trips" method="post">
+            <fieldset>
+                <legend>Trip</legend>
+                <label for="username">Username</label><br>
+                <input type="text" id="username" name="username" required><br>
+                <br><label for="sort_by_cost">should be sorted by cost:</label><br>
+                <select id="sort_by_cost" name="sort_by_cost">
+                    <option value="no" style="font-size:20px; " selected>no</option>
+                    <option value="yes" style="font-size:20px;">yes</option>
+                </select>
+                <br><br>
+                <br><input type="submit">
+                <input type="reset">
+            </fieldset>
+        </form>
+    </div>
+
+</body>
+
+</html>
