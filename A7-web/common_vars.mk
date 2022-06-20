@@ -11,7 +11,9 @@ ERROR 		:= $(CODES)error/
 IO 			:= $(CODES)IO/
 MANAGER 	:= $(CODES)manager/
 REQUEST 	:= $(CODES)requests/
-
+HANDLERS    := $(CODES)handler/
+SERVER      := $(CODES)server/
+UTILS       := $(CODES)utils/
 
 #working with files
 ifeq ($(OS),Windows_NT)

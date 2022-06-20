@@ -7,7 +7,7 @@ const std::string DeleteRequestCommands[] = {
     "trips"
 };
 
-class DeleteRequest : public Request {
+class DeleteRequest : public SystemRequest {
 public:
     DeleteRequest(std::string _line);
     virtual void handle(DataBase& database);

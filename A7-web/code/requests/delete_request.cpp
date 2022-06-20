@@ -1,6 +1,6 @@
 #include "delete_request.hpp"
 
-DeleteRequest::DeleteRequest(std::string line) : Request(line) {
+DeleteRequest::DeleteRequest(std::string line) : SystemRequest(line) {
     int idIndex = find_index(ID_KEYWORD);
     check_for_type();
     if (idIndex == NOT_FOUND_INDEX)

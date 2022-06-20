@@ -1,6 +1,6 @@
 #include "get_request.hpp"
 
-GetRequest::GetRequest(std::string line) : Request(line) {
+GetRequest::GetRequest(std::string line) : SystemRequest(line) {
     originName = destinationName = EMPTY_STRING;
     person = nullptr;
     inHurry = false;

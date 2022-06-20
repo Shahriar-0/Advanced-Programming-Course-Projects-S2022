@@ -9,14 +9,14 @@
 #include "../requests/post_request.hpp"
 #include "../datas/database.hpp"
 
-enum RequestType { GET, POST, DELETE };
+enum RequestType { GET_STRING, POST_STRING, DELETE_STRING };
 const std::string RequestTypeString[] { "GET", "POST", "DELETE" };
 
 class IOHandler {
 public:
     IOHandler(std::string filename);
     void read_locations(DataBase& database);
-    Request* generate_request(std::string line);
+    SystemRequest* generate_request(std::string line);
 private:
     std::string filename;
 };

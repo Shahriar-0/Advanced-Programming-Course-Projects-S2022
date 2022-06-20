@@ -18,14 +18,14 @@ void IOHandler::read_locations(DataBase& database) {
     }
 }
 
-Request* IOHandler::generate_request(std::string line) {
+SystemRequest* IOHandler::generate_request(std::string line) {
     size_t index = line.find(COMMAND_DELIMITER);
     std::string type = line.substr(0, index);
-    if (type == RequestTypeString[GET])
+    if (type == RequestTypeString[GET_STRING])
         return new GetRequest(line.substr(index + 1));
-    else if (type == RequestTypeString[POST]) 
+    else if (type == RequestTypeString[POST_STRING]) 
         return new PostRequest(line.substr(index + 1));
-    else if (type == RequestTypeString[DELETE])
+    else if (type == RequestTypeString[DELETE_STRING])
         return new DeleteRequest(line.substr(index + 1));
     else 
         throw ErrorHandler(BAD_REQUEST, "not one of the three basic types");

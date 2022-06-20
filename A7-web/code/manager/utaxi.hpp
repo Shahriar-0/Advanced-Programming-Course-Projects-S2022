@@ -17,7 +17,7 @@ public:
 private:
     DataBase database;
     IOHandler IOHandlerVar;
-    Request* request;
+    SystemRequest* request;
 };
 
 #endif

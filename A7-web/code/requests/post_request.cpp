@@ -1,6 +1,6 @@
 #include "post_request.hpp"
 
-PostRequest::PostRequest(std::string _line) : Request(_line) {
+PostRequest::PostRequest(std::string _line) : SystemRequest(_line) {
     origin = destination = role = EMPTY_STRING;
     id = EMPTY_ID;
     person = nullptr;

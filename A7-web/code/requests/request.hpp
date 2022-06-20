@@ -19,10 +19,10 @@ const std::string IN_HURRY_KEYWORD      = "in_hurry";
 const std::string AGREE                 = "yes";
 const std::string DISAGREE              = "no";
 
-class Request {
+class SystemRequest {
 public:
-    Request(std::string line);
-    ~Request() = default;
+    SystemRequest(std::string line);
+    ~SystemRequest() = default;
     virtual void handle(DataBase& database) = 0;
 protected:
     int find_index(std::string word);

@@ -16,7 +16,7 @@ const std::string postRequestCommands[] = {
     "finish"
 };
 
-class PostRequest : public Request {
+class PostRequest : public SystemRequest {
 public:
     PostRequest(std::string line);
     virtual void handle(DataBase& database);
