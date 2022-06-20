@@ -11,25 +11,24 @@
 
 <h1 class="title">UTAXI!</h1>
 
-<body>
+<body class="body">
     <div>
-        <form class="trip_box" action="/trip">
+        <form action="/ask-for-trip" method="post">
             <fieldset>
                 <legend>Trip</legend>
                 <label for="username">Username</label><br>
-                <input type="text" id="username" name="username"><br>
+                <input type="text" id="username" name="username" required><br>
                 <label for="origin">Origin</label><br>
-                <input type="text" id="origin" name="origin"><br>
+                <input type="text" id="origin" name="origin"  required><br>
                 <label for="destination">Destination</label><br>
-                <input type="text" id="destination" name="destination"><br>
-                <br><label for="hurry">in hurry:</label>
+                <input type="text" id="destination" name="destination" required><br>
+                <br><label for="hurry">are you in hurry:</label>
                 <select id="hurry" name="hurry">
                     <option value="yes">yes</option>
                     <option value="no">no</option>
                 </select><br>
                 <br><input type="submit">
                 <input type="reset">
-
             </fieldset>
         </form>
     </div>

@@ -1,9 +1,9 @@
 .title {
     box-sizing: border-box;
     text-align: center;
-    padding: 30px 0px;
+    padding: 40px 0px;
     margin: 20px 20px;
-    color: rgb(40, 240, 14);
+    color: rgb(241, 233, 3);
 }
 
 .body {
@@ -13,47 +13,3 @@
     background-size: 100% 100%
 }
 
-.signup_box {
-    background-color: rgb(0, 0, 0);
-    padding: 20px 20px;
-    margin: 40px 40px;
-    color: white;
-    filter: opacity(0.95);
-    font-style: unset;
-    font-size: 25px;
-}
-
-.container-signup {
-    border-radius: 10px;
-    box-sizing: border-box;
-    display: inline-block;
-    background-color: rgb(233, 220, 34);
-    height: 350px;
-    padding: 20px 20px;
-    margin: 40px 40px;
-    color: white;
-    filter: opacity(0.9);
-    box-shadow: black;
-    text-align: center;
-}
-
-.ticon {
-    margin-top: 100px;
-    width: 150px;
-}
-
-.signup-go {
-    display: block;
-    color: rgb(57, 54, 54);
-    margin-top: 40px;
-    font-style: unset;
-    font-size: 25px;
-}
-
-.trip_box {
-    color: white;
-    background-color: rgb(0, 0, 0);
-    padding: 20px 20px;
-    filter: opacity(0.85);
-    margin: 40px 40px;
-}
