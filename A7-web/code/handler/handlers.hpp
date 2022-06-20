@@ -37,6 +37,14 @@ private:
     UTaxi* manager;
 };
 
+class GetCostHandler : public RequestHandler {
+public:
+    GetCostHandler(UTaxi* _manager) { manager = _manager; };
+    Response* callback(Request* request) override;
+private:
+    UTaxi* manager;
+};
+
 class AcceptTripHandler : public RequestHandler {
 public:
     AcceptTripHandler(UTaxi* _manager) { manager = _manager; };

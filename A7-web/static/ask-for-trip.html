@@ -10,7 +10,7 @@
 <body class="body">
     <div>
         <br/><br/><br/><br/><br/>
-        <form action="/ask-for-trip" method="post">
+        <form action="/submit-trip" method="get">
             <fieldset style="border: none;">
                 <legend>Trip</legend>
                 <label for="username">Username</label><br>
@@ -23,9 +23,9 @@
                 <select id="hurry" name="hurry">
                     <option value="yes">yes</option>
                     <option value="no">no</option>
-                </select><br>
-                <br><input type="submit">
-                <input type="reset">
+                </select><br/><br/>
+                <button type="submit">Submit</button>
+                <button type="submit" formaction="/get-cost">Get Cost</button>
             </fieldset>
         </form>
     </div>

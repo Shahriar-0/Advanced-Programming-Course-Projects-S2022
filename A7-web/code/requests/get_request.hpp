@@ -19,7 +19,7 @@ public:
 private:
     void check_for_cost_validation();
     void check_for_trips_validation();
-    void handle_cost(DataBase& database);
+    void handle_cost(DataBase& database, Response* response);
     void handle_trips(DataBase& database);
     void check_for_type();
     std::string originName;
