@@ -52,7 +52,7 @@ void GetRequest::check_for_cost_validation() {
     inHurry = (commands[inHurryIndex] == AGREE)? true : false;
 }
 
-void GetRequest::handle(DataBase& database) {
+void GetRequest::handle(DataBase& database, Response* response) {
     person = database.find_person(username);
     if (person == nullptr)
             throw ErrorHandler(NOT_FOUND, "person not found");

@@ -61,7 +61,7 @@ void PostRequest::check_for_signup_validation() {
     role = commands[roleIndex];
 }
 
-void PostRequest::handle(DataBase& database) {
+void PostRequest::handle(DataBase& database, Response* response) {
     if (type == SIGNUP)
         handle_signup(database);    
     else {
@@ -71,7 +71,7 @@ void PostRequest::handle(DataBase& database) {
             throw ErrorHandler(NOT_FOUND, "person not found");
         
         if (type == POST_TRIPS) {
-            handle_trips(database);
+            handle_trips(database, response);
             return;
         }
 
@@ -88,14 +88,14 @@ void PostRequest::handle(DataBase& database) {
     }
 }
 
-void PostRequest::handle_trips(DataBase& database) {
+void PostRequest::handle_trips(DataBase& database, Response* response) {
     person->can_ask_for_a_trip();
 
     Passenger* passenger = dynamic_cast<Passenger*> (person);
     if (passenger == NULL)
         throw ErrorHandler(PERMISSION_DENIED, "not a passenger");
 
-    database.check_and_add_trip(passenger,  origin, destination, inHurry);
+    database.check_and_add_trip(passenger,  origin, destination, inHurry, response);
 }
 
 void PostRequest::handle_signup(DataBase& database) { database.check_and_add_person(username, role); }

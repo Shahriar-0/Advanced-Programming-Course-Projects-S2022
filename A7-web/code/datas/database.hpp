@@ -6,6 +6,9 @@
 #include "driver.hpp"
 #include "trip.hpp"
 #include "location.hpp"
+#include <string>
+#include <cstring>
+#include "../utils/response.hpp"
 
 const std::string PASSENGER_KEYWORD = "passenger";
 const std::string DRIVER_KEYWORD    = "driver";
@@ -19,7 +22,7 @@ public:
     ~DataBase();
     void add_location(Location* location);
     void check_and_add_person(std::string username, std::string role);
-    void check_and_add_trip(Passenger* passenger, std::string origin, std::string destination, bool inHurry);
+    void check_and_add_trip(Passenger* passenger, std::string origin, std::string destination, bool inHurry, Response* response);
     void show_trips(int id, bool sortedByCist);
     Trip* find_trip(int id);
     Person* find_person(std::string username);
@@ -29,7 +32,7 @@ private:
     void show_all_trips_id() const;
     void show_all_trips_cost() const;
     bool check_for_trip_existence() const;
-    void add_trip(Trip* trip); 
+    void add_trip(Trip* trip, Response* response); 
     void add_person(Person* person);
     std::vector<Location*> locations;
     std::vector<Person*> people;

@@ -14,7 +14,7 @@ const std::string SORT_BY_COST_KEYWORD = "sort_by_cost";
 class GetRequest : public SystemRequest {
 public:
     GetRequest(std::string line);
-    virtual void handle(DataBase& database);
+    virtual void handle(DataBase& database, Response* response);
 
 private:
     void check_for_cost_validation();

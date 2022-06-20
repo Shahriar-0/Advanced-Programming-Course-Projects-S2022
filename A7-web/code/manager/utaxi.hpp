@@ -9,11 +9,12 @@
 #include "../requests/post_request.hpp"
 #include "../IO/IO_handler.hpp"
 #include "../error/error_handler.hpp"
+#include "../utils/response.hpp"
 
 class UTaxi {
 public:
     UTaxi(std::string filename);
-    void run();
+    void run(std::string line, std::string username, Response* response);
 private:
     DataBase database;
     IOHandler IOHandlerVar;

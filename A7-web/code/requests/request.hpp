@@ -4,6 +4,7 @@
 #include <map>
 #include <utility>
 #include <string>
+#include "../utils/response.hpp"
 
 constexpr char COMMAND_DELIMITER        = ' ';
 
@@ -23,7 +24,7 @@ class SystemRequest {
 public:
     SystemRequest(std::string line);
     ~SystemRequest() = default;
-    virtual void handle(DataBase& database) = 0;
+    virtual void handle(DataBase& database, Response* response) = 0;
 protected:
     int find_index(std::string word);
     std::vector<std::string> commands;
