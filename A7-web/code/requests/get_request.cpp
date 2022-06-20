@@ -52,20 +52,20 @@ void GetRequest::check_for_cost_validation() {
     inHurry = (commands[inHurryIndex] == AGREE)? true : false;
 }
 
-void GetRequest::handle(DataBase& database, Response* response) {
+void GetRequest::handle(DataBase& database, Response* response, std::string username) {
     person = database.find_person(username);
     if (person == nullptr)
             throw ErrorHandler(NOT_FOUND, "person not found");
 
     if (type == GET_TRIPS) 
-        handle_trips(database);
+        handle_trips(database, response, username);
     else if (type == COST) 
         handle_cost(database, response);
 }
 
-void GetRequest::handle_trips(DataBase& database) {
+void GetRequest::handle_trips(DataBase& database, Response* response, std::string username) {
     person->can_see_trips();
-    database.show_trips(id, sortByCost);
+    database.show_trips(id, sortByCost, response, username);
 }
 
 void GetRequest::handle_cost(DataBase& database, Response* response) {

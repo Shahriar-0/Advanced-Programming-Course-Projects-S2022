@@ -41,6 +41,22 @@ double Trip::calculate_cost() const {
         DISTANCE_TO_COST_CONVERTER * inHurryCoefficient;
 }
 
+void Trip::add_information_to_body(std::string& body, std::string username) {
+    body += "<tr>";
+    body += "<th>" + std::to_string(id) + "</th>";
+    body += "<th>" + passenger->get_username() + "</th>";
+    body += "<th>" + origin->get_name() + "</th>";
+    body += "<th>" + destination->get_name() + "</th>";
+    body += "<th>" + std::to_string(cost) + "</th>";
+    if (state == NOT_ACCEPTED_YET)
+        body += "<th><a style='font-size: small;' href='/accept-trip?id=" + std::to_string(id) + "&username=" + username + "'>accept</a></th>";
+    else if (state == ON_GOING)
+        body += "<th><a style='font-size: small;' href='/finish-trip?id=" + std::to_string(id) + "&username=" + username + "'>finish</a></th>";
+    else if (state == DONE)
+        body += "<th>done</th>";
+    body += "</tr>";
+}
+
 std::ostream& operator<<(std::ostream& out, TripState state) {
     if (state == NOT_ACCEPTED_YET)
         out << "waiting";

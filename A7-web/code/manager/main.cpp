@@ -13,7 +13,11 @@ int main(int argc, char* argv[]) {
         server.get("/submit-trip", new SubmitTripHandler(&manager));
         server.get("/get-cost", new GetCostHandler(&manager));
         server.get("/delete-trip", new ShowPage("static/delete-trip.html"));
+        server.post("/delete-trip", new DeleteTripHandler(&manager));
         server.get("/show-trips", new ShowPage("static/show-trips.html"));
+        server.post("/show-trips", new ShowTripHandler(&manager));
+        server.get("/accept-trip", new AcceptTripHandler(&manager));
+        server.get("/finish-trip", new FinishTripHandler(&manager));
         server.get("/ok", new ShowPage("static/ok.html"));
         server.run();
     }

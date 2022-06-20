@@ -20,6 +20,7 @@ public:
     double operator-(const Location& other) const;
     friend void operator>>(std::string& stream, Location& location);
     friend std::ostream& operator<<(std::ostream& stream, Location& location);
+    std::string get_name() const { return name; };
 private:
     int trafficCoefficient;
     double latitude, longitude;

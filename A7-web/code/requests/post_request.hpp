@@ -19,7 +19,7 @@ const std::string postRequestCommands[] = {
 class PostRequest : public SystemRequest {
 public:
     PostRequest(std::string line);
-    virtual void handle(DataBase& database, Response* response);
+    virtual void handle(DataBase& database, Response* response, std::string username);
 
 private:
     void handle_signup(DataBase& database);

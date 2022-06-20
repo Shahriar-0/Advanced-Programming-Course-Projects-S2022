@@ -61,7 +61,7 @@ void PostRequest::check_for_signup_validation() {
     role = commands[roleIndex];
 }
 
-void PostRequest::handle(DataBase& database, Response* response) {
+void PostRequest::handle(DataBase& database, Response* response, std::string username) {
     if (type == SIGNUP)
         handle_signup(database);    
     else {

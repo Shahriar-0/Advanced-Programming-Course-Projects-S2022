@@ -21,6 +21,7 @@ public:
     bool operator==(std::string username) const;
     
     friend std::ostream& operator<<(std::ostream& out, const Person& person);
+    std::string get_username() const { return username; };
 protected:
     std::string username;
     PersonState state;

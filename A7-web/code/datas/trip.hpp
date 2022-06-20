@@ -26,6 +26,7 @@ public:
     bool is_for_this_passenger(std::string username) const;
     bool can_get_canceled() const;
     double calculate_cost() const;
+    void add_information_to_body(std::string& body, std::string username);
 
     bool operator==(int _id) const;
     bool operator!=(Trip _trip) const;

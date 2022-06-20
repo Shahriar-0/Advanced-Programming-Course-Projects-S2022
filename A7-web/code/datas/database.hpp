@@ -23,14 +23,14 @@ public:
     void add_location(Location* location);
     void check_and_add_person(std::string username, std::string role);
     void check_and_add_trip(Passenger* passenger, std::string origin, std::string destination, bool inHurry, Response* response);
-    void show_trips(int id, bool sortedByCist);
+    void show_trips(int id, bool sortedByCost, Response* response, std::string username);
     Trip* find_trip(int id);
     Person* find_person(std::string username);
     Location* find_location(std::string name);
 
 private:
-    void show_all_trips_id() const;
-    void show_all_trips_cost() const;
+    void show_all_trips_id(std::string& body, std::string username) const;
+    void show_all_trips_cost(std::string& body, std::string username) const;
     bool check_for_trip_existence() const;
     void add_trip(Trip* trip, Response* response); 
     void add_person(Person* person);

@@ -6,5 +6,5 @@ UTaxi::UTaxi(std::string filename) : IOHandlerVar(filename) {
 
 void UTaxi::run(std::string line, std::string username, Response* response) {
     request = IOHandlerVar.generate_request(line);
-    request->handle(database, response);
+    request->handle(database, response, username);
 }

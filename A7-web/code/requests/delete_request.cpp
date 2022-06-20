@@ -14,7 +14,7 @@ void DeleteRequest::check_for_type() {
     throw ErrorHandler(NOT_FOUND, "not one of delete-request commands");
 }
 
-void DeleteRequest::handle(DataBase& database, Response* response) {
+void DeleteRequest::handle(DataBase& database, Response* response, std::string username) {
     Trip* trip = database.find_trip(id);
     if (trip == nullptr) 
         throw ErrorHandler(NOT_FOUND, "trip does not exist");

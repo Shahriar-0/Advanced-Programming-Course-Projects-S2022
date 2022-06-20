@@ -10,7 +10,7 @@ const std::string DeleteRequestCommands[] = {
 class DeleteRequest : public SystemRequest {
 public:
     DeleteRequest(std::string _line);
-    virtual void handle(DataBase& database, Response* response);
+    virtual void handle(DataBase& database, Response* response, std::string username);
 
 private:
     void check_for_type();
