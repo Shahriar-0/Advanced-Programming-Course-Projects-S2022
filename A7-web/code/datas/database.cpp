@@ -115,5 +115,10 @@ void DataBase::add_trip(Trip* trip, Response* response) {
     response->setBody(body);
 }
 
+void DataBase::add_location_to_string(std::string& body) {
+    for (auto& i : locations) 
+        body += "<option value='" + i->get_name() + "'>" + i->get_name() + "</option>";
+}
+
 void DataBase::add_location(Location* location) { locations.push_back(location); }
 void DataBase::add_person(Person* person) { people.push_back(person); std::cout << SUCCESS_MESSAGE << std::endl; }

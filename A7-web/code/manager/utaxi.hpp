@@ -15,6 +15,7 @@ class UTaxi {
 public:
     UTaxi(std::string filename);
     void run(std::string line, std::string username, Response* response);
+    void add_location_to_string(std::string& body);
 private:
     DataBase database;
     IOHandler IOHandlerVar;

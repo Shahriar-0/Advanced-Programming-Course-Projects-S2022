@@ -21,6 +21,14 @@ private:
     UTaxi* manager;
 };
 
+class AskTripFormHandler : public RequestHandler {
+public:
+    AskTripFormHandler(UTaxi* _manager) { manager = _manager; };
+    Response* callback(Request* request) override;
+private:
+    UTaxi* manager;
+};
+
 class DeleteTripHandler : public RequestHandler {
 public:
     DeleteTripHandler(UTaxi* _manager) { manager = _manager; };

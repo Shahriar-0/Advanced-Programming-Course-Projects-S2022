@@ -67,6 +67,7 @@ Response* SubmitTripHandler::callback(Request* request) {
     }
 }
 
+
 Response* GetCostHandler::callback(Request* request) {
     Response* response = new Response;
     response->setHeader("Content-Type", "text/html");
@@ -84,6 +85,32 @@ Response* GetCostHandler::callback(Request* request) {
         return response;
     }
 }
+
+
+Response* AskTripFormHandler::callback(Request* request) {
+    Response* response = new Response;
+    response->setHeader("Content-Type", "text/html");
+    std::string body;
+    body += "<!DOCTYPE html><html><head><link rel='stylesheet' href='home.css'><meta charset='UTF-8'><title>UTAXI</title></head>";
+    body += "<body class='body'><div><br/><br/><br/><br/><br/>";
+    body += "<form action='/submit-trip' method='get'><fieldset style='border: none;'><legend>submit trip</legend>";
+    body += "<br><label for='username'>Username</label><br><input type='text' id='username' name='username' required>";
+    body += "<br/><label for='origin'>origin</label><br/>";
+    body += "<select id='origin' name='origin'>";
+    manager->add_location_to_string(body);
+    body += "</select>";
+    body += "<br/><label for='destination'>destination</label><br/>";
+    body += "<select id='destination' name='destination'>";
+    manager->add_location_to_string(body);
+    body += "</select>";
+    body += "<br/><label for='hurry'>are you in hurry?</label><br/>";
+    body += "<select id='hurry' name='hurry'> <option value='yes'>yes</option><option value='no'>no</option></select><br/><br/>";
+    body += "<button type='submit'>Submit</button>\n<button type='submit' formaction='/get-cost'>Get Cost</button>";
+    body += "</fieldset></form></div></body></html>";
+    response->setBody(body);
+    return response;
+}
+
 
 Response* AcceptTripHandler::callback(Request* request) {
     Response* response = new Response;
@@ -117,4 +144,3 @@ Response* FinishTripHandler::callback(Request* request) {
         return response;
     }
 }
-

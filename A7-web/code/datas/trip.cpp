@@ -42,6 +42,8 @@ double Trip::calculate_cost() const {
 }
 
 void Trip::add_information_to_body(std::string& body, std::string username) {
+    if (is_cancelled())
+        return;
     body += "<tr>";
     body += "<th>" + std::to_string(id) + "</th>";
     body += "<th>" + passenger->get_username() + "</th>";
