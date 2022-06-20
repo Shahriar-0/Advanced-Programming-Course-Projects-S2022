@@ -46,14 +46,14 @@ Trip* DataBase::find_trip(int id) {
 void DataBase::show_trips(int id, bool sortedByCost, Response* response, std::string username) {
     std::string body;
     body += "<!DOCTYPE html><html><head><link rel='stylesheet' href='home.css'><meta charset='UTF-8'><style> a:link";
-    body += "{ color: rgb(0, 0, 0); background-color: transparent; text-decoration: none; width:100%; font-size: xx-large; display:block;text-align: center; text-align: center;";
+    body += "{ color: rgb(0, 0, 0); background-color: transparent; text-decoration: none; width:100%; font-size: xx-large; display:block;text-align: center; }";
     body += " a:visited {color: rgb(65, 15, 212); background-color: transparent; text-decoration: none; width:100%; font-size: xx-large; display:block; text-align: center; }";
     body += " a:hover { color: rgb(23, 71, 194); background-color: transparent; text-decoration: underline; width:100%; font-size: xx-large; display:block; text-align: center; }";
     body += " a:active { color: yellow; background-color: transparent; text-decoration: underline; width:100%; font-size: xx-large; display:block; text-align: center; }";
     if (!check_for_trip_existence()) 
         body += "</style></head><body class='body'><div><br/><br/><br/><br/><p style='text-align: center;'>EMPTY!</p><a href='/'>home</a><br></div>";
     else {
-        body += " table, th, td {\nborder: 1px solid black;\nborder-collapse: collapse;\n} th:nth-child(even),td:nth-child(even) {\nbackground-color: #D6EEEE;\n}";
+        body += " table, th, td {\nborder: 1px solid black;\nborder-collapse: collapse;\n}";
         body += " tr:hover { background-color: #00FF00; }";
         body += "</style><body>";
         body += "<table style='width:100%'><tr><th>id</th><th>username</th><th>origin</th><th>destination</th><th>cost</th><th>status</th></tr>";
