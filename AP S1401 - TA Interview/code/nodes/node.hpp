@@ -12,6 +12,7 @@ class Node {
         virtual void add_player(Player* player, int node_id) = 0;
         virtual Node* close_station(int node_id) = 0;
         bool is_root() { return parent == nullptr; }
+        virtual std::vector<Player*> get_players() const = 0;
     protected:
         int id;
         Node* right;

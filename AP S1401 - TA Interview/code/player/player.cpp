@@ -10,3 +10,9 @@ Player::Player(int _id, int _strength, int _agility, int _intelligence, std::str
     else if (main_ability == INTELLIGENT_KEYWORD)
         main_trait = &intelligence;
 }
+
+int Player::get_win() { return win; }
+
+int Player::calc_skill() {
+    return strength + agility + intelligence + (*main_trait);
+}

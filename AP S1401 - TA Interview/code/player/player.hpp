@@ -8,6 +8,7 @@ class Player {
         Player(int _id, int _power, int _speed, int _intelligence, std::string main_ability);
         ~Player();
         int get_win();
+        int calc_skill();
     private:
         int *main_trait;
         int strength;
