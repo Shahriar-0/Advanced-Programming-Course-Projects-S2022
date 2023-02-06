@@ -20,7 +20,7 @@ interview.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)
 #----------------------------------------------------------------
 
 #managing part
-$(BUILDS)main.o: $(MANAGER)main.cpp $(MANAGER)utaxi.hpp
+$(BUILDS)main.o: $(MANAGER)main.cpp 
 	$(CC_OBJECT) $< -o $@
 
 $(BUILDS)game_manager.o: $(MANAGER)game_manager.cpp $(MANAGER)game_manager.hpp

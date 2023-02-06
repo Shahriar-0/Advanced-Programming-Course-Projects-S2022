@@ -11,7 +11,7 @@
 constexpr char INPUT_DELIMETER = ' ';
 const std::string RUN_KEYWORD = "run";
 const std::string END_GAME_KEYWORD = "$";
-const std::string CLOSE_GAME_KEYWORD = "close";
+const std::string CLOSE_KEYWORD = "close";
 const std::string ARRIVAL_KEYWORD = "arrival";
 
 
@@ -23,7 +23,7 @@ public:
     void run();
 private:
     GameManager game_manager;
-    std::map<std::string, game_manager_func> game_manager_func_map;
+    game_manager_func_map_type game_manager_func_map;
 };
 
 #endif
