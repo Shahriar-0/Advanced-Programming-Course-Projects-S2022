@@ -21,8 +21,10 @@ void GameManager::load_nodes() {
         string type;
         cin >> node_id >> right_node_id >> left_node_id >> type;
 
-        Node* right_node = *find(nodes.begin(), nodes.end(), right_node_id);
-        Node* left_node = *find(nodes.begin(), nodes.end(), left_node_id);
+        auto right_node_it = find(nodes.begin(), nodes.end(), right_node_id);
+        auto left_node_it = find(nodes.begin(), nodes.end(), left_node_id);
+        Node* right_node = (right_node_it != nodes.end()) ? *right_node_it : nullptr;
+        Node* left_node = (left_node_it != nodes.end()) ? *left_node_it : nullptr;
 
 
         Node* node;
@@ -39,6 +41,8 @@ void GameManager::load_nodes() {
                 node = createInstance<ArmWrestle>(node_id, nullptr, right_node, left_node);
             else if (type == KABAB_KEYWORD)
                 node = createInstance<Kabab>(node_id, nullptr, right_node, left_node);
+            else 
+                throw logic_error("Invalid node type");
         }
     }
 
