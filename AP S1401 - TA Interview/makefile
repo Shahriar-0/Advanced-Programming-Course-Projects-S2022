@@ -27,7 +27,7 @@ $(BUILDS)game_manager.o: $(MANAGER)game_manager.cpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
 #nodes 
-$(BUILDS)node.o: $(NODES)node.cpp $(NODES)game_manager.hpp
+$(BUILDS)node.o: $(NODES)node.cpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
 $(BUILDS)game_station.o: $(NODES)game_station.cpp $(NODES)game_station.hpp $(MANAGER)game_manager.hpp
