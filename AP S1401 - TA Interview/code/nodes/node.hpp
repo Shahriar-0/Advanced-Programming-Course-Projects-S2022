@@ -9,6 +9,7 @@ class Node {
             Node* _left = nullptr) : id(_id), parent(_parent), right(_right), left(_left) {};
         ~Node() = default;
         virtual void add_player(Player* player) = 0;
+        bool is_root() { return parent == nullptr; }
     protected:
         int id;
         Node* right;

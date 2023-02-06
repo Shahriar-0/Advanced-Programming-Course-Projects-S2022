@@ -27,13 +27,13 @@ $(BUILDS)game_manager.o: $(MANAGER)game_manager.cpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
 #nodes 
-$(BUILDS)node.o: $(NODES)node.cpp $(MANAGER)game_manager.hpp
+$(BUILDS)node.o: $(NODES)node.cpp $(MANAGER)node.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)game_station.o: $(NODES)game_station.cpp $(NODES)game_station.hpp $(MANAGER)game_manager.hpp
+$(BUILDS)game_station.o: $(NODES)game_station.cpp $(NODES)game_station.hpp $(MANAGER)node.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)queue_node.o: $(NODES)queue_node.cpp $(NODES)queue_node.hpp $(MANAGER)game_manager.hpp
+$(BUILDS)queue_node.o: $(NODES)queue_node.cpp $(NODES)queue_node.hpp $(MANAGER)node.hpp
 	$(CC_OBJECT) $< -o $@
 
 $(BUILDS)armwrestler.o: $(NODES)armwrestler.cpp $(NODES)armwrestler.hpp $(NODES)game_station.hpp
@@ -50,6 +50,10 @@ $(BUILDS)kabab.o: $(NODES)kabab.cpp $(NODES)kabab.hpp $(NODES)game_station.hpp
 
 #cli
 $(BUILDS)cli.o: $(CLI)cli.cpp $(CLI)cli.hpp $(MANAGER)game_manager.hpp
+	$(CC_OBJECT) $< -o $@
+
+#player
+$(BUILDS)player.o: $(PLAYER)player.cpp $(PLAYER)player.hpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
 #----------------------------------------------------------------

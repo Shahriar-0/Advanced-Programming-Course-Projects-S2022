@@ -16,6 +16,7 @@
 #include "../nodes/chess.hpp"
 #include "../nodes/wrestle.hpp"
 #include "../nodes/armwrestle.hpp"
+#include "../nodes/kabab.hpp"
 
 
 // typedef void (*game_manager_method)(std::map<std::string, std::string>);
@@ -24,7 +25,7 @@
 
 typedef void (GameManager::*game_manager_method)(std::map<std::string, std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
-
+typedef std::map<std::string, Node*(*)()> string_to_node_map;
 
 const std::string RUN_KEYWORD = "run";
 const std::string END_GAME_KEYWORD = "$";
@@ -56,12 +57,12 @@ public:
 
 
 private:
-    void map_names_to_game_station_type();
     void load_nodes();
     void map_functions(game_manager_func_map_type& game_manager_function_map);
     Node* root_node;
-    std::map<std::string, Node*> stations_type;
+    string_to_node_map stations_type;
 
+    template <typename T> T* createInstance(int _id, Node* parent, Node* right, Node* left);
 };
 
 
