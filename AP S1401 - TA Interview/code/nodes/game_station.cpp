@@ -17,7 +17,7 @@ void GameStation::add_player(Player* player, int node_id) {
 
 Node* GameStation::close_station(int node_id) {
     if (node_id == id) {
-        std::vector<Player*> v1 {};
+        std::vector<Player*> v1 {}; //
         if (right) 
             v1 = right->get_players();
         std::vector<Player*> v2 {};
@@ -25,7 +25,8 @@ Node* GameStation::close_station(int node_id) {
             v2 = left->get_players();
 
         v1.insert(v1.end(), v2.begin(), v2.end());
-        sort(v1.begin(), v1.end(), [](Player* p1, Player* p2) { return p1->calc_skill() < p2->calc_skill(); });
+        sort(v1.begin(), v1.end(), [](Player* p1, Player* p2) -> bool { return p1->calc_skill() < p2->calc_skill(); }); //
+        // TODO: add function to get all players from a node
         Node* node = new QueueNode(node_id, v1, parent, right, left);
         return node;
     }
