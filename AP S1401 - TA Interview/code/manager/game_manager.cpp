@@ -1,4 +1,5 @@
 #include "game_manager.hpp"
+#include "../cli/cli.hpp"
 
 typedef void (GameManager::*game_manager_method)(std::vector<std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
@@ -10,6 +11,13 @@ GameManager::GameManager(game_manager_func_map_type& func_map) : is_working(true
     map_functions(func_map);
 }
 
+enum LoadStation {
+    ID_INDEX, 
+    LEFT_INDEX,
+    RIGHT_INDEX,
+    TYPE_INDEX
+};
+
 void GameManager::load_nodes() {
     // Load all nodes from input file
 
@@ -19,13 +27,13 @@ void GameManager::load_nodes() {
     while (num_nodes--) {
         int node_id, right_node_id, left_node_id;
         string type;
-        cin >> node_id >> right_node_id >> left_node_id >> type;
+        string line;
+        getline(cin, line);
+        split_line(node_id, right_node_id, left_node_id, type, line);
 
-        auto right_node_it = find(nodes.begin(), nodes.end(), right_node_id);
-        auto left_node_it = find(nodes.begin(), nodes.end(), left_node_id);
-        Node* right_node = (right_node_it != nodes.end()) ? *right_node_it : nullptr;
-        Node* left_node = (left_node_it != nodes.end()) ? *left_node_it : nullptr;
-
+        Node* left_node = nullptr;
+        Node* right_node = nullptr;
+        find_left_and_right(left_node, right_node, nodes, left_node_id, right_node_id);
 
         Node* node;
 
@@ -49,6 +57,24 @@ void GameManager::load_nodes() {
     root_node = *find_if(nodes.begin(), nodes.end(), [](Node* node) { return node->is_root(); });
 }
 
+void GameManager::split_line(int& node_id, int& right_node_id, int& left_node_id, string& type, string& line) {
+    node_id = stoi(line.substr(0, line.find(' ')));
+    line = line.substr(line.find(' ') + 1);
+    right_node_id = stoi(line.substr(0, line.find(' ')));
+    line = line.substr(line.find(' ') + 1);
+    left_node_id = stoi(line.substr(0, line.find(' ')));
+    line = line.substr(line.find(' ') + 1);
+    type = line.substr(0, line.find(' '));
+}
+
+void GameManager::find_left_and_right(Node*& left_node, Node*& right_node, vector<Node*>& nodes,
+                 int left_node_id, int right_node_id) {
+    auto right_node_it = find(nodes.begin(), nodes.end(), right_node_id);
+    auto left_node_it = find(nodes.begin(), nodes.end(), left_node_id);
+    right_node = (right_node_it != nodes.end()) ? *right_node_it : nullptr;
+    left_node = (left_node_it != nodes.end()) ? *left_node_it : nullptr;
+}
+
 void GameManager::map_functions(game_manager_func_map_type& game_manager_function_map) {
     // Map all strings to the function map
 
@@ -63,8 +89,13 @@ void GameManager::run(std::vector<std::string> args){
     
 }
 
+enum Close { 
+    CLOSE_KEYWORD_INDEX,
+    QUEUE_INDEX,
+};
+
 void GameManager::close_station(std::vector<std::string> args){
-    
+    root_node = root_node->close_station(stoi(args[QUEUE_INDEX]));
 }
 
 enum Arrival { 

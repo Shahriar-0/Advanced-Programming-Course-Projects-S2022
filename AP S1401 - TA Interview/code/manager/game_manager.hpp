@@ -56,6 +56,8 @@ public:
 private:
     void load_nodes();
     void map_functions(game_manager_func_map_type& game_manager_function_map);
+    void split_line(int& node_id, int& left_node_id, int& right_node_id, std::string& node_type, std::string& line);
+    void find_left_and_right(Node*& left, Node*& right, std::vector<Node*>& nodes, int left_node_id, int right_node_id);
     Node* root_node;
     string_to_node_map stations_type;
     bool is_working;

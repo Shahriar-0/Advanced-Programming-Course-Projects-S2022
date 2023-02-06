@@ -3,13 +3,7 @@
 using namespace std;
 
 CLI::CLI() : game_manager(game_manager_func_map) {
-    while (game_manager.is_running()) {
-        string line;
-        getline(cin, line);
-        vector<string> input = split_input_by_delimeter(line, ' ');
-        string command = input[0];
-        game_manager_func_map[command](input);
-    }
+    
 }
 
 vector<string> CLI::split_input_by_delimeter(string line, char delimeter) {
@@ -23,3 +17,17 @@ vector<string> CLI::split_input_by_delimeter(string line, char delimeter) {
     return internal;
 }
 
+void CLI::run() {
+    while (game_manager.is_running()) {
+        string line;
+        getline(cin, line);
+        vector<string> input = split_input_by_delimeter(line, ' ');
+        string command = input[0];
+        try {
+            game_manager_func_map[command](input);
+        }
+        catch (const std::exception& e) {
+            cout << e.what() << endl;
+        }
+    }
+}
