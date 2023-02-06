@@ -12,9 +12,13 @@
 
 #include "../nodes/queue_node.hpp"
 #include "../nodes/game_station.hpp"
+#include "../nodes/node.hpp"
+#include "../nodes/chess.hpp"
+#include "../nodes/wrestle.hpp"
+#include "../nodes/armwrestle.hpp"
 
 
-// typedef void (GameManager::*game_manager_method)(std::map<std::string, std::string>);
+// typedef void (*game_manager_method)(std::map<std::string, std::string>);
 // typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 // typedef std::map<std::string, std::function<void(std::map<std::string, std::string>)>> game_manager_func_map_type;
 
@@ -46,31 +50,9 @@ public:
     void add_player(std::map<std::string, std::string> args);
     void shutdown(std::map<std::string, std::string> args);
     
-    class Player {
-    public:
-        Player(int _id, int _power, int _speed, int _intelligence, std::string main_ability);
-        ~Player();
-    private:
-        int *main_trait;
-        int power;
-        int speed;
-        int intelligence;
-        int id;
-        int win;
-    };
+    
 
-    class Node {
-    public:
-        Node(int _id, GameManager::Node* _parent = nullptr, GameManager::Node* _right = nullptr,
-            GameManager::Node* _left = nullptr) : id(_id), parent(_parent), right(_right), left(_left) {};
-        ~Node() = default;
-        virtual void add_player(Player* player) = 0;
-    protected:
-        int id;
-        Node* right;
-        Node* left;
-        Node* parent;
-    };
+    
 
 
 private:
@@ -78,7 +60,7 @@ private:
     void load_nodes();
     void map_functions(game_manager_func_map_type& game_manager_function_map);
     Node* root_node;
-    std::map<std::string, GameManager::Node*> stations_type;
+    std::map<std::string, Node*> stations_type;
 
 };
 

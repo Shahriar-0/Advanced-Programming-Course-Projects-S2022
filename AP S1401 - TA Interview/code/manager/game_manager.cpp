@@ -1,11 +1,5 @@
 #include "game_manager.hpp"
 
-// #include "../nodes/chess.cpp"
-// #include "../nodes/armwrestle.cpp"
-// #include "../nodes/wrestle.cpp"
-// #include "../nodes/kabab.cpp"
-// #include "../nodes/queue_node.cpp"
-
 typedef void (GameManager::*game_manager_method)(std::map<std::string, std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 
@@ -33,7 +27,7 @@ void GameManager::load_nodes() {
         else {
 
         }
-        // Node* node = new GameManager::Node(node_id);
+        // Node* node = new Node(node_id);
         // if (root_node == nullptr) {
         //     root_node = node;
         // }
@@ -51,8 +45,25 @@ void GameManager::map_functions(game_manager_func_map_type& game_manager_functio
 
 }
 
+void GameManager::run(std::map<std::string, std::string> args){
+    
+}
 
-void GameManager::map_names_to_game_station_type() {
+void GameManager::close_station(std::map<std::string, std::string> args){
+    
+}
+
+void GameManager::add_player(std::map<std::string, std::string> args){
+    
+}
+
+void GameManager::shutdown(std::map<std::string, std::string> args){
+    
+}
+
+
+
+void map_names_to_game_station_type() {
     // Map all strings to the game station type
 
 

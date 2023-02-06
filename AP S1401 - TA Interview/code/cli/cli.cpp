@@ -3,9 +3,9 @@
 using namespace std;
 
 CLI::CLI() : game_manager(game_manager_func_map) {
-    // game_manager_function_map["new"] = &GameManager::run;
+    // game_manager_function_map["new"] = &run;
     // game_manager_func_map_type m;
-    // m["new"] = &GameManager::run;
+    // m["new"] = &run;
     std::map<std::string, void (CLI::*)()> m;
     m["new"] = &CLI::run;
 }

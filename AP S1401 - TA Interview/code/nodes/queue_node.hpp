@@ -1,17 +1,17 @@
 #ifndef __QUEUE_NODE_HPP__
 #define __QUEUE_NODE_HPP__
 
-#include "../manager/game_manager.hpp"
+#include "node.hpp"
 #include <vector>
 
-class QueueNode : public GameManager::Node {
+class QueueNode : public Node {
 public:
-    QueueNode(int _id, GameManager::Node* _parent = nullptr, GameManager::Node* _right = nullptr,
-            GameManager::Node* _left = nullptr);
+    QueueNode(int _id, Node* _parent = nullptr, Node* _right = nullptr,
+            Node* _left = nullptr);
     ~QueueNode() = default;
-    void add_player(GameManager::Player* player) override;
+    void add_player(Player* player) override;
 private:
-    std::vector<GameManager::Player*> players;
+    std::vector<Player*> players;
 };
 
 #endif

@@ -3,15 +3,15 @@
 
 #include "../manager/game_manager.hpp"
 
-class GameStation : public GameManager::Node {
+class GameStation : public Node {
 public:
-    GameStation(int _id, GameManager::Node* _parent = nullptr, GameManager::Node* _left = nullptr,
-            GameManager::Node* _right = nullptr) : GameManager::Node(_id, _parent, _right, _left) {};
+    GameStation(int _id, Node* _parent = nullptr, Node* _left = nullptr,
+            Node* _right = nullptr) : Node(_id, _parent, _right, _left) {};
     ~GameStation() = default;
-    void add_player(GameManager::Player* player) override;
+    void add_player(Player* player) override;
 private:
-    GameManager::Player* right_player;
-    GameManager::Player* left_player;
+    Player* right_player;
+    Player* left_player;
 };
 
 #endif
