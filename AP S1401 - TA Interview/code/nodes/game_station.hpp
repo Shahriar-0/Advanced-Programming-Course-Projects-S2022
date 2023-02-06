@@ -6,9 +6,9 @@
 class GameStation : public Node {
 public:
     GameStation(int _id, Node* _parent = nullptr, Node* _left = nullptr,
-            Node* _right = nullptr) : Node(_id, _parent, _right, _left) {};
+            Node* _right = nullptr);
     ~GameStation() = default;
-    void add_player(Player* player) override;
+    void add_player(Player* player, int node_id) override;
 private:
     Player* right_player;
     Player* left_player;

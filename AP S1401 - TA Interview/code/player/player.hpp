@@ -10,8 +10,8 @@ class Player {
         int get_win();
     private:
         int *main_trait;
-        int power;
-        int speed;
+        int strength;
+        int agility;
         int intelligence;
         int id;
         int win;

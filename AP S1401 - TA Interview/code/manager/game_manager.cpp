@@ -1,11 +1,11 @@
 #include "game_manager.hpp"
 
-typedef void (GameManager::*game_manager_method)(std::map<std::string, std::string>);
+typedef void (GameManager::*game_manager_method)(std::vector<std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 
 using namespace std;
 
-GameManager::GameManager(game_manager_func_map_type& func_map) {
+GameManager::GameManager(game_manager_func_map_type& func_map) : is_working(true) {
     load_nodes();
     map_functions(func_map);
 }
@@ -59,19 +59,33 @@ void GameManager::map_functions(game_manager_func_map_type& game_manager_functio
 
 }
 
-void GameManager::run(std::map<std::string, std::string> args){
+void GameManager::run(std::vector<std::string> args){
     
 }
 
-void GameManager::close_station(std::map<std::string, std::string> args){
+void GameManager::close_station(std::vector<std::string> args){
     
 }
 
-void GameManager::add_player(std::map<std::string, std::string> args){
-    
+enum Arrival { 
+    ARRIVAL_KEYWORD_INDEX,
+    QUEUE_INDEX,
+    PLAYER_INDEX,
+    STRENGTH_INDEX,
+    AGILITY_INDEX,
+    INTELLIGENCE_INDEX,
+    MAIN_ABILITY_INDEX 
+};
+
+
+
+void GameManager::add_player(std::vector<std::string> args){
+    Player* player = new Player(stoi(args[PLAYER_INDEX]), stoi(args[STRENGTH_INDEX]),
+                     stoi(args[AGILITY_INDEX]), stoi(args[INTELLIGENCE_INDEX]), args[MAIN_ABILITY_INDEX]);
+    root_node->add_player(player, stoi(args[QUEUE_INDEX]));
 }
 
-void GameManager::shutdown(std::map<std::string, std::string> args){
+void GameManager::shutdown(std::vector<std::string> args){
     
 }
 

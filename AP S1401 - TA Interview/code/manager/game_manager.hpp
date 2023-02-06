@@ -2,6 +2,7 @@
 #define __GAME_MANAGER_HPP__
 
 #include <string>
+#include <cstring>
 #include <map>
 #include <functional>
 #include <iostream>
@@ -23,7 +24,7 @@
 // typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 // typedef std::map<std::string, std::function<void(std::map<std::string, std::string>)>> game_manager_func_map_type;
 
-typedef void (GameManager::*game_manager_method)(std::map<std::string, std::string>);
+typedef void (GameManager::*game_manager_method)(std::vector<std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 typedef std::map<std::string, Node*(*)()> string_to_node_map;
 
@@ -46,22 +47,18 @@ public:
     GameManager(game_manager_func_map_type& game_manager_function_map);
     ~GameManager() = default;
 
-    void run(std::map<std::string, std::string> args);
-    void close_station(std::map<std::string, std::string> args);
-    void add_player(std::map<std::string, std::string> args);
-    void shutdown(std::map<std::string, std::string> args);
+    void run(std::vector<std::string> args);
+    void close_station(std::vector<std::string> args);
+    void add_player(std::vector<std::string> args);
     
-    
-
-    
-
-
+    void shutdown(std::vector<std::string> args) { is_working = false; } ;
+    bool is_running() { return is_working; }
 private:
     void load_nodes();
     void map_functions(game_manager_func_map_type& game_manager_function_map);
     Node* root_node;
     string_to_node_map stations_type;
-
+    bool is_working;
     template <typename T> T* createInstance(int _id, Node* parent, Node* right, Node* left);
 };
 

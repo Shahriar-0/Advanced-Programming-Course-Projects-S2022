@@ -7,7 +7,7 @@ class Node {
     public:
         Node(int _id, Node* _parent = nullptr, Node* _right = nullptr, Node* _left = nullptr);
         ~Node() = default;
-        virtual void add_player(Player* player) = 0;
+        virtual void add_player(Player* player, int node_id) = 0;
         bool is_root() { return parent == nullptr; }
     protected:
         int id;

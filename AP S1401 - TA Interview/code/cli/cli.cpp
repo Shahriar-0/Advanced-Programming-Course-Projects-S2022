@@ -3,11 +3,13 @@
 using namespace std;
 
 CLI::CLI() : game_manager(game_manager_func_map) {
-    // game_manager_function_map["new"] = &run;
-    // game_manager_func_map_type m;
-    // m["new"] = &run;
-    std::map<std::string, void (CLI::*)()> m;
-    m["new"] = &CLI::run;
+    while (game_manager.is_running()) {
+        string line;
+        getline(cin, line);
+        vector<string> input = split_input_by_delimeter(line, ' ');
+        string command = input[0];
+        game_manager_func_map[command](input);
+    }
 }
 
 vector<string> CLI::split_input_by_delimeter(string line, char delimeter) {
