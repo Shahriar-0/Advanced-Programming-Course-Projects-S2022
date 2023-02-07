@@ -28,7 +28,7 @@ void QueueNode::add_player(Player* player, int node_id) {
 Node* QueueNode::close_station(int node_id) {
     if (node_id == id) 
         throw runtime_error("Cannot close a queue station");
-    return nullptr; // since this is a queue, we aren't suppose to have right and left nodes
+    return this; // since this is a queue, we aren't suppose to have right and left nodes
 }
 
 Player* QueueNode::get_winner() {
