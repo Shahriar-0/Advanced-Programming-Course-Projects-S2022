@@ -1,23 +1,18 @@
+#well, if it doesn't matter, can I stay with you on the phone at least?
 include common_vars.mk
-#let the dance be eternal
 
-
-#----------------------------------------------------------------
 #------------------------- TARGETS ------------------------------
-#----------------------------------------------------------------
-
 
 all: interview.out
 
-debug.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestler.o $(BUILDS)chess.o $(BUILDS)wrestler.o $(BUILDS)kabab.o $(BUILDS)cli.o
-	$(CC) $(DEBUG) $(BUILDS)*.o -o $@
+debug.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestler.o $(BUILDS)chess.o $(BUILDS)wrestler.o $(BUILDS)kabab.o $(BUILDS)cli.o $(BUILDS)player.o 
+	$(DEBUG) $(BUILDS)*.o -o $@
 
-interview.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestler.o $(BUILDS)chess.o $(BUILDS)wrestler.o $(BUILDS)kabab.o $(BUILDS)cli.o
+interview.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestler.o $(BUILDS)chess.o $(BUILDS)wrestler.o $(BUILDS)kabab.o $(BUILDS)cli.o $(BUILDS)player.o 
 	$(CC) $(BUILDS)*.o -o $@
 
-#----------------------------------------------------------------
+
 #------------------------- OBJECTS ------------------------------
-#----------------------------------------------------------------
 
 #managing part
 $(BUILDS)main.o: $(MANAGER)main.cpp 
@@ -27,7 +22,7 @@ $(BUILDS)game_manager.o: $(MANAGER)game_manager.cpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
 #nodes 
-$(BUILDS)node.o: $(NODES)node.cpp $(MANAGER)node.hpp
+$(BUILDS)node.o: $(NODES)node.cpp $(MANAGER)node.hpp $(PLAYER)player.hpp
 	$(CC_OBJECT) $< -o $@
 
 $(BUILDS)game_station.o: $(NODES)game_station.cpp $(NODES)game_station.hpp $(MANAGER)node.hpp
@@ -56,23 +51,22 @@ $(BUILDS)cli.o: $(CLI)cli.cpp $(CLI)cli.hpp $(MANAGER)game_manager.hpp
 $(BUILDS)player.o: $(PLAYER)player.cpp $(PLAYER)player.hpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
-#----------------------------------------------------------------
+
 #------------------------- PHONYS  ------------------------------
-#----------------------------------------------------------------
 
 .PHONY: clean clean_objs clean_exe help
 
-clean:
-	rm -r $(BUILDS)*.o interview.out debug.out 2> $(NULL_DEVICE)
+help:
+	@echo Targets: all clean clean-objs clean-exe run
 
-clean_exe:
-	rm -r interview.out debug.out 2> $(NULL_DEVICE)
+clean:
+	$(RM) $(BUILDS)*.o interview.out debug.out 2> $(NULL_DEVICE)
 
 clean_objs:
-	rm -r $(BUILDS)*.o 2> $(NULL_DEVICE)
+	$(RM) $(BUILDS)*.o 2> $(NULL_DEVICE)
+
+clean_exe:
+	$(RM) interview.out debug.out 2> $(NULL_DEVICE)
 
 run:
 	./interview.out 
-
-help:
-	@echo Targets: all clean clean-objs clean-exe run

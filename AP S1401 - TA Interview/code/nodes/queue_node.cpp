@@ -37,6 +37,6 @@ Player* QueueNode::get_winner() {
     return i;
 }
 
-void QueueNode::relocate_loser(Player* loser) {
-    add_player(loser, id);
-}
+void QueueNode::relocate_loser(Player* loser) { add_player(loser, id); }
+
+std::vector<Player*> QueueNode::get_players() const { return players; }

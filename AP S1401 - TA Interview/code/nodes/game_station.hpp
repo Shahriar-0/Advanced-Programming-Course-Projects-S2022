@@ -8,13 +8,16 @@ class GameStation : public Node {
 public:
     GameStation(int _id, Node* _left = nullptr, Node* _right = nullptr);
     ~GameStation() = default;
+
+    virtual Player* winner_of_match() = 0;
+
     void add_player(Player* player, int node_id) override;
     Node* close_station(int node_id) override;
     std::vector<Player*> get_players() const override;
-    std::vector<Player*> combine_lists();
     Player* get_winner() override;
     void relocate_loser(Player* loser) override;
-    virtual Player* winner_of_match() = 0;
+    
+    std::vector<Player*> combine_lists();
     Player* determine_winner();
 protected:
     Player* right_player;

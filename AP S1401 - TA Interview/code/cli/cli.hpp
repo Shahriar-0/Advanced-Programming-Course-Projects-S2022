@@ -9,12 +9,13 @@
 
 // consts
 constexpr char INPUT_DELIMETER = ' ';
-const std::string RUN_KEYWORD = "run";
+const std::string RUN_KEYWORD = "Run";
 const std::string END_GAME_KEYWORD = "$";
-const std::string CLOSE_KEYWORD = "close";
-const std::string ARRIVAL_KEYWORD = "arrival";
+const std::string CLOSE_KEYWORD = "Close";
+const std::string ARRIVAL_KEYWORD = "Arrival";
 
-
+typedef void (GameManager::*game_manager_method)(std::vector<std::string>);
+typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 
 class CLI {
 public:
@@ -22,6 +23,7 @@ public:
     std::vector<std::string> split_input_by_delimeter(std::string input, char delimeter = INPUT_DELIMETER);
     void run();
 private:
+    void map_functions();
     GameManager game_manager;
     game_manager_func_map_type game_manager_func_map;
 };

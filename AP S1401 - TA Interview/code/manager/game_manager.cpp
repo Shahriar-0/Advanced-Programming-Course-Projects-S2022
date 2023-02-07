@@ -6,9 +6,9 @@ typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 
 using namespace std;
 
-GameManager::GameManager(game_manager_func_map_type& func_map) : is_working(true) {
+GameManager::GameManager() : is_working(true) {
     load_nodes();
-    map_functions(func_map);
+    // map_functions(func_map); //TODO: delete this line
 }
 
 enum LoadStation {
@@ -32,7 +32,6 @@ void GameManager::load_nodes() {
 }
 
 void GameManager::split_line(int& node_id, int& right_node_id, int& left_node_id, string& type, string& line) {
-    // Split the line into the node id, right node id, left node id and type
     node_id = stoi(line.substr(0, line.find(' ')));
     line = line.substr(line.find(' ') + 1);
     right_node_id = stoi(line.substr(0, line.find(' ')));
@@ -43,7 +42,8 @@ void GameManager::split_line(int& node_id, int& right_node_id, int& left_node_id
 }
 
 void GameManager::find_left_and_right(Node*& left_node, Node*& right_node, vector<Node*>& nodes,
-                 int left_node_id, int right_node_id) {
+             int left_node_id, int right_node_id) {
+
     // Find the left and right nodes in the nodes vector, if they exist, otherwise create queue nodes
     auto right_node_it = find(nodes.begin(), nodes.end(), right_node_id);
     auto left_node_it = find(nodes.begin(), nodes.end(), left_node_id);
@@ -75,7 +75,6 @@ void GameManager::add_node(string line, vector<Node*>& nodes, int num_nodes) {
     find_left_and_right(left_node, right_node, nodes, left_node_id, right_node_id);
     
     Node* node;
-    // nullptrs are used to indicate that the node does not yet have a parent
     if (node_id > num_nodes) 
         node = createInstance<QueueNode>(node_id, right_node, left_node);
 
@@ -90,23 +89,17 @@ void GameManager::add_node(string line, vector<Node*>& nodes, int num_nodes) {
             node = createInstance<Kabab>(node_id, right_node, left_node);
         else 
             throw logic_error("Invalid node type");
-        
     }
     nodes.push_back(node);
 }
 
-void GameManager::map_functions(game_manager_func_map_type& game_manager_function_map) {
-    // Map all strings to the function map
-
-    game_manager_function_map[ARRIVAL_KEYWORD] = &GameManager::add_player;
-    game_manager_function_map[RUN_KEYWORD] = &GameManager::run;
-    game_manager_function_map[END_GAME_KEYWORD] = &GameManager::shutdown;
-    game_manager_function_map[CLOSE_KEYWORD] = &GameManager::close_station;
-
-}
 
 void GameManager::run(std::vector<std::string> args){
-    
+    Player* winner = root_node->get_winner();
+    if (winner != nullptr)
+        cout << winner << endl;
+    else
+        cout << "No winner" << endl;
 }
 
 enum Close { // indexes of the arguments in the close station command
@@ -141,7 +134,12 @@ void GameManager::shutdown(std::vector<std::string> args){
 }
 
 template <typename T>
-T* createInstance(int _id, T* right, T* left) { 
+T* GameManager::createInstance(int _id, Node* right, Node* left) { 
     // Create a new instance of a specific type of node with the given parameters
     return new T(_id, right, left); 
 }
+
+
+void GameManager::shutdown(std::vector<std::string> args) { is_working = false; }
+
+bool GameManager::is_running() { return is_working; }

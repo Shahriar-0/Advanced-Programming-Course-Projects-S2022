@@ -1,5 +1,7 @@
 #include "player.hpp"
 
+using namespace std;
+
 Player::Player(int _id, int _strength, int _agility, int _intelligence, std::string main_ability)
     : id(_id), strength(_strength), agility(_agility), intelligence(_intelligence), win(0) {
 
@@ -11,30 +13,26 @@ Player::Player(int _id, int _strength, int _agility, int _intelligence, std::str
         main_trait = &intelligence;
 }
 
-int Player::get_win() { return win; }
-
-int Player::calc_skill() {
-    return strength + agility + intelligence + (*main_trait);
-}
-
-void Player::update_stats() {
+void Player::update_stats_after_win() {
     (*main_trait)++;
     win++;
 }
 
-double Player::calc_kabab_power() {
-    return intelligence + pow(agility, 2);
+ostream& operator<<(ostream& out, const Player& player) {
+    out << player.id << endl;
+    return out;
 }
 
-double Player::calc_chess_power() {
-    return intelligence;
-}
+void Player::update_stats_after_lose() { win = 0; }
 
-double Player::calc_wrestle_power() {
-    return intelligence + pow(strength, 2) + 2 * agility; 
-}
+int Player::calc_skill() { return strength + agility + intelligence + (*main_trait); }
 
-double Player::calc_arm_wrestle_power() {
-    return strength;
-}
+double Player::calc_kabab_power() { return intelligence + pow(agility, 2); }
 
+double Player::calc_chess_power() { return intelligence; }
+
+double Player::calc_wrestle_power() { return intelligence + pow(strength, 2) + 2 * agility;  }
+
+double Player::calc_arm_wrestle_power() { return strength; }
+
+int Player::get_win() { return win; }

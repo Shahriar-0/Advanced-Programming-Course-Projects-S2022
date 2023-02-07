@@ -31,19 +31,21 @@ vector<Player*> GameStation::combine_lists() {
 Node* GameStation::close_station(int node_id) {
     if (node_id == id) {
         std::vector<Player*> v = combine_lists();
-        Node* node = new QueueNode(node_id, v, parent, right, left);
-        return node;
+        return new QueueNode(node_id, v, parent, right, left);;
     }
-    if (right)
-        right = right->close_station(node_id);
-    if (left)
-        left = left->close_station(node_id);
+    if (right) {
+        Node* updated_right = right->close_station(node_id);
+        if (updated_right != right) 
+            delete right;   //delete the old right node to avoid memory leak
+        right = updated_right;
+    }
+    if (left) {
+        Node* updated_left = left->close_station(node_id);
+        if (updated_left != left) 
+            delete left;    //delete the old left node to avoid memory leak
+        left = updated_left;
+    }
     return this;
-}
-
-
-std::vector<Player*> GameStation::get_players() const {
-    throw runtime_error("Cannot get players from a game station");
 }
 
 Player* GameStation::determine_winner() {
@@ -65,7 +67,7 @@ Player* GameStation::get_winner() {
         left->relocate_loser(right_player); //cause we move the loser the the leftmost queue
     
     right_player = left_player = nullptr;
-    winner->update_stats();
+    winner->update_stats_after_win();
     return winner;
 };
 
@@ -75,3 +77,5 @@ void GameStation::relocate_loser(Player* loser) {
     else
         throw runtime_error("Cannot relocate loser to a game station");
 };
+
+std::vector<Player*> GameStation::get_players() const { throw runtime_error("Cannot get players from a game station"); }

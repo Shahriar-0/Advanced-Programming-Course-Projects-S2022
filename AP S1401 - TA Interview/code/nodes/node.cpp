@@ -7,3 +7,10 @@ Node::Node(int _id, Node* _right, Node* _left) : id(_id), parent(nullptr), right
     if (left != nullptr) left->parent = this;
 }
  
+void Node::shutdown() {
+    if (right) right->shutdown();
+    if (left) left->shutdown();
+    delete this;
+}
+
+bool Node::is_root() { return parent == nullptr; }

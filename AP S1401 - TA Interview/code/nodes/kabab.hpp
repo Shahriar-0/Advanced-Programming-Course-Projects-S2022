@@ -7,7 +7,6 @@ class Kabab : public GameStation {
 public:
     Kabab(int _id, Node* _right, Node* _left);
     Player* winner_of_match() override;
-
 };
 
 #endif
