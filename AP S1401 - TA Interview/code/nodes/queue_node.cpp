@@ -22,7 +22,6 @@ void QueueNode::add_player(Player* player, int node_id) {
         
         return;
     }
-    // since this is a queue, we aren't suppose to have right and left nodes
 }
 
 Node* QueueNode::close_station(int node_id) {
