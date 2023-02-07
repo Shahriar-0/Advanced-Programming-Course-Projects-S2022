@@ -25,7 +25,7 @@ vector<Player*> GameStation::combine_lists() {
         v2 = left->get_players();
 
     v1.insert(v1.end(), v2.begin(), v2.end());
-    sort(v1.begin(), v1.end(), [](Player* p1, Player* p2) -> bool { return p1->calc_skill() < p2->calc_skill(); });
+    sort(v1.begin(), v1.end(), [](Player* p1, Player* p2) -> bool { return p1->calc_skill() > p2->calc_skill(); });
     return v1;
 }
 

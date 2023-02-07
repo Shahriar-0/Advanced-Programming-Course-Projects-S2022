@@ -4,3 +4,7 @@
 Arrival 3 1 5 6 7 strong
 Arrival 4 2 5 6 7 agile
 Arrival 5 3 5 6 7 intelligent
+Close 1
+Run
+Run
+Run
