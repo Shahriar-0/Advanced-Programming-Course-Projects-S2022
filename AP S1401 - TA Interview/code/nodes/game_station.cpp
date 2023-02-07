@@ -2,8 +2,8 @@
 
 using namespace std;
 
-GameStation::GameStation(int _id, Node* _parent, Node* _left, Node* _right) 
-    : Node(_id, _parent, _right, _left), right_player(nullptr), left_player(nullptr) {}
+GameStation::GameStation(int _id, Node* _left, Node* _right) 
+    : Node(_id, _right, _left), right_player(nullptr), left_player(nullptr) {}
 
 
 void GameStation::add_player(Player* player, int node_id) {

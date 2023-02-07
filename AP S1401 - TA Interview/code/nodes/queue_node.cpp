@@ -3,11 +3,11 @@
 using namespace std;
 
 
-QueueNode::QueueNode(int _id, Node* _parent, Node* _right, Node* _left) 
-          : Node(_id, _parent, _right, _left) {}
+QueueNode::QueueNode(int _id, Node* _right, Node* _left) 
+          : Node(_id, _right, _left) {}
 
 QueueNode::QueueNode(int _id, std::vector<Player*> _players, Node* _parent, Node* _right, Node* _left) 
-          : Node(_id, _parent, _right, _left), players(_players) {}
+          : Node(_id, _right, _left), players(_players) { parent = _parent; }
 
 void QueueNode::add_player(Player* player, int node_id) { 
     if (node_id == id) {

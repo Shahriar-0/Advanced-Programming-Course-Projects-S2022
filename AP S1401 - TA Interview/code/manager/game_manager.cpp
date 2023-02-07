@@ -48,11 +48,19 @@ void GameManager::find_left_and_right(Node*& left_node, Node*& right_node, vecto
     auto right_node_it = find(nodes.begin(), nodes.end(), right_node_id);
     auto left_node_it = find(nodes.begin(), nodes.end(), left_node_id);
 
-    right_node = (right_node_it != nodes.end()) ?  *right_node_it
-                : createInstance<QueueNode>(right_node_id, nullptr, nullptr, nullptr);
+    if (right_node_it != nodes.end()) 
+        right_node = *right_node_it;
+    else {
+        right_node = createInstance<QueueNode>(right_node_id, nullptr, nullptr);
+        nodes.push_back(right_node);
+    }
 
-    left_node = (left_node_it != nodes.end()) ?  *left_node_it 
-                : createInstance<QueueNode>(left_node_id, nullptr, nullptr, nullptr);
+    if (left_node_it != nodes.end()) 
+        left_node = *left_node_it;
+    else {
+        left_node = createInstance<QueueNode>(left_node_id, nullptr, nullptr);
+        nodes.push_back(left_node);
+    }
 }
 
 void GameManager::add_node(string line, vector<Node*>& nodes, int num_nodes) {
@@ -69,17 +77,17 @@ void GameManager::add_node(string line, vector<Node*>& nodes, int num_nodes) {
     Node* node;
     // nullptrs are used to indicate that the node does not yet have a parent
     if (node_id > num_nodes) 
-        node = createInstance<QueueNode>(node_id, nullptr, right_node, left_node);
+        node = createInstance<QueueNode>(node_id, right_node, left_node);
 
     else {
         if (type == CHESS_KEYWORD) 
-            node = createInstance<Chess>(node_id, nullptr, right_node, left_node);
+            node = createInstance<Chess>(node_id, right_node, left_node);
         else if (type == WRESTLE_KEYWORD) 
-            node = createInstance<Wrestle>(node_id, nullptr, right_node, left_node);
+            node = createInstance<Wrestle>(node_id, right_node, left_node);
         else if (type == ARMWRESTLE_KEYWORD) 
-            node = createInstance<ArmWrestle>(node_id, nullptr, right_node, left_node);
+            node = createInstance<ArmWrestle>(node_id, right_node, left_node);
         else if (type == KABAB_KEYWORD)
-            node = createInstance<Kabab>(node_id, nullptr, right_node, left_node);
+            node = createInstance<Kabab>(node_id, right_node, left_node);
         else 
             throw logic_error("Invalid node type");
         
@@ -133,7 +141,7 @@ void GameManager::shutdown(std::vector<std::string> args){
 }
 
 template <typename T>
-T* createInstance(int _id, T* parent, T* right, T* left) { 
+T* createInstance(int _id, T* right, T* left) { 
     // Create a new instance of a specific type of node with the given parameters
-    return new T(_id, parent, right, left); 
+    return new T(_id, right, left); 
 }

@@ -7,7 +7,7 @@
 
 class Node {
     public:
-        Node(int _id, Node* _parent = nullptr, Node* _right = nullptr, Node* _left = nullptr);
+        Node(int _id, Node* _right = nullptr, Node* _left = nullptr);
         ~Node() = default;
         virtual void add_player(Player* player, int node_id) = 0;
         virtual Node* close_station(int node_id) = 0;

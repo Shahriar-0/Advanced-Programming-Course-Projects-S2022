@@ -62,7 +62,7 @@ private:
     Node* root_node;
     string_to_node_map stations_type;
     bool is_working;
-    template <typename T> T* createInstance(int _id, Node* parent, Node* right, Node* left);
+    template <typename T> T* createInstance(int _id, Node* right, Node* left);
 };
 
 

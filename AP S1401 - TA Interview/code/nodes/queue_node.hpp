@@ -6,7 +6,7 @@
 
 class QueueNode : public Node {
 public:
-    QueueNode(int _id, Node* _parent = nullptr, Node* _right = nullptr, Node* _left = nullptr);
+    QueueNode(int _id, Node* _right = nullptr, Node* _left = nullptr);
     QueueNode(int _id, std::vector<Player*> _players, Node* _parent = nullptr, Node* _right = nullptr, Node* _left = nullptr);
     ~QueueNode() = default;
     void add_player(Player* player, int node_id) override;
