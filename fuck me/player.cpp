@@ -23,7 +23,7 @@ void Player::update_stats_after_win() {
 }
 
 ostream& operator<<(ostream& out, const Player& player) {
-    out << player.id;
+    out << player.id << endl;
     return out;
 }
 

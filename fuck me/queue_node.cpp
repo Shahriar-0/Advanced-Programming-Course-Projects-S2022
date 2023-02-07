@@ -17,9 +17,8 @@ void QueueNode::add_player(Player* player, int node_id) {
             players.insert(players.begin(), player);
         else 
             players.insert(players.end() - index, player);
-
-        player->update_stats_after_lose();
         
+        player->update_stats_after_lose();
         return;
     }
     // since this is a queue, we aren't suppose to have right and left nodes

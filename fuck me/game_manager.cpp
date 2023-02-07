@@ -1,5 +1,5 @@
 #include "game_manager.hpp"
-#include "../cli/cli.hpp"
+#include "cli.hpp"
 
 typedef void (GameManager::*game_manager_method)(std::vector<std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
@@ -103,7 +103,7 @@ void GameManager::add_node(string line, vector<Node*>& nodes, int num_nodes) {
 void GameManager::run(std::vector<std::string> args){
     Player* winner = root_node->get_winner();
     if (winner != nullptr)
-        cout << *winner << endl;
+        cout << winner << endl;
     else
         cout << "No winner" << endl;
 }
