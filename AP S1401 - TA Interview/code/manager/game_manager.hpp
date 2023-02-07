@@ -1,7 +1,6 @@
 #ifndef __GAME_MANAGER_HPP__
 #define __GAME_MANAGER_HPP__
 
-#include <string>
 #include <cstring>
 #include <map>
 #include <functional>
@@ -21,10 +20,6 @@
 #include "../nodes/kabab.hpp"
 
 
-std::string STRONG_KEYWORD = "strong";
-std::string AGILE_KEYWORD = "agile";
-std::string INTELLIGENT_KEYWORD = "intelligent";
-
 const std::string CHESS_KEYWORD = "chess";
 const std::string WRESTLE_KEYWORD = "wrestle";
 const std::string ARMWRESTLE_KEYWORD = "armwrestle";
@@ -32,7 +27,7 @@ const std::string KABAB_KEYWORD = "kabab";
 
 class GameManager {
 public:
-    GameManager() = default;
+    GameManager();
     ~GameManager() = default;
 
     void run(std::vector<std::string> args);

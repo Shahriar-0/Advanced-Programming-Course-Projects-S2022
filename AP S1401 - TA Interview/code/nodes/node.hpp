@@ -4,6 +4,7 @@
 #include "../player/player.hpp"
 #include <stdexcept>
 #include <exception>
+#include <vector>
 
 class Node {
 public:
@@ -11,6 +12,7 @@ public:
     ~Node() = default;
 
     bool is_root();
+    int get_id();
     void shutdown();
     
     virtual void add_player(Player* player, int node_id) = 0;

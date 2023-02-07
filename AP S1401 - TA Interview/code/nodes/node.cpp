@@ -13,4 +13,6 @@ void Node::shutdown() {
     delete this;
 }
 
+int Node::get_id() { return id; }
+
 bool Node::is_root() { return parent == nullptr; }

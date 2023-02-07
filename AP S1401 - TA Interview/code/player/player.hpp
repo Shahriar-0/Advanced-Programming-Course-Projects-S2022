@@ -4,7 +4,10 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "../manager/game_manager.hpp"
+
+std::string STRONG_KEYWORD = "strong";
+std::string AGILE_KEYWORD = "agile";
+std::string INTELLIGENT_KEYWORD = "intelligent";
 
 class Player {
 public:

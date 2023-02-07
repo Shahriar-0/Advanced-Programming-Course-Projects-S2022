@@ -5,10 +5,10 @@ include common_vars.mk
 
 all: interview.out
 
-debug.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestler.o $(BUILDS)chess.o $(BUILDS)wrestler.o $(BUILDS)kabab.o $(BUILDS)cli.o $(BUILDS)player.o 
+debug.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestle.o $(BUILDS)chess.o $(BUILDS)wrestle.o $(BUILDS)kabab.o $(BUILDS)cli.o $(BUILDS)player.o 
 	$(DEBUG) $(BUILDS)*.o -o $@
 
-interview.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestler.o $(BUILDS)chess.o $(BUILDS)wrestler.o $(BUILDS)kabab.o $(BUILDS)cli.o $(BUILDS)player.o 
+interview.out: $(BUILDS)main.o $(BUILDS)game_manager.o $(BUILDS)node.o $(BUILDS)game_station.o $(BUILDS)queue_node.o $(BUILDS)armwrestle.o $(BUILDS)chess.o $(BUILDS)wrestle.o $(BUILDS)kabab.o $(BUILDS)cli.o $(BUILDS)player.o 
 	$(CC) $(BUILDS)*.o -o $@
 
 
@@ -22,22 +22,22 @@ $(BUILDS)game_manager.o: $(MANAGER)game_manager.cpp $(MANAGER)game_manager.hpp
 	$(CC_OBJECT) $< -o $@
 
 #nodes 
-$(BUILDS)node.o: $(NODES)node.cpp $(MANAGER)node.hpp $(PLAYER)player.hpp
+$(BUILDS)node.o: $(NODES)node.cpp $(NODES)node.hpp $(PLAYER)player.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)game_station.o: $(NODES)game_station.cpp $(NODES)game_station.hpp $(MANAGER)node.hpp
+$(BUILDS)game_station.o: $(NODES)game_station.cpp $(NODES)game_station.hpp $(NODES)node.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)queue_node.o: $(NODES)queue_node.cpp $(NODES)queue_node.hpp $(MANAGER)node.hpp
+$(BUILDS)queue_node.o: $(NODES)queue_node.cpp $(NODES)queue_node.hpp $(NODES)node.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)armwrestler.o: $(NODES)armwrestler.cpp $(NODES)armwrestler.hpp $(NODES)game_station.hpp
+$(BUILDS)armwrestle.o: $(NODES)armwrestle.cpp $(NODES)armwrestle.hpp $(NODES)game_station.hpp
 	$(CC_OBJECT) $< -o $@
 
 $(BUILDS)chess.o: $(NODES)chess.cpp $(NODES)chess.hpp $(NODES)game_station.hpp
 	$(CC_OBJECT) $< -o $@
 
-$(BUILDS)wrestler.o: $(NODES)wrestler.cpp $(NODES)wrestler.hpp $(NODES)game_station.hpp
+$(BUILDS)wrestle.o: $(NODES)wrestle.cpp $(NODES)wrestle.hpp $(NODES)game_station.hpp
 	$(CC_OBJECT) $< -o $@
 
 $(BUILDS)kabab.o: $(NODES)kabab.cpp $(NODES)kabab.hpp $(NODES)game_station.hpp

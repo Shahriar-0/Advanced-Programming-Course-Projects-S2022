@@ -1,8 +1,9 @@
 #ifndef __GAME_STATION_HPP__
 #define __GAME_STATION_HPP__
 
-#include "../manager/game_manager.hpp"
+#include "node.hpp"
 #include <cmath>
+#include <algorithm>
 
 class GameStation : public Node {
 public:

@@ -1,4 +1,5 @@
 #include "game_station.hpp"
+#include "queue_node.hpp"
 
 using namespace std;
 

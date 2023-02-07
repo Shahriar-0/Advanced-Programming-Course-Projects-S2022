@@ -44,9 +44,11 @@ void GameManager::split_line(int& node_id, int& right_node_id, int& left_node_id
 void GameManager::find_left_and_right(Node*& left_node, Node*& right_node, vector<Node*>& nodes,
              int left_node_id, int right_node_id) {
 
-    // Find the left and right nodes in the nodes vector, if they exist, otherwise create queue nodes
-    auto right_node_it = find(nodes.begin(), nodes.end(), right_node_id);
-    auto left_node_it = find(nodes.begin(), nodes.end(), left_node_id);
+    auto right_node_it = find_if(nodes.begin(), nodes.end(), 
+        [&nodes, &right_node_id](Node*& node) { return node->get_id() == right_node_id;});
+
+    auto left_node_it = find_if(nodes.begin(), nodes.end(), 
+        [&nodes, &left_node_id](Node*& node) { return node->get_id() == left_node_id;});
 
     if (right_node_it != nodes.end()) 
         right_node = *right_node_it;
@@ -104,16 +106,16 @@ void GameManager::run(std::vector<std::string> args){
 
 enum Close { // indexes of the arguments in the close station command
     CLOSE_KEYWORD_INDEX,
-    QUEUE_INDEX,
+    QUEUE_INDEX_CLOSE,
 };
 
 void GameManager::close_station(std::vector<std::string> args){
-    root_node = root_node->close_station(stoi(args[QUEUE_INDEX]));
+    root_node = root_node->close_station(stoi(args[Close::QUEUE_INDEX_CLOSE]));
 }
 
 enum Arrival {  // indexes of the arguments in the arrival command
     ARRIVAL_KEYWORD_INDEX,
-    QUEUE_INDEX,
+    QUEUE_INDEX_ARRIVAL,
     PLAYER_INDEX,
     STRENGTH_INDEX,
     AGILITY_INDEX,
@@ -125,7 +127,7 @@ enum Arrival {  // indexes of the arguments in the arrival command
 void GameManager::add_player(std::vector<std::string> args){
     Player* player = new Player(stoi(args[PLAYER_INDEX]), stoi(args[STRENGTH_INDEX]),
                      stoi(args[AGILITY_INDEX]), stoi(args[INTELLIGENCE_INDEX]), args[MAIN_ABILITY_INDEX]);
-    root_node->add_player(player, stoi(args[QUEUE_INDEX]));
+    root_node->add_player(player, stoi(args[Arrival::QUEUE_INDEX_ARRIVAL]));
 }
 
 void GameManager::shutdown(std::vector<std::string> args){
@@ -138,8 +140,5 @@ T* GameManager::createInstance(int _id, Node* right, Node* left) {
     // Create a new instance of a specific type of node with the given parameters
     return new T(_id, right, left); 
 }
-
-
-void GameManager::shutdown(std::vector<std::string> args) { is_working = false; }
 
 bool GameManager::is_running() { return is_working; }
