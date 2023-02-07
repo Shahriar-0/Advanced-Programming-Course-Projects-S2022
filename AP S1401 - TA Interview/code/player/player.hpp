@@ -5,9 +5,7 @@
 #include <string>
 #include <math.h>
 
-std::string STRONG_KEYWORD = "strong";
-std::string AGILE_KEYWORD = "agile";
-std::string INTELLIGENT_KEYWORD = "intelligent";
+
 
 class Player {
 public:

@@ -5,6 +5,10 @@ using namespace std;
 Player::Player(int _id, int _strength, int _agility, int _intelligence, std::string main_ability)
     : id(_id), strength(_strength), agility(_agility), intelligence(_intelligence), win(0) {
 
+    const std::string STRONG_KEYWORD = "strong";
+    const std::string AGILE_KEYWORD = "agile";
+    const std::string INTELLIGENT_KEYWORD = "intelligent";
+
     if (main_ability == AGILE_KEYWORD)
         main_trait = &agility;
     else if (main_ability == STRONG_KEYWORD)
