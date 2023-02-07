@@ -24,6 +24,11 @@ void CLI::run() {
         vector<string> input = split_input_by_delimeter(line, ' ');
         string command = input[0];
         try {
+            // auto func = game_manager_func_map.find(command);
+            // if (func != game_manager_func_map.end())
+            //     (game_manager.*(func->second))(input);
+            // else
+            //     throw std::invalid_argument("Invalid command");
             game_manager_func_map[command](input);
         }
         catch (const std::exception& e) {

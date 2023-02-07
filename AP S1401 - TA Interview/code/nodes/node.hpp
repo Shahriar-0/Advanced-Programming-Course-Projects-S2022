@@ -13,6 +13,8 @@ class Node {
         virtual Node* close_station(int node_id) = 0;
         bool is_root() { return parent == nullptr; }
         virtual std::vector<Player*> get_players() const = 0;
+        virtual Player* get_winner() = 0;
+        virtual void relocate_loser(Player* loser) = 0;
     protected:
         int id;
         Node* right;

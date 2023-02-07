@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <exception>
+#include <math.h>
 
 #include "../nodes/queue_node.hpp"
 #include "../nodes/game_station.hpp"

@@ -28,3 +28,15 @@ Node* QueueNode::close_station(int node_id) {
         throw runtime_error("Cannot close a queue station");
     return nullptr; // since this is a queue, we aren't suppose to have right and left nodes
 }
+
+Player* QueueNode::get_winner() {
+    if (players.size() == 0) 
+        return nullptr;
+    Player* i = players[0];
+    players.erase(players.begin());
+    return i;
+}
+
+void QueueNode::relocate_loser(Player* loser) {
+    add_player(loser, id);
+}

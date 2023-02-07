@@ -12,6 +12,8 @@ public:
     void add_player(Player* player, int node_id) override;
     Node* close_station(int node_id) override;
     std::vector<Player*> get_players() const override { return players; };
+    Player* get_winner() override;
+    void relocate_loser(Player* loser) override;
 
 private:
     std::vector<Player*> players;
