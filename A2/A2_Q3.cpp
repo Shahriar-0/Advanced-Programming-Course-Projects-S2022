@@ -112,7 +112,7 @@ int changing_direction(vector<vector<Coordinate>> map, Direction direction, Poin
 }
 
 int find_shortest_path(vector<vector<Coordinate>> map, Direction direction, Point position, int length) {
-    bool hittedEdge = false, inLoop = false;
+    bool hitEdge = false, inLoop = false;
 
     do {
         //we go ahead till we hit rock or edge or we stuck in a loop
@@ -120,14 +120,14 @@ int find_shortest_path(vector<vector<Coordinate>> map, Direction direction, Poin
         inLoop = in_loop(map, direction, position);
         mark_position(map, position, direction);
         position = generate_new_coordinate(position, direction);
-        hittedEdge = hit_edge(position, map.size(), map[0].size());
+        hitEdge = hit_edge(position, map.size(), map[0].size());
         length++;
-    } while (!hittedEdge && !inLoop && map[position.x][position.y].data == EMPTY);
+    } while (!hitEdge && !inLoop && map[position.x][position.y].data == EMPTY);
 
     if (inLoop) 
         return NO_PATH;
 
-    if (hittedEdge || map[position.x][position.y].data == ROCK) 
+    if (hitEdge || map[position.x][position.y].data == ROCK) 
         return changing_direction(map, direction, position, length);
     
     if (map[position.x][position.y].data == BAMBOO)
