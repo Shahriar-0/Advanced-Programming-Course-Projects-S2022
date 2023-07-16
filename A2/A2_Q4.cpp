@@ -1,10 +1,10 @@
 #include <iostream>
 #include <vector>
-using namespace std;
 
-bool can_be_weighted(vector<int>& listOfWeights, int goal, int index = 0, int sum = 0) {
+bool can_be_weighted(std::vector<int>& listOfWeights, int goal, int index = 0, int sum = 0) {
     if (index == listOfWeights.size())
         return abs(sum) == goal;
+        
     bool foundAnswer = false;
     //there's only three possible choice
     foundAnswer = foundAnswer || can_be_weighted(listOfWeights, goal, index + 1, sum + listOfWeights[index]);
@@ -15,9 +15,9 @@ bool can_be_weighted(vector<int>& listOfWeights, int goal, int index = 0, int su
 
 int main(void) {
     int numOfStones, goalWeight;
-    cin >> numOfStones >> goalWeight;
-    vector<int> listOfWeights(numOfStones);
+    std::cin >> numOfStones >> goalWeight;
+    std::vector<int> listOfWeights(numOfStones);
     for (int i = 0; i < numOfStones; i++)
-        cin >> listOfWeights[i];
-    (can_be_weighted(listOfWeights, goalWeight))? cout << "True\n" : cout << "False\n";
+        std::cin >> listOfWeights[i];
+    std::cout << (can_be_weighted(listOfWeights, goalWeight)? "True" : "False") << std::endl;
 }
