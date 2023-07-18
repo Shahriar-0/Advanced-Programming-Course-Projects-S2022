@@ -1,9 +1,10 @@
 #ifndef __GAME_STATION_HPP__
 #define __GAME_STATION_HPP__
 
-#include "node.hpp"
-#include <cmath>
 #include <algorithm>
+#include <cmath>
+
+#include "node.hpp"
 
 class GameStation : public Node {
 public:
@@ -17,9 +18,10 @@ public:
     std::vector<Player*> get_players() const override;
     Player* get_winner() override;
     void relocate_loser(Player* loser) override;
-    
+
     std::vector<Player*> combine_lists();
     Player* determine_winner();
+
 protected:
     Player* right_player;
     Player* left_player;

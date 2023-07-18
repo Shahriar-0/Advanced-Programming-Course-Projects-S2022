@@ -1,8 +1,9 @@
 #ifndef __QUEUE_NODE_HPP__
 #define __QUEUE_NODE_HPP__
 
-#include "node.hpp"
 #include <vector>
+
+#include "node.hpp"
 
 class QueueNode : public Node {
 public:

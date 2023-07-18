@@ -2,7 +2,6 @@
 
 using namespace std;
 
-    
 CLI::CLI() { map_functions(); }
 
 void CLI::map_functions() {
@@ -14,10 +13,10 @@ void CLI::map_functions() {
 
 vector<string> CLI::split_input_by_delimeter(string line, char delimeter) {
     vector<string> internal;
-    stringstream ss(line); // Turn the string into a stream.
+    stringstream ss(line);  // Turn the string into a stream.
     string tok;
 
-    while(getline(ss, tok, delimeter)) 
+    while (getline(ss, tok, delimeter))
         internal.push_back(tok);
 
     return internal;
@@ -35,8 +34,7 @@ void CLI::run() {
                 (game_manager.*(func->second))(input);
             else
                 throw invalid_argument("Invalid command");
-        }
-        catch (const exception& e) {
+        } catch (const exception& e) {
             cout << e.what() << endl;
         }
     }

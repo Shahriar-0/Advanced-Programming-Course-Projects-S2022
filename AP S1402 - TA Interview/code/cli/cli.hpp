@@ -1,11 +1,12 @@
 #ifndef __CLI_HPP__
 #define __CLI_HPP__
 
-#include "../manager/game_manager.hpp"
+#include <map>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
-#include <map>
+
+#include "../manager/game_manager.hpp"
 
 // consts
 constexpr char INPUT_DELIMETER = ' ';
@@ -18,11 +19,12 @@ typedef void (GameManager::*game_manager_method)(std::vector<std::string>);
 typedef std::map<std::string, game_manager_method> game_manager_func_map_type;
 
 class CLI {
-public:
+   public:
     CLI();
     std::vector<std::string> split_input_by_delimeter(std::string input, char delimeter = INPUT_DELIMETER);
     void run();
-private:
+
+   private:
     void map_functions();
     GameManager game_manager;
     game_manager_func_map_type game_manager_func_map;
