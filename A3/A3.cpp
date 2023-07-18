@@ -1,9 +1,9 @@
+#include <algorithm>
+#include <cstring>
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <vector>
-#include <fstream>
-#include <algorithm>
 
 #define NO_TRANSLATOR_FOUND "Not Found"
 #define LANGUAGE_NOT_FOUND -1
@@ -26,7 +26,7 @@ struct TimePeriod {
 struct Translator {
     string name;
     TimePeriod availableTimePeriod;
-    vector<TimePeriod> occupiedTimes; 
+    vector<TimePeriod> occupiedTimes;
     int numOfLanguages;
 };
 
@@ -93,28 +93,27 @@ void initialising_data(string inputFile, Languages& languagesList, Translators& 
     sorting_languages(languagesList);
 }
 
-
 void sorting_languages(Languages& languagesList) {
-    for (int i = 0; i < languagesList.size(); i++) 
+    for (int i = 0; i < languagesList.size(); i++)
         sort(languagesList[i].translators.begin(), languagesList[i].translators.end(), translator_compare);
 }
 
 bool translator_compare(const TranslatorPointer& first, const TranslatorPointer& second) {
     return first->numOfLanguages < second->numOfLanguages ||
-        ((second->numOfLanguages == first->numOfLanguages) && name_compare(first->name, second->name));
+           ((second->numOfLanguages == first->numOfLanguages) && name_compare(first->name, second->name));
 }
 
 bool name_compare(string first, string second) {
-	int i = 0;
-	for (; i < max(first.size(), second.size()); i++) {
-		if (first[i] != second[i])
-			return first[i] < second[i];
-	}
-	return true;    //when both are equal
+    int i = 0;
+    for (; i < max(first.size(), second.size()); i++) {
+        if (first[i] != second[i])
+            return first[i] < second[i];
+    }
+    return true;  // when both are equal
 }
 
 void get_input(string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
-    ifstream fileStream (inputFile);
+    ifstream fileStream(inputFile);
     check_for_file_validation(fileStream);
     read_languages(fileStream, languagesList, translatorsList);
     read_events(fileStream, eventsList, languagesList);
@@ -129,7 +128,7 @@ void check_for_file_validation(ifstream& inputFile) {
 }
 
 void read_languages(ifstream& fileStream, Languages& languagesList, Translators& translatorsList) {
-    int lineCount; 
+    int lineCount;
     fileStream >> lineCount;
     translatorsList.resize(lineCount);
     for (int i = 0; i < lineCount; i++) {
@@ -140,10 +139,10 @@ void read_languages(ifstream& fileStream, Languages& languagesList, Translators&
         for (auto singleLanguageName : splittedLanguages) {
             int languageIndex = search(languagesList, singleLanguageName);
 
-            if (languageIndex == LANGUAGE_NOT_FOUND) 
+            if (languageIndex == LANGUAGE_NOT_FOUND)
                 add_new(languagesList, singleLanguageName, translatorsList, i);
             else
-                add_existing(languagesList, singleLanguageName, translatorsList, i,languageIndex);
+                add_existing(languagesList, singleLanguageName, translatorsList, i, languageIndex);
         }
     }
 }
@@ -151,7 +150,7 @@ void read_languages(ifstream& fileStream, Languages& languagesList, Translators&
 void add_new(Languages& languagesList, string name, Translators& translatorsList, int translatorIndex) {
     languagesList.resize(languagesList.size() + 1);
     languagesList[languagesList.size() - 1].name = name;
-    languagesList[languagesList.size() - 1].numOfTranslators = 1;   //it's the first translator
+    languagesList[languagesList.size() - 1].numOfTranslators = 1;  // it's the first translator
     languagesList[languagesList.size() - 1].translators.push_back(&translatorsList[translatorIndex]);
 }
 
@@ -188,8 +187,8 @@ Time read_time_format(ifstream& fileStream) {
 vector<string> read_list_of_languages(ifstream& fileStream) {
     string languagesName;
     getline(fileStream, languagesName);
-    languagesName = languagesName.substr(1); //cause we have an extra space in thr beginning
-    return string_tokenizer(&languagesName[0]); 
+    languagesName = languagesName.substr(1);  // cause we have an extra space in thr beginning
+    return string_tokenizer(&languagesName[0]);
 }
 
 vector<string> string_tokenizer(char* str) {
@@ -204,7 +203,7 @@ vector<string> string_tokenizer(char* str) {
 }
 
 void read_events(ifstream& fileStream, Events& eventsList, const Languages& languagesList) {
-    int lineCount; 
+    int lineCount;
     fileStream >> lineCount;
     while (lineCount--) {
         Event event;
@@ -214,14 +213,14 @@ void read_events(ifstream& fileStream, Events& eventsList, const Languages& lang
         vector<string> splittedLanguages = read_list_of_languages(fileStream);
         EventsLanguage eventLanguage = {""};
         int priority = 0;
-        for (auto singleLanguageName : splittedLanguages) { 
+        for (auto singleLanguageName : splittedLanguages) {
             eventLanguage.languageName = singleLanguageName;
             int index = search(languagesList, singleLanguageName);
             if (index == LANGUAGE_NOT_FOUND)
                 eventLanguage.numOfTranslators = 0;
             else
                 eventLanguage.numOfTranslators = languagesList[index].numOfTranslators;
-            eventLanguage.priority = priority;  //this is for knowing the order of input
+            eventLanguage.priority = priority;  // this is for knowing the order of input
             priority++;
             event.eventLanguages.push_back(eventLanguage);
         }
@@ -252,7 +251,8 @@ void dedicate_time(Events& eventsList, const Languages& languageList) {
                 translatorPtr->occupiedTimes.push_back(eventsList[i].timePeriod);
             }
         }
-        sort(eventsList[i].eventLanguages.begin(), eventsList[i].eventLanguages.end(), language_of_event_compare_for_priority);
+        sort(eventsList[i].eventLanguages.begin(), eventsList[i].eventLanguages.end(),
+             language_of_event_compare_for_priority);
     }
 }
 
@@ -262,7 +262,7 @@ bool is_before(Time first, Time second) {
 
 bool is_overlapping(TimePeriod first, TimePeriod second) {
     return (is_before(second.start, first.start) || is_before(second.start, first.end)) &&
-            (is_before(first.start, second.start) || is_before(first.start, second.end));
+           (is_before(first.start, second.start) || is_before(first.start, second.end));
 }
 
 bool is_available(TranslatorPointer translatorPtr, TimePeriod goalTimePeriod) {
