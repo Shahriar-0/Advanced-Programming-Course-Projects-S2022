@@ -24,7 +24,7 @@ enum GameMode { BEFORE_START_MENU,
                 FINISHED };
 enum PlayerStatus { DEAD,
                     ALIVE };
-enum ErrosList { PLAYER_NOT_AVAILABLE,
+enum ErrorList { PLAYER_NOT_AVAILABLE,
                  CANT_BUY,
                  WEAPON_NOT_AVAILABLE,
                  ALREADY_HAVE,
@@ -36,7 +36,7 @@ enum ErrosList { PLAYER_NOT_AVAILABLE,
                  ATTACKED_DEAD };
 
 class Gun {
-   public:
+public:
     Gun(int _price, int _damage, int _prizeForKilling, string _name) {
         price = _price;
         damage = _damage;
@@ -49,7 +49,7 @@ class Gun {
     int get_prize_for_killing() { return prizeForKilling; }
     string get_name() { return name; }
 
-   private:
+private:
     string name;
     int price;
     int damage;
@@ -58,11 +58,11 @@ class Gun {
 const Gun GUN_NOT_AVAILABLE(0, 0, 0, "NOT AVAILABLE");
 
 class Player {
-   public:
+public:
     int get_money() { return money; }
     int get_health() { return health; }
     string get_username() { return username; }
-    string get_teamname() { return teamname; }
+    string get_team_name() { return teamName; }
     PlayerMode get_mode() { return mode; }
     PlayerStatus get_status() { return status; }
     int get_kills() { return kills; }
@@ -83,12 +83,12 @@ class Player {
     void buy(GameManager*);
     bool can_buy(Gun, GameManager*);
 
-   private:
+private:
     int kills;
     int deaths;
     int money;
     int health;
-    string teamname;
+    string teamName;
     string username;
     vector<Gun> listOfGuns;
     PlayerMode mode;
@@ -96,15 +96,15 @@ class Player {
 };
 
 class Team {
-   public:
-    Team(string _teamname) { teamname = _teamname; }
+public:
+    Team(string _teamName) { teamName = _teamName; }
     void add_user(Player player, GameManager* cs_go) {
         player.initialise(cs_go);
         listOfMembers.push_back(player);
     }
     vector<Player> get_list_of_players() { return listOfMembers; }
     void set_list_of_players(vector<Player> listOfPlayers) { listOfMembers = listOfPlayers; }
-    string get_name() { return teamname; }
+    string get_name() { return teamName; }
 
     int count_alive();
     void sorting();
@@ -114,13 +114,13 @@ class Team {
     void initialise(GameManager*);
     void score_board();
 
-   private:
-    string teamname;
+private:
+    string teamName;
     vector<Player> listOfMembers;
 };
 
 class GameManager {
-   public:
+public:
     GameManager();
     void before_menu();
     void menu();
@@ -137,7 +137,7 @@ class GameManager {
     void score_board();
     void clearing();
     Gun search_weapon(Gun);
-    void show_error(ErrosList);
+    void show_error(ErrorList);
     void get_command_in_start_menu(int&, int);
     void get_command_during_game(int&, int);
     void get_command_before_start_menu(int&);
@@ -145,7 +145,7 @@ class GameManager {
     Player* search_in_players(string);
     GameMode get_mode() { return gameMode; }
 
-   private:
+private:
     vector<Gun> listOfAllGuns;
     Team terrorist, counter_terrorist;
     GameMode gameMode;
@@ -165,7 +165,7 @@ GameManager::GameManager() : terrorist("terrorist"), counter_terrorist("counter-
 }
 
 void Team::win() {
-    cout << teamname << " won" << endl;
+    cout << teamName << " won" << endl;
     for (auto& player : listOfMembers)
         player.add_money(WIN_PRIZE);
 }
@@ -175,9 +175,9 @@ void Team::lose() {
         player.add_money(LOSE_PRIZE);
 }
 
-Player::Player(string _username, string _teamname) {
+Player::Player(string _username, string _teamName) {
     username = _username;
-    teamname = _teamname;
+    teamName = _teamName;
     status = DEAD;
     health = INITIAL_HEALTH;
     money = INITIAL_MONEY;
@@ -221,7 +221,7 @@ void Team::sorting() {
     sort(listOfMembers.begin(), listOfMembers.end(), player_compare);
 }
 
-void GameManager::show_error(ErrosList error) {
+void GameManager::show_error(ErrorList error) {
     switch (error) {
         case PLAYER_NOT_AVAILABLE:
             cout << "user not available" << endl;
@@ -310,7 +310,7 @@ bool Player::can_shoot(Gun gun, Player* attacked, GameManager* cs_go) {
         cs_go->show_error(DOESNT_HAVE_GUN);
         return false;
     }
-    if (get_teamname() == attacked->get_teamname()) {
+    if (get_team_name() == attacked->get_team_name()) {
         cs_go->show_error(FRIENDLY_FIRE);
         return false;
     }
@@ -398,9 +398,9 @@ void GameManager::end_game() {
 }
 
 void GameManager::add_user() {
-    string username, teamname;
-    cin >> username >> teamname;
-    (teamname == "terrorist") ? terrorist.add_user(Player(username, teamname), this) : counter_terrorist.add_user(Player(username, teamname), this);
+    string username, teamName;
+    cin >> username >> teamName;
+    (teamName == "terrorist") ? terrorist.add_user(Player(username, teamName), this) : counter_terrorist.add_user(Player(username, teamName), this);
     cout << "ok" << endl;
 }
 
