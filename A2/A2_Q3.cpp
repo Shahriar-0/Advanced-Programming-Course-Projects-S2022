@@ -10,7 +10,7 @@ enum Direction { RIGHT,
                  LEFT,
                  UP,
                  DOWN };
-                 
+
 enum Coordinate_status { NOT_SEEN,
                          SEEN };
 
@@ -106,6 +106,7 @@ void mark_position(std::vector<std::vector<Coordinate>>& map, const Point positi
             map[position.x][position.y].down = SEEN;
             break;
     }
+    throw "Invalid direction";
 }
 
 int changing_direction(std::vector<std::vector<Coordinate>> map, Direction direction, Point position, int length) {
@@ -141,7 +142,7 @@ int find_shortest_path(std::vector<std::vector<Coordinate>> map, Direction direc
 
     if (map[position.x][position.y].data == BAMBOO)
         return length;
-    
+
     return NO_PATH;
 }
 
