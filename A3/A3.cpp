@@ -5,13 +5,11 @@
 #include <string>
 #include <vector>
 
-#define NO_TRANSLATOR_FOUND "Not Found"
-#define LANGUAGE_NOT_FOUND -1
-#define SPLIT_CHAR " "
-#define OUTPUT_DELIMETER ": "
-#define ERROR_1 "haven't pass the argument"
-
-using namespace std;
+const std::string NO_TRANSLATOR_FOUND = "Not Found";
+const std::string OUTPUT_DELIMETER = ": ";
+const std::string ERROR_1 = "haven't pass the argument";
+const char* SPLIT_CHAR = " ";
+const int LANGUAGE_NOT_FOUND = -1;
 
 struct Time {
     int hour;
@@ -24,50 +22,51 @@ struct TimePeriod {
 };
 
 struct Translator {
-    string name;
+    std::string name;
     TimePeriod availableTimePeriod;
-    vector<TimePeriod> occupiedTimes;
+    std::vector<TimePeriod> occupiedTimes;
     int numOfLanguages;
 };
 
 struct EventsLanguage {
-    string languageName;
-    string translatorName;
+    std::string languageName;
+    std::string translatorName;
     int numOfTranslators;
     int priority;
 };
 
 struct Event {
-    string name;
+    std::string name;
     TimePeriod timePeriod;
-    vector<EventsLanguage> eventLanguages;
+    std::vector<EventsLanguage> eventLanguages;
 };
 
 struct Language {
-    string name;
+    std::string name;
     int numOfTranslators;
-    vector<Translator*> translators;
+    std::vector<Translator*> translators;
 };
 
-typedef vector<Language> Languages;
-typedef vector<Translator> Translators;
-typedef vector<Event> Events;
+typedef std::vector<Language> Languages;
+typedef std::vector<Translator> Translators;
+typedef std::vector<Event> Events;
 typedef Translator* TranslatorPointer;
 
-void get_input(string, Languages&, Translators&, Events&);
-void initialising_data(string, Languages&, Translators&, Events&);
-void check_for_file_validation(ifstream&);
-void read_languages(ifstream&, Languages&, Translators&);
-Time read_time_format(ifstream&);
-Translator read_translator_info(ifstream&);
-int search(const Languages&, string);
-void add_new(Languages&, string, Translators&, int);
-void add_existing(Languages&, string, Translators&, int, int);
-void read_events(ifstream&, Events&, const Languages&);
-vector<string> read_list_of_languages(ifstream&);
-vector<string> string_tokenizer(char*);
+// functions
+void get_input(std::string, Languages&, Translators&, Events&);
+void initialising_data(std::string, Languages&, Translators&, Events&);
+void check_for_file_validation(std::ifstream&);
+void read_languages(std::ifstream&, Languages&, Translators&);
+Time read_time_format(std::ifstream&);
+Translator read_translator_info(std::ifstream&);
+int search(const Languages&, std::string);
+void add_new(Languages&, std::string, Translators&, int);
+void add_existing(Languages&, std::string, Translators&, int, int);
+void read_events(std::ifstream&, Events&, const Languages&);
+std::vector<std::string> read_list_of_languages(std::ifstream&);
+std::vector<std::string> string_tokenizer(char*);
 void sorting_languages(Languages&);
-bool name_compare(string, string);
+bool name_compare(std::string, std::string);
 bool translator_compare(const TranslatorPointer&, const TranslatorPointer&);
 bool language_of_event_compare(const EventsLanguage&, const EventsLanguage&);
 bool language_of_event_compare_for_priority(const EventsLanguage&, const EventsLanguage&);
@@ -77,6 +76,7 @@ bool is_available(TranslatorPointer, TimePeriod);
 bool is_overlapping(TimePeriod, TimePeriod);
 TranslatorPointer find_first_available_translator(int, const Languages&, TimePeriod);
 void show_result(const Events&);
+// end of functions
 
 int main(int argc, const char* argv[]) {
     Languages languagesList;
@@ -88,7 +88,7 @@ int main(int argc, const char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-void initialising_data(string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
+void initialising_data(std::string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
     get_input(inputFile, languagesList, translatorsList, eventsList);
     sorting_languages(languagesList);
 }
@@ -103,38 +103,38 @@ bool translator_compare(const TranslatorPointer& first, const TranslatorPointer&
            ((second->numOfLanguages == first->numOfLanguages) && name_compare(first->name, second->name));
 }
 
-bool name_compare(string first, string second) {
+bool name_compare(std::string first, std::string second) {
     int i = 0;
-    for (; i < max(first.size(), second.size()); i++) {
+    for (; i < std::max(first.size(), second.size()); i++) {
         if (first[i] != second[i])
             return first[i] < second[i];
     }
     return true;  // when both are equal
 }
 
-void get_input(string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
-    ifstream fileStream(inputFile);
+void get_input(std::string inputFile, Languages& languagesList, Translators& translatorsList, Events& eventsList) {
+    std::ifstream fileStream(inputFile);
     check_for_file_validation(fileStream);
     read_languages(fileStream, languagesList, translatorsList);
     read_events(fileStream, eventsList, languagesList);
     fileStream.close();
 }
 
-void check_for_file_validation(ifstream& inputFile) {
+void check_for_file_validation(std::ifstream& inputFile) {
     if (!inputFile.is_open()) {
-        cerr << ERROR_1 << endl;
+        std::cerr << ERROR_1 << std::endl;
         exit(EXIT_FAILURE);
     }
 }
 
-void read_languages(ifstream& fileStream, Languages& languagesList, Translators& translatorsList) {
+void read_languages(std::ifstream& fileStream, Languages& languagesList, Translators& translatorsList) {
     int lineCount;
     fileStream >> lineCount;
     translatorsList.resize(lineCount);
     for (int i = 0; i < lineCount; i++) {
         Translator translator = read_translator_info(fileStream);
         translatorsList[i] = translator;
-        vector<string> splittedLanguages = read_list_of_languages(fileStream);
+        std::vector<std::string> splittedLanguages = read_list_of_languages(fileStream);
         translatorsList[i].numOfLanguages = splittedLanguages.size();
         for (auto singleLanguageName : splittedLanguages) {
             int languageIndex = search(languagesList, singleLanguageName);
@@ -147,19 +147,19 @@ void read_languages(ifstream& fileStream, Languages& languagesList, Translators&
     }
 }
 
-void add_new(Languages& languagesList, string name, Translators& translatorsList, int translatorIndex) {
+void add_new(Languages& languagesList, std::string name, Translators& translatorsList, int translatorIndex) {
     languagesList.resize(languagesList.size() + 1);
     languagesList[languagesList.size() - 1].name = name;
     languagesList[languagesList.size() - 1].numOfTranslators = 1;  // it's the first translator
     languagesList[languagesList.size() - 1].translators.push_back(&translatorsList[translatorIndex]);
 }
 
-void add_existing(Languages& languagesList, string name, Translators& translatorsList, int translatorIndex, int index) {
+void add_existing(Languages& languagesList, std::string name, Translators& translatorsList, int translatorIndex, int index) {
     languagesList[index].numOfTranslators++;
     languagesList[index].translators.push_back(&translatorsList[translatorIndex]);
 }
 
-int search(const Languages& languages, string name) {
+int search(const Languages& languages, std::string name) {
     for (int i = 0; i < languages.size(); i++) {
         if (languages[i].name == name)
             return i;
@@ -167,7 +167,7 @@ int search(const Languages& languages, string name) {
     return LANGUAGE_NOT_FOUND;
 }
 
-Translator read_translator_info(ifstream& fileStream) {
+Translator read_translator_info(std::ifstream& fileStream) {
     Translator translator;
     fileStream >> translator.name;
     translator.availableTimePeriod.start = read_time_format(fileStream);
@@ -175,7 +175,7 @@ Translator read_translator_info(ifstream& fileStream) {
     return translator;
 }
 
-Time read_time_format(ifstream& fileStream) {
+Time read_time_format(std::ifstream& fileStream) {
     Time time;
     fileStream >> time.hour;
     char letter;
@@ -184,25 +184,25 @@ Time read_time_format(ifstream& fileStream) {
     return time;
 }
 
-vector<string> read_list_of_languages(ifstream& fileStream) {
-    string languagesName;
+std::vector<std::string> read_list_of_languages(std::ifstream& fileStream) {
+    std::string languagesName;
     getline(fileStream, languagesName);
     languagesName = languagesName.substr(1);  // cause we have an extra space in thr beginning
     return string_tokenizer(&languagesName[0]);
 }
 
-vector<string> string_tokenizer(char* str) {
-    vector<string> result;
+std::vector<std::string> string_tokenizer(char* str) {
+    std::vector<std::string> result;
     str = strtok(str, SPLIT_CHAR);
     while (str != NULL) {
-        string singleLanguageName(str);
+        std::string singleLanguageName(str);
         result.push_back(singleLanguageName);
         str = strtok(NULL, SPLIT_CHAR);
     }
     return result;
 }
 
-void read_events(ifstream& fileStream, Events& eventsList, const Languages& languagesList) {
+void read_events(std::ifstream& fileStream, Events& eventsList, const Languages& languagesList) {
     int lineCount;
     fileStream >> lineCount;
     while (lineCount--) {
@@ -210,7 +210,7 @@ void read_events(ifstream& fileStream, Events& eventsList, const Languages& lang
         fileStream >> event.name;
         event.timePeriod.start = read_time_format(fileStream);
         event.timePeriod.end = read_time_format(fileStream);
-        vector<string> splittedLanguages = read_list_of_languages(fileStream);
+        std::vector<std::string> splittedLanguages = read_list_of_languages(fileStream);
         EventsLanguage eventLanguage = {""};
         int priority = 0;
         for (auto singleLanguageName : splittedLanguages) {
@@ -284,8 +284,8 @@ TranslatorPointer find_first_available_translator(int languageIndex, const Langu
 
 void show_result(const Events& eventsList) {
     for (auto element : eventsList) {
-        cout << element.name << endl;
+        std::cout << element.name << std::endl;
         for (auto language : element.eventLanguages)
-            cout << language.languageName << OUTPUT_DELIMETER << language.translatorName << endl;
+            std::cout << language.languageName << OUTPUT_DELIMETER << language.translatorName << std::endl;
     }
 }
