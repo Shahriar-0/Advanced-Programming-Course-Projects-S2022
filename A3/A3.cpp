@@ -5,11 +5,14 @@
 #include <string>
 #include <vector>
 
+// clang format off
 const std::string NO_TRANSLATOR_FOUND = "Not Found";
-const std::string OUTPUT_DELIMETER = ": ";
-const std::string ERROR_1 = "haven't pass the argument";
-const char* SPLIT_CHAR = " ";
-const int LANGUAGE_NOT_FOUND = -1;
+const std::string OUTPUT_DELIMETER    = ": ";
+const std::string ERROR_1             = "haven't pass the argument";
+
+const char* SPLIT_CHAR                = " ";
+const int LANGUAGE_NOT_FOUND          = -1;
+// clang format on
 
 struct Time {
     int hour;

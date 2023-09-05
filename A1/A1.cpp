@@ -10,9 +10,10 @@ const std::string TIMES_DELIMETER       = "-";
 const std::string HOUR_MINUTE_DELIMETER = ":";
 const std::string END_OF_INPUT          = "#";
 const std::string ID_TIME_DELIMETER     = " ";
-// clang-format on
+
 const char FILLER = '0';
 } // namespace IO
+// clang-format on
 
 namespace Time {
 typedef struct TimeFormat {
@@ -26,20 +27,19 @@ typedef struct TimePeriod {
     TimeFormat currentTime;
     int duration;
     int range_id;
-    
+
 } TimePeriod;
 // clang-format off
 constexpr int MINUTES_PER_HOUR = 60;
 constexpr Time::TimeFormat START_TIME = Time::TimeFormat{12, 00};
 constexpr Time::TimeFormat END_TIME   = Time::TimeFormat{20, 00};
 // clang-format on
-} // namespace Time
-
+}  // namespace Time
 
 namespace Time {
 int time_difference(Time::TimeFormat first, Time::TimeFormat second) {
-        return (second.hour * Time::MINUTES_PER_HOUR + second.minute) -
-               (first.hour * Time::MINUTES_PER_HOUR + first.minute);
+    return (second.hour * Time::MINUTES_PER_HOUR + second.minute) -
+           (first.hour * Time::MINUTES_PER_HOUR + first.minute);
 }
 
 void find_free_times(std::vector<Time::TimePeriod> occupiedTimes, std::vector<Time::TimePeriod>& freeTimes) {
@@ -53,7 +53,7 @@ void find_free_times(std::vector<Time::TimePeriod> occupiedTimes, std::vector<Ti
             period.currentTime = period.begin = currentTime;
             period.end = occupiedTime.begin;
             period.duration = time_difference(currentTime, occupiedTime.begin);
-            period.range_id = 0; // it won't be used so it's not important
+            period.range_id = 0;  // it won't be used so it's not important
 
             freeTimes.push_back(period);
         }
