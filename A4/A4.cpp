@@ -16,24 +16,21 @@ class GameManager;
 #define INITIAL_HEALTH 100
 #define INITIAL_MONEY 1000
 
-enum PlayerMode { AFK,
-                  ATK };
-enum GameMode { BEFORE_START_MENU,
-                START_MENU,
-                DURING_GAME,
-                FINISHED };
-enum PlayerStatus { DEAD,
-                    ALIVE };
-enum ErrorList { PLAYER_NOT_AVAILABLE,
-                 CANT_BUY,
-                 WEAPON_NOT_AVAILABLE,
-                 ALREADY_HAVE,
-                 INSUFFICIENT_MONEY,
-                 DOESNT_HAVE_GUN,
-                 FRIENDLY_FIRE,
-                 NOT_STARTED,
-                 ATTACKER_DEAD,
-                 ATTACKED_DEAD };
+enum PlayerMode { AFK, ATK };
+enum GameMode { BEFORE_START_MENU, START_MENU, DURING_GAME, FINISHED };
+enum PlayerStatus { DEAD, ALIVE };
+enum ErrorList {
+    PLAYER_NOT_AVAILABLE,
+    CANT_BUY,
+    WEAPON_NOT_AVAILABLE,
+    ALREADY_HAVE,
+    INSUFFICIENT_MONEY,
+    DOESNT_HAVE_GUN,
+    FRIENDLY_FIRE,
+    NOT_STARTED,
+    ATTACKER_DEAD,
+    ATTACKED_DEAD
+};
 
 class Gun {
 public:
@@ -153,8 +150,7 @@ private:
 
 Gun GameManager::search_weapon(Gun gun) {
     for (auto i : listOfAllGuns)
-        if (i == gun)
-            return i;
+        if (i == gun) return i;
     return GUN_NOT_AVAILABLE;
 }
 
@@ -166,13 +162,11 @@ GameManager::GameManager() : terrorist("terrorist"), counter_terrorist("counter-
 
 void Team::win() {
     cout << teamName << " won" << endl;
-    for (auto& player : listOfMembers)
-        player.add_money(WIN_PRIZE);
+    for (auto& player : listOfMembers) player.add_money(WIN_PRIZE);
 }
 
 void Team::lose() {
-    for (auto& player : listOfMembers)
-        player.add_money(LOSE_PRIZE);
+    for (auto& player : listOfMembers) player.add_money(LOSE_PRIZE);
 }
 
 Player::Player(string _username, string _teamName) {
@@ -195,14 +189,14 @@ void Player::initialise(GameManager* cs_go) {
 }
 
 void Team::initialise(GameManager* cs_go) {
-    for (auto& player : listOfMembers)
-        player.initialise(cs_go);
+    for (auto& player : listOfMembers) player.initialise(cs_go);
 }
 
 bool player_compare(Player& first, Player& second) {
     return first.get_kills() > second.get_kills() ||
            (first.get_deaths() < second.get_deaths() && first.get_kills() == second.get_kills()) ||
-           (first.get_deaths() == second.get_deaths() && first.get_kills() == second.get_kills() && first.get_username() < second.get_username());
+           (first.get_deaths() == second.get_deaths() && first.get_kills() == second.get_kills() &&
+            first.get_username() < second.get_username());
 }
 
 void Team::score_board() {
@@ -217,65 +211,40 @@ void GameManager::score_board() {
     terrorist.score_board();
 }
 
-void Team::sorting() {
-    sort(listOfMembers.begin(), listOfMembers.end(), player_compare);
-}
+void Team::sorting() { sort(listOfMembers.begin(), listOfMembers.end(), player_compare); }
 
 void GameManager::show_error(ErrorList error) {
     switch (error) {
-        case PLAYER_NOT_AVAILABLE:
-            cout << "user not available" << endl;
-            break;
-        case CANT_BUY:
-            cout << "you can't buy weapons anymore" << endl;
-            break;
-        case WEAPON_NOT_AVAILABLE:
-            cout << "weapon not available" << endl;
-            break;
-        case ALREADY_HAVE:
-            cout << "you already have this weapon" << endl;
-            break;
-        case INSUFFICIENT_MONEY:
-            cout << "insufficient money" << endl;
-            break;
-        case DOESNT_HAVE_GUN:
-            cout << "attacker doesn't have this gun" << endl;
-            break;
-        case FRIENDLY_FIRE:
-            cout << "you can't shoot this player" << endl;
-            break;
-        case NOT_STARTED:
-            cout << "The game hasn't started yet" << endl;
-            break;
-        case ATTACKER_DEAD:
-            cout << "attacker is dead" << endl;
-            break;
-        case ATTACKED_DEAD:
-            cout << "attacked is dead" << endl;
-            break;
+        case PLAYER_NOT_AVAILABLE: cout << "user not available"             << endl; break;
+        case CANT_BUY            : cout << "you can't buy weapons anymore"  << endl; break;
+        case WEAPON_NOT_AVAILABLE: cout << "weapon not available"           << endl; break;
+        case ALREADY_HAVE        : cout << "you already have this weapon"   << endl; break;
+        case INSUFFICIENT_MONEY  : cout << "insufficient money"             << endl; break;
+        case DOESNT_HAVE_GUN     : cout << "attacker doesn't have this gun" << endl; break;
+        case FRIENDLY_FIRE       : cout << "you can't shoot this player"    << endl; break;
+        case NOT_STARTED         : cout << "The game hasn't started yet"    << endl; break;
+        case ATTACKER_DEAD       : cout << "attacker is dead"               << endl; break;
+        case ATTACKED_DEAD       : cout << "attacked is dead"               << endl; break;
     }
 }
 
 bool Player::has_gun(Gun gun) {
     for (auto& playerGun : listOfGuns) {
-        if (playerGun == gun)
-            return true;
+        if (playerGun == gun) return true;
     }
     return false;
 }
 
 Player* Team::search(string username) {
     for (auto& player : listOfMembers) {
-        if (player.get_username() == username)
-            return &player;
+        if (player.get_username() == username) return &player;
     }
     return nullptr;
 }
 
 int Team::count_alive() {
     int result = 0;
-    for (auto i : listOfMembers)
-        result += (i.get_status() == ALIVE && i.get_mode() == ATK);
+    for (auto i : listOfMembers) result += (i.get_status() == ALIVE && i.get_mode() == ATK);
     return result;
 }
 
@@ -289,8 +258,7 @@ void Player::get_shot(Gun gun) {
 
 void Player::add_money(int income) {
     money += income;
-    if (money > MAX_MONEY)
-        money = MAX_MONEY;
+    if (money > MAX_MONEY) money = MAX_MONEY;
 }
 
 bool Player::can_shoot(Gun gun, Player* attacked, GameManager* cs_go) {
@@ -323,16 +291,14 @@ bool Player::can_shoot(Gun gun, Player* attacked, GameManager* cs_go) {
 
 Gun GameManager::convert_name_to_gun(string gunName) {
     for (auto gun : listOfAllGuns)
-        if (gun.get_name() == gunName)
-            return gun;
+        if (gun.get_name() == gunName) return gun;
     return GUN_NOT_AVAILABLE;
 }
 
 Player* GameManager::search_in_players(string username) {
     Player* result = nullptr;
     result = terrorist.search(username);
-    if (result == nullptr)
-        result = counter_terrorist.search(username);
+    if (result == nullptr) result = counter_terrorist.search(username);
     return result;
 }
 
@@ -400,7 +366,8 @@ void GameManager::end_game() {
 void GameManager::add_user() {
     string username, teamName;
     cin >> username >> teamName;
-    (teamName == "terrorist") ? terrorist.add_user(Player(username, teamName), this) : counter_terrorist.add_user(Player(username, teamName), this);
+    (teamName == "terrorist") ? terrorist.add_user(Player(username, teamName), this)
+                              : counter_terrorist.add_user(Player(username, teamName), this);
     cout << "ok" << endl;
 }
 
@@ -515,8 +482,7 @@ void GameManager::initialising() {
 
 void GameManager::clearing() {
     string command;
-    while (cin >> command && command == "score-board")
-        score_board();
+    while (cin >> command && command == "score-board") score_board();
 }
 
 int main() {
