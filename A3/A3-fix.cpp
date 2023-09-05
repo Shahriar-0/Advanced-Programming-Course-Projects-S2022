@@ -219,8 +219,22 @@ std::shared_ptr<Data::Translator> find_first_available_translator(int languageIn
 }
 
 void schedule(Data::EventScheduler& scheduler) {
-    //...
-    // schedule events
+    for (int i = 0; i < scheduler.events.size(); i++) {
+        for (int j = 0; j < scheduler.events[i].eventLanguages.size(); j++) {
+            int languageIndex = search(scheduler.languages, scheduler.events[i].eventLanguages[j].languageName);
+            std::shared_ptr<Data::Translator> translatorPtr = nullptr;
+            if (languageIndex != LANGUAGE_NOT_FOUND)
+                translatorPtr = find_first_available_translator(languageIndex, scheduler, scheduler.events[i].timePeriod);
+            if (translatorPtr == nullptr)
+                scheduler.events[i].eventLanguages[j].translatorName = NO_TRANSLATOR_FOUND;
+            else {
+                scheduler.events[i].eventLanguages[j].translatorName = translatorPtr->name;
+                translatorPtr->occupiedTimes.push_back(scheduler.events[i].timePeriod);
+            }
+        }
+        sort(scheduler.events[i].eventLanguages.begin(), scheduler.events[i].eventLanguages.end(),
+             language_of_event_compare_for_priority);
+    }
 }
 
 }  // namespace Scheduling
@@ -228,8 +242,11 @@ void schedule(Data::EventScheduler& scheduler) {
 namespace Output {
 
 void display(const Data::EventScheduler& scheduler) {
-    //...
-    // display scheduled events
+    for (auto element : scheduler.events) {
+        std::cout << element.name << std::endl;
+        for (auto language : element.eventLanguages)
+            std::cout << language.languageName << OUTPUT_DELIMETER << language.translatorName << std::endl;
+    }
 }
 
 }  // namespace Output
