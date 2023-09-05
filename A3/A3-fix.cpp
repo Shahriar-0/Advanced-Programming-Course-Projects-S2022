@@ -5,17 +5,16 @@
 #include <memory>
 #include <regex>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-// clang format off
 const std::string NO_TRANSLATOR_FOUND = "Not Found";
 const std::string OUTPUT_DELIMETER = ": ";
 const std::string ERROR_1 = "haven't pass the argument";
 
 const char* SPLIT_CHAR = " ";
 const int LANGUAGE_NOT_FOUND = -1;
-// clang format on
 
 namespace Data {
 
@@ -52,17 +51,16 @@ struct Event {
 };
 
 struct Language {
-    Language(std::string name, int numOfTranslators, std::vector<std::unique_ptr<Translator>> translators)
+    Language(std::string name, int numOfTranslators, std::vector<std::shared_ptr<Translator>> translators)
         : name(name), numOfTranslators(numOfTranslators), translators(std::move(translators)) {}
     std::string name;
     int numOfTranslators;
-    std::vector<std::unique_ptr<Translator>> translators;
+    std::vector<std::shared_ptr<Translator>> translators;
 };
 
 using Languages = std::vector<Language>;
-using Translators = std::vector<Translator>;
+using Translators = std::vector<std::shared_ptr<Translator>>;
 using Events = std::vector<Event>;
-using TranslatorPointer = std::unique_ptr<Translator>;
 
 struct EventScheduler {
     Languages languages;
@@ -88,12 +86,15 @@ void readTranslators(Data::EventScheduler& scheduler, std::ifstream& file) {
     file >> numOfTranslators;
     scheduler.translators.reserve(numOfTranslators);
     for (int i = 0; i < numOfTranslators; ++i) {
-        Data::Translator translator;
-        file >> translator;
+        auto translator = std::make_shared<Data::Translator>();
+        file >> *translator;
         scheduler.translators.push_back(translator);
-        for (auto language : translator.languages) {
+        for (auto language : translator->languages) {
             int index = Scheduling::search(scheduler.languages, language);
             if (index == LANGUAGE_NOT_FOUND) {
+                Input::addNew(scheduler, language, i);
+            } else {
+                Input::addExisting(scheduler, index, i);
             }
         }
     }
@@ -123,12 +124,12 @@ void readEvents(Data::EventScheduler& scheduler, std::ifstream& file) {
 }
 
 void addNew(Data::EventScheduler& scheduler, std::string name, int translatorIndex) {
-    scheduler.languages.push_back(Data::Language(name, 1, {std::make_unique<Data::Translator>(scheduler.translators[translatorIndex])}));
+    scheduler.languages.push_back(Data::Language(name, 1, {scheduler.translators[translatorIndex]}));
 }
 
 void addExisting(Data::EventScheduler& scheduler, int index, int translatorIndex) {
     scheduler.languages[index].numOfTranslators++;
-    scheduler.languages[index].translators.push_back(std::make_unique<Data::Translator>(scheduler.translators[translatorIndex]));
+    scheduler.languages[index].translators.push_back(scheduler.translators[translatorIndex]);
 }
 
 std::ifstream& operator>>(std::ifstream& file, Data::Time& time) {
@@ -142,7 +143,7 @@ std::ifstream& operator>>(std::ifstream& file, Data::Translator& translator) {
     file >> translator.availableTimePeriod.start >> translator.availableTimePeriod.end;
     std::string languagesNames;
     std::getline(file, languagesNames);
-    translator.languages = split(languagesNames.substr(1));  // cause we have an extra space in thr beginning
+    translator.languages = split(languagesNames.substr(1));  // cause we have an extra space in the beginning
     translator.numOfLanguages = translator.languages.size();
     return file;
 }
@@ -152,7 +153,7 @@ std::ifstream& operator>>(std::ifstream& file, Data::Event& event) {
     file >> event.timePeriod.start >> event.timePeriod.end;
     std::string languagesNames;
     std::getline(file, languagesNames);
-    event.languages = split(languagesNames.substr(1));  // cause we have an extra space in thr beginning
+    event.languages = split(languagesNames.substr(1));  // cause we have an extra space in the beginning
     return file;
 }
 
@@ -198,7 +199,7 @@ bool is_overlapping(Data::TimePeriod first, Data::TimePeriod second) {
            (is_before(first.start, second.start) || is_before(first.start, second.end));
 }
 
-bool is_available(Data::TranslatorPointer translatorPtr, Data::TimePeriod goalTimePeriod) {
+bool is_available(std::shared_ptr<Data::Translator> translatorPtr, Data::TimePeriod goalTimePeriod) {
     if (is_before(goalTimePeriod.start, translatorPtr->availableTimePeriod.start) ||
         is_before(translatorPtr->availableTimePeriod.end, goalTimePeriod.end))
         return false;
@@ -208,13 +209,11 @@ bool is_available(Data::TranslatorPointer translatorPtr, Data::TimePeriod goalTi
     return true;
 }
 
-Data::TranslatorPointer find_first_available_translator(int languageIndex, const Data::EventScheduler& scheduler, Data::TimePeriod goalPeriod) {
+std::shared_ptr<Data::Translator> find_first_available_translator(int languageIndex, const Data::EventScheduler& scheduler, Data::TimePeriod goalPeriod) {
     for (int i = 0; i < scheduler.languages[languageIndex].translators.size(); i++) {
-
-        auto& translatorPtr = scheduler.languages[languageIndex].translators[i];
-    Data::TranslatorPointer translator = translatorPtr;
-    // if (is_available(, goalPeriod))
-    // return ;
+        auto translatorPtr = scheduler.languages[languageIndex].translators[i];
+        if (is_available(translatorPtr, goalPeriod))
+            return translatorPtr;
     }
     return nullptr;
 }
