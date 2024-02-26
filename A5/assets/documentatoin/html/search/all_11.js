@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['sdl_5fevent_0',['sdl_event',['../class_event.html#a4c0d226ba919df84f6b502dd524f9d4f',1,'Event']]],
+  ['set_5fblock_5fsize_1',['set_block_size',['../class_space_ship.html#a036b1dd70a62cad1b4aa118d542e80ce',1,'SpaceShip']]],
+  ['set_5fcolor_2',['set_color',['../class_window.html#aaa44de3bc409af49f86169a44b6dad0c',1,'Window']]],
+  ['set_5fmove_3',['set_move',['../class_my_space_ship.html#ac35b56889931ec2d0f5452ef657aa21d',1,'MySpaceShip']]],
+  ['set_5fmusic_5fplayer_4',['set_music_player',['../class_space_ship.html#af372e8d210502c8a35733f252cd2afdf',1,'SpaceShip']]],
+  ['shoot_5',['SHOOT',['../my__space__ship_8hpp.html#a0f5a033bfaf543e8248cae45ca62ce82a38317998d0db1f65b5a5d3f9990c02f3',1,'my_space_ship.hpp']]],
+  ['shooting_6',['SHOOTING',['../audio_8hpp.html#ae520c781057c498cc833fe6f3ebcb44fa7b771453d1a8c8cc2efab221859139d8',1,'audio.hpp']]],
+  ['show_5ftext_7',['show_text',['../class_window.html#a4a2713437d89d7524adc5966e330718e',1,'Window']]],
+  ['singlemap_8',['singleMap',['../star__wars_8hpp.html#aec48c2660051b3c45f3945f9127f44df',1,'star_wars.hpp']]],
+  ['sound_5feffects_5fcache_9',['sound_effects_cache',['../class_window.html#aad2b37b66e3c1be8356f663d0b8b0af4',1,'Window']]],
+  ['space_5fship_2ecpp_10',['space_ship.cpp',['../space__ship_8cpp.html',1,'']]],
+  ['space_5fship_2ehpp_11',['space_ship.hpp',['../space__ship_8hpp.html',1,'']]],
+  ['spaceship_12',['SpaceShip',['../class_space_ship.html',1,'SpaceShip'],['../class_space_ship.html#a79bc348344ee93deffd7273d120d4445',1,'SpaceShip::SpaceShip(Point, Window *)']]],
+  ['stamina_13',['stamina',['../class_space_ship.html#ab02370d7e3725943f519818a02af0431',1,'SpaceShip']]],
+  ['star_5fwars_2ecpp_14',['star_wars.cpp',['../star__wars_8cpp.html',1,'']]],
+  ['star_5fwars_2ehpp_15',['star_wars.hpp',['../star__wars_8hpp.html',1,'']]],
+  ['starwars_16',['StarWars',['../class_star_wars.html',1,'StarWars'],['../class_star_wars.html#addd9bb9e113c60137f61a58aa9bc2dde',1,'StarWars::StarWars()']]],
+  ['stationary_5fenemy_2ecpp_17',['stationary_enemy.cpp',['../stationary__enemy_8cpp.html',1,'']]],
+  ['stationary_5fenemy_2ehpp_18',['stationary_enemy.hpp',['../stationary__enemy_8hpp.html',1,'']]],
+  ['stationary_5fenemy_5fpic_19',['STATIONARY_ENEMY_PIC',['../stationary__enemy_8hpp.html#ae01ff8185a80ae0addcec0b2d10d5030',1,'stationary_enemy.hpp']]],
+  ['stationary_5fenemy_5fsymbol_20',['STATIONARY_ENEMY_SYMBOL',['../star__wars_8hpp.html#a0a3346919beb2d4a3d1b0f29572844c6',1,'star_wars.hpp']]],
+  ['stationaryenemy_21',['StationaryEnemy',['../class_stationary_enemy.html',1,'StationaryEnemy'],['../class_stationary_enemy.html#ac715324396ae6543640811c992a99787',1,'StationaryEnemy::StationaryEnemy()']]],
+  ['stop_5fmoving_22',['stop_moving',['../class_my_space_ship.html#a2074db3acda4f2d3059d7eaa091fffe4',1,'MySpaceShip']]],
+  ['stop_5fmusic_23',['stop_music',['../class_window.html#ad8b12893f21628cad8c8b3c687b6189d',1,'Window']]]
+];
